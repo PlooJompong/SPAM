@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import Item from './models/model.item.js';
 
 dotenv.config();
 
@@ -10,14 +11,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const app = express();
 app.use(express.json());
 
-const ItemSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-});
-
-const Item = mongoose.model('Item', ItemSchema);
-
-mongoose.connect(process.env.MONGO_URI, {
-})
+mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 

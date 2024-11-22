@@ -1,65 +1,111 @@
-GET /meny
-Meny
+GET /menu
+Menu
 {
-  "name": string,
-  "price": number,
+  "name": string
+  "price": number
   "ingredients": string[]
-  "_id": string | number
+  "itemID": string | number
   "vegetarian": boolean //optional
 }
 
+GET /order/orderID
+Get order by ID
+order: Object[
+  {
+    "customerID": string
+    "cartID": string
+    "products": Object[
+      {
+        "name": string
+        "price": number
+        "ingredients": string[] 
+        "quantity": number
+        "comments": string //optional
+        "itemID": string | number
+      },
+   ],
+    "createdAt": new Date()
+    "locked": boolean
+    "done":  boolean
+    "orderID": string
+    "totalPrice": number
+  }
+]
+
+GET /customer/order-history
+customer
+Get order history
+orders: Object[
+  {
+    orderID
+  }
+]
+
+PUT /menu/itemID 
+admin
+Update menu item 
+{
+  "name": string //optional
+  "price": number //optional
+  "ingredients": string[] //optional
+  "vegetarian": boolean //optional
+}
+
+PUT /cart/cartID
+customer
+Update cart item
+{
+  "itemID": string,
+  "comments": string, //optional
+  "quantity": number //optional
+}
+
+DELETE /cart/cartID
+customer
+Delete cart item
+{
+  itemID: string
+}
+
+DELETE /cart/cartID
+customer
+Delete cart
+
 POST /cart
 Create order
-order: Object {
+order: Object[
   {
     "customerID": string,
     "cartID": string,
-    "cartProducts": Object[
+    "products": Object[
       {
         "name": string,
         "price": number,
         "ingredients": string[] 
         "quantity": number
-        "_id": string | number
+        "itemID": string | number
       },
    ],
     "createdAt": new Date()
     "locked": boolean
     "done": null | boolean
+    "comments" null | string
     "orderID": string
+    "totalPrice": number
   }
-}
+]
 
-GET /order/:id
-Get order by ID
-order: Object {
-  {
-    "customerID": string,
-      "cartID": string,
-        "cartProducts": Object[
-          {
-            "name": string,
-            "price": number,
-            "ingredients": string[] 
-        "quantity": number
-          "_id": string | number
-          },
-   ],
-          "createdAt": new Date()
-    "locked": boolean
-    "done": null | boolean
-    "orderID": string
-  }
-}
-
-/GET /cart
-  / PUT / cart
-
-  / DELETE / cart
-/ GET / orderHistory
-
-/ POST / loginAdmin
+POST /loginAdmin
 {
   "username": string
   "password": string
 }
+
+POST /loginCustomer
+{
+  "username": string
+  "password": string
+}
+
+// LAGERSTATUS????
+// Ändring order + låsning och betalning

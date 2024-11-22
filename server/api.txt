@@ -1,0 +1,65 @@
+GET /meny
+Meny
+{
+  "name": string,
+  "price": number,
+  "ingredients": string[]
+  "_id": string | number
+  "vegetarian": boolean //optional
+}
+
+POST /cart
+Create order
+order: Object {
+  {
+    "customerID": string,
+    "cartID": string,
+    "cartProducts": Object[
+      {
+        "name": string,
+        "price": number,
+        "ingredients": string[] 
+        "quantity": number
+        "_id": string | number
+      },
+   ],
+    "createdAt": new Date()
+    "locked": boolean
+    "done": null | boolean
+    "orderID": string
+  }
+}
+
+GET /order/:id
+Get order by ID
+order: Object {
+  {
+    "customerID": string,
+      "cartID": string,
+        "cartProducts": Object[
+          {
+            "name": string,
+            "price": number,
+            "ingredients": string[] 
+        "quantity": number
+          "_id": string | number
+          },
+   ],
+          "createdAt": new Date()
+    "locked": boolean
+    "done": null | boolean
+    "orderID": string
+  }
+}
+
+/GET /cart
+  / PUT / cart
+
+  / DELETE / cart
+/ GET / orderHistory
+
+/ POST / loginAdmin
+{
+  "username": string
+  "password": string
+}

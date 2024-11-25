@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 
-const itemSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-});
+// const itemSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+// });
 
-const Item = mongoose.model('Item', itemSchema);
+// const Item = mongoose.model('Item', itemSchema);
 
-export default Item;
+// export default Item;

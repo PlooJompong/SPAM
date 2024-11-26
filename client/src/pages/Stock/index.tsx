@@ -1,7 +1,7 @@
 const Stock = () => {
   return (
     <>
-      <h1 className="flex h-screen w-full items-center justify-center text-3xl text-red-600">
+      <h1 className="flex h-screen w-full items-center justify-center bg-orange-100 text-3xl text-teal-900">
         SPAM Stock
       </h1>
     </>

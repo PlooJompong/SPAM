@@ -4,7 +4,7 @@ import "./index.css";
 const Landing = () => {
   return (
     <>
-      <nav>
+      <nav className="bg-orange-100 text-teal-900">
         <ul>
           <li>
             <Link to="/">Landing</Link>
@@ -41,7 +41,7 @@ const Landing = () => {
           </li>
         </ul>
       </nav>
-      <h1 className="flex h-screen w-full items-center justify-center text-3xl text-red-600">
+      <h1 className="flex h-screen w-full items-center justify-center bg-orange-100 text-3xl text-teal-900">
         SPAM Landing
       </h1>
     </>

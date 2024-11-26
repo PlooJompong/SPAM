@@ -5,6 +5,7 @@ import User from './models/user.js';
 import Menu from './models/menu.js';
 import Order from './models/orders.js';
 import Stock from './models/stockStatus.js';
+import cors from 'cors';
 
 
 dotenv.config();
@@ -14,6 +15,9 @@ const MONGO_URI = process.env.MONGO_URI;
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:3000',
+}));
 
 mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('MongoDB connected'))
@@ -63,6 +67,32 @@ app.get('/order', async (req, res) => {
     res.status(500).json(err);
   }
 })
+app.post('/orders', async (req, res) => {
+  try {
+    const { name, items, totalPrice, orderDate } = req.body;
+
+    // Validera att nödvändiga fält finns
+    if (!name || !items || items.length === 0 || !totalPrice) {
+      return res.status(400).json({ message: 'Namn, varor och totalpris krävs.' });
+    }
+
+    // Skapa en ny beställning
+    const newOrder = new Order({
+      name, // Namn på personen som gör beställningen
+      items, // Varukorgens innehåll
+      totalPrice, // Totalt pris
+      orderDate, // Datum för beställningen
+    });
+
+    // Spara beställningen i databasen
+    const savedOrder = await newOrder.save();
+    res.status(201).json(savedOrder);
+  } catch (err) {
+    console.error('Kunde inte spara beställningen:', err);
+    res.status(500).json({ message: 'Något gick fel vid skapandet av beställningen.' });
+  }
+});
+
 
 // Lagerstatus
 app.get('/stock', async (req, res) => {

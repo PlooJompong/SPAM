@@ -1,9 +1,11 @@
 import Header from "../../components/Header";
 import twoPizzas from "../../assets/twoPizzas.png";
+import Navbar from "../../components/Navbar";
 
 const About = () => {
   return (
     <>
+      <Navbar />
       <Header title="Vilka är SPAM Pizza?" />
       <main className="flex min-h-screen">
         <aside

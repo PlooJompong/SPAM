@@ -4,10 +4,12 @@ import pizzaBite from "../../assets/pizzaBite.png";
 import pizzaBox from "../../assets/pizzaBox.png";
 import checkeredPattern from "../../assets/checkeredPattern.png";
 import { Link } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 const Home = () => {
   return (
     <>
+      <Navbar />
       <header className="relative top-16 flex h-80 w-full bg-orange-100">
         <img src={pizzaHand} alt="" className="h-80" />
         <div className="flex h-full w-full flex-col justify-center">

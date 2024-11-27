@@ -41,6 +41,13 @@ orders: Object[
   }
 ]
 
+GET /stock
+admin
+{
+  "ingredient": string
+  "quantity": number
+}
+
 PUT /menu/itemID 
 admin
 Update menu item 
@@ -107,5 +114,4 @@ POST /loginCustomer
   "password": string
 }
 
-// LAGERSTATUS????
 // Ändring order + låsning och betalning

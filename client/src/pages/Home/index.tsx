@@ -26,13 +26,13 @@ const Home = () => {
       </header>
       <main className="h-76 mt-40 flex w-full">
         <section
-          className="w-1/2 flex-shrink-0 bg-cover bg-center"
+          className="flex w-1/2 flex-shrink-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${checkeredPattern})`,
           }}
         >
-          <article className="m-auto my-auto flex h-5/6 w-1/2 w-full items-center justify-center border-4 border-teal-900">
-            <h2 className="text-center font-primary text-3xl text-teal-900">
+          <article className="m-auto my-auto flex h-4/6 w-2/4 w-full items-center justify-center border-4 border-teal-900">
+            <h2 className="text-center font-primary text-2xl text-teal-900">
               <Link to="/menu">
                 JAG ÄR HUNGRIG!
                 <br />

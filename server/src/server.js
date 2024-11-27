@@ -7,25 +7,26 @@ import Order from './models/orders.js';
 import Stock from './models/stockStatus.js';
 import cors from 'cors';
 
-
 dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 const MONGO_URI = process.env.MONGO_URI;
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:3000',
 }));
 
-mongoose.connect(process.env.MONGO_URI, {})
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+mongoose
+  .connect(process.env.MONGO_URI, {})
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Enkel test-API
-app.get('/', async (req, res) => {
-  res.send('Hello, world!');
+app.get("/", async (req, res) => {
+  res.send("Hello, world!");
 });
 
 // Hämta alla objekt
@@ -39,33 +40,34 @@ app.get('/', async (req, res) => {
 // });
 
 // Hämta alla användare
-app.get('/users', async (req, res) => {
+app.get("/users", async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
 // Hämta alla pizzor
-app.get('/menu', async (req, res) => {
+app.get("/menu", async (req, res) => {
   try {
     const menu = await Menu.find();
     res.status(200).json(menu);
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
 // Hämta orders
-app.get('/order', async (req, res) => {
+app.get("/order", async (req, res) => {
   try {
     const order = await Order.find();
     res.status(200).json(order);
   } catch (err) {
     res.status(500).json(err);
   }
+
 })
 app.post('/orders', async (req, res) => {
   try {
@@ -94,15 +96,16 @@ app.post('/orders', async (req, res) => {
 });
 
 
+
 // Lagerstatus
-app.get('/stock', async (req, res) => {
+app.get("/stock", async (req, res) => {
   try {
     const stock = await Stock.find();
     res.status(200).json(stock);
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

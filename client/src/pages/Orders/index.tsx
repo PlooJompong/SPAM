@@ -3,9 +3,11 @@ import Navbar from "../../components/Navbar";
 import pizzaLogo from "../../assets/pizzaLogo.png";
 import editLogo from "../../assets/editLogo.svg";
 import lockedLogo from "../../assets/lockedLogo.svg";
+import margherita from "../../assets/margherita.png";
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
 import { useState } from "react";
 
+// Exempeldata
 const orders = ["TG23S#L", "S3FSS#D", "DF23S#P", "MN23F&3"];
 
 const Orders: React.FC = () => {
@@ -32,6 +34,8 @@ const Orders: React.FC = () => {
           Beställningar
         </h2>
       </header>
+
+      {/* Innehållet */}
       <main className="m-auto flex h-full w-full justify-center bg-orange-100 p-4">
         {/* Container för båda kolumnerna */}
         <div className="flex h-screen w-9/12 bg-[#f9ecd8] p-4">
@@ -78,13 +82,49 @@ const Orders: React.FC = () => {
                   <h2 className="text-lg font-bold text-teal-900">
                     Beställning {selectedOrder}
                   </h2>
-                  <button className="">
+                  <button>
                     <img src={editLogo} alt="Edit" className="h-6 w-6" />
                   </button>
                 </div>
-                {/* Placeholder  */}
-                <div className="mt-4 text-gray-500">
-                  Detaljer för beställningen kommer här.
+                <div className="mt-4">
+                  {/* Detaljer för beställningarna*/}
+                  <div className="flex items-center justify-between border-b py-3">
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={margherita}
+                        alt="Pizza"
+                        className="h-16 w-16 rounded-md object-cover"
+                      />
+                      <div>
+                        <div className="text-teal-900">Margherita</div>
+                        <div className="text-sm text-gray-500">Antal: 2</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-teal-900"> 165 kr</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between border-b py-3">
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={margherita}
+                        alt="Pizza"
+                        className="h-16 w-16 rounded-md object-cover"
+                      />
+                      <div>
+                        <div className="text-teal-900">Pepperoni</div>
+                        <div className="text-sm text-gray-500">Antal: 1</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-teal-900"> 205 kr</div>
+                    </div>
+                  </div>
+                  {/* Totalen */}
+                  <div className="mt-4 flex justify-between text-lg font-semibold">
+                    <span className="text-teal-900">Totalbelopp</span>
+                    <span className="text-teal-900">535 kr</span>
+                  </div>
                 </div>
               </div>
             ) : (

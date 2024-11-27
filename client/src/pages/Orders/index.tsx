@@ -5,13 +5,42 @@ import editLogo from "../../assets/editLogo.svg";
 import lockedLogo from "../../assets/lockedLogo.svg";
 import margherita from "../../assets/margherita.png";
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Exempeldata
-const orders = ["TG23S#L", "S3FSS#D", "DF23S#P", "MN23F&3"];
+interface OrderItem {
+  _id: string;
+  name: string;
+  price: number;
+  vegetarian: boolean;
+  ingredients: string[];
+}
 
-const Orders: React.FC = () => {
+interface Order {
+  _id: string;
+  name: string;
+  items: OrderItem[];
+  totalPrice: number;
+  orderDate: string;
+}
+
+const Orders = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+
+  // Hämta ordrar från backend
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/order");
+        const data = await response.json();
+        setOrders(data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <>
@@ -35,13 +64,11 @@ const Orders: React.FC = () => {
         </h2>
       </header>
 
-      {/* Innehållet */}
       <main className="m-auto flex h-full w-full justify-center bg-orange-100 p-4">
         {/* Container för båda kolumnerna */}
-        <div className="flex h-screen w-9/12 bg-[#f9ecd8] p-4">
-          {/* Vänster column */}
+        <div className="flex h-screen w-9/12 p-4">
+          {/* Vänster kolumn */}
           <div className="w-2/5 space-y-4">
-            {/* Filtreringsknapparna */}
             <div className="flex items-center justify-center">
               <button className="rounded-l-lg bg-teal-900 px-4 py-2 text-white">
                 SAMTLIGA
@@ -51,22 +78,22 @@ const Orders: React.FC = () => {
               </button>
             </div>
 
-            {/* Beställningar */}
+            {/* Rendera ordrarna */}
             {orders.map((order) => (
               <div
-                key={order}
+                key={order._id}
                 className={`flex cursor-pointer items-center justify-between rounded-lg border p-4 ${
-                  selectedOrder === order ? "bg-[#e9dfcf]" : ""
+                  selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
                 }`}
-                onClick={() => setSelectedOrder(order)}
+                onClick={() => setSelectedOrder(order._id)}
               >
-                <div className="">Beställning {order}</div>
+                <div className="">Beställning {order._id}</div>
                 <div className="flex items-center space-x-2">
-                  <input type="checkbox" className="form-checkbox" />
+                  <input type="checkbox" className="form-checkbox h-6 w-6" />
                   <button className="px-5">
                     <img src={editLogo} alt="Edit" className="h-6 w-6" />
                   </button>
-                  <button className="">
+                  <button>
                     <img src={lockedLogo} alt="Locked" className="h-6 w-6" />
                   </button>
                 </div>
@@ -77,7 +104,7 @@ const Orders: React.FC = () => {
           {/* Höger kolumn*/}
           <div className="w-3/5 pl-6">
             {selectedOrder ? (
-              <div className="h-2/6 rounded-lg bg-white p-6 shadow-md">
+              <div className="rounded-lg bg-white p-6 shadow-md">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-bold text-teal-900">
                     Beställning {selectedOrder}
@@ -87,44 +114,46 @@ const Orders: React.FC = () => {
                   </button>
                 </div>
                 <div className="mt-4">
-                  {/* Detaljer för beställningarna*/}
-                  <div className="flex items-center justify-between border-b py-3">
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={margherita}
-                        alt="Pizza"
-                        className="h-16 w-16 rounded-md object-cover"
-                      />
-                      <div>
-                        <div className="text-teal-900">Margherita</div>
-                        <div className="text-sm text-gray-500">Antal: 2</div>
+                  {/* Rendera detaljer för den valda beställningen */}
+                  {orders
+                    .filter((order) => order._id === selectedOrder)
+                    .map((order) => (
+                      <div key={order._id}>
+                        {order.items.map((item) => (
+                          <div
+                            key={item._id}
+                            className="flex items-center justify-between border-b py-3"
+                          >
+                            <div className="flex items-center space-x-4">
+                              <img
+                                src={margherita}
+                                alt="Pizza"
+                                className="h-16 w-16 rounded-md object-cover"
+                              />
+                              <div>
+                                <div className="text-teal-900">{item.name}</div>
+                                {/* Behöver läggas till quantity i backend? */}
+                                <div className="text-sm text-gray-500">
+                                  Antal: 1
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-teal-900">
+                                {item.price} kr
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        {/* Totalen */}
+                        <div className="mt-4 flex justify-between text-lg font-semibold">
+                          <span className="text-teal-900">Totalbelopp</span>
+                          <span className="text-teal-900">
+                            {order.totalPrice} kr
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-teal-900"> 165 kr</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between border-b py-3">
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={margherita}
-                        alt="Pizza"
-                        className="h-16 w-16 rounded-md object-cover"
-                      />
-                      <div>
-                        <div className="text-teal-900">Pepperoni</div>
-                        <div className="text-sm text-gray-500">Antal: 1</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-teal-900"> 205 kr</div>
-                    </div>
-                  </div>
-                  {/* Totalen */}
-                  <div className="mt-4 flex justify-between text-lg font-semibold">
-                    <span className="text-teal-900">Totalbelopp</span>
-                    <span className="text-teal-900">535 kr</span>
-                  </div>
+                    ))}
                 </div>
               </div>
             ) : (

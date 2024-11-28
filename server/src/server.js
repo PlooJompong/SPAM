@@ -7,6 +7,7 @@ import Order from './models/orders.js';
 import Stock from './models/stockStatus.js';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
+import OrderHistory from './models/orderHistory.js'; 
 
 dotenv.config();
 
@@ -124,6 +125,41 @@ app.get("/menu", async (req, res) => {
   }
 });
 
+// Ändra alla pizzor
+app.put("/menu/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Hämta ID från URL:en
+    const { name, price, vegetarian, ingredients } = req.body; // Hämta uppdaterade värden från request-body
+
+    // Kontrollera att alla nödvändiga fält finns
+    if (!name || !price || !Array.isArray(ingredients)) {
+      return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+    }
+
+    // Hitta och uppdatera menyalternativet i databasen
+    const updatedMenuItem = await Menu.findByIdAndUpdate(
+      id,
+      { name, price, vegetarian, ingredients },
+      { new: true } // Returnera det uppdaterade objektet
+    );
+
+    if (!updatedMenuItem) {
+      return res.status(404).json({ message: "Menyartikel hittades inte." });
+    }
+
+    // Returnera den uppdaterade menyalternativet
+    res.status(200).json({ message: "Menyartikel uppdaterad!", menu: updatedMenuItem });
+  } catch (err) {
+    console.error("Fel vid uppdatering av menyartikel:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av menyartikel." });
+  }
+});
+
+
+
+
+
+
 // Hämta orders
 app.get("/order", async (req, res) => {
   try {
@@ -134,32 +170,191 @@ app.get("/order", async (req, res) => {
   }
 
 })
+
+app.put("/orders/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // ID för den order som ska uppdateras
+    const { name, items, totalPrice, orderDate } = req.body; // Nya värden från body
+
+    // Kontrollera att obligatoriska fält finns
+    if (!name || !items || !totalPrice || !Array.isArray(items)) {
+      return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+    }
+
+    // Hitta och uppdatera ordern i databasen
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { name, items, totalPrice, orderDate },
+      { new: true } // Returnera den uppdaterade ordern
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Ordern hittades inte." });
+    }
+
+    res.status(200).json({ message: "Order uppdaterad!", order: updatedOrder });
+  } catch (err) {
+    console.error("Fel vid uppdatering av order:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
+  }
+});
+
+app.delete("/orders/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Kontrollera att ID är giltigt
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Ogiltigt ID-format." });
+    }
+
+    const deletedOrder = await Order.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: "Ordern hittades inte." });
+    }
+
+    res.status(200).json({ message: "Order raderad!", order: deletedOrder });
+  } catch (err) {
+    console.error("Fel vid borttagning av order:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid borttagning av order." });
+  }
+});
+
+
+
+// app.post('/orders', async (req, res) => {
+//   try {
+//     const { name, items, totalPrice, orderDate } = req.body;
+
+//     // Validera att nödvändiga fält finns
+//     if (!name || !items || items.length === 0 || !totalPrice) {
+//       return res.status(400).json({ message: 'Namn, varor och totalpris krävs.' });
+//     }
+
+//     // Skapa en ny beställning
+//     const newOrder = new Order({
+//       name, // Namn på personen som gör beställningen
+//       items, // Varukorgens innehåll
+//       totalPrice, // Totalt pris
+//       orderDate, // Datum för beställningen
+//     });
+
+//     // Spara beställningen i databasen
+//     const savedOrder = await newOrder.save();
+//     res.status(201).json(savedOrder);
+//   } catch (err) {
+//     console.error('Kunde inte spara beställningen:', err);
+//     res.status(500).json({ message: 'Något gick fel vid skapandet av beställningen.' });
+//   }
+// });
+
 app.post('/orders', async (req, res) => {
   try {
     const { name, items, totalPrice, orderDate } = req.body;
 
-    // Validera att nödvändiga fält finns
     if (!name || !items || items.length === 0 || !totalPrice) {
       return res.status(400).json({ message: 'Namn, varor och totalpris krävs.' });
     }
 
-    // Skapa en ny beställning
-    const newOrder = new Order({
-      name, // Namn på personen som gör beställningen
-      items, // Varukorgens innehåll
-      totalPrice, // Totalt pris
-      orderDate, // Datum för beställningen
-    });
+    const newOrder = new Order({ name, items, totalPrice, orderDate });
 
-    // Spara beställningen i databasen
+    for (const item of items) {
+      console.log('Bearbetar artikel:', item.name);
+
+      for (const ingredient of item.ingredients) {
+        console.log('Bearbetar ingrediens:', ingredient);
+
+        // Case-insensitive sökning efter ingrediens i lager
+        const stockItem = await Stock.findOne({ name: { $regex: new RegExp(`^${ingredient}$`, "i") } });
+
+        if (!stockItem) {
+          console.log(`Ingrediensen ${ingredient} hittades inte i lager.`);
+          return res.status(404).json({
+            message: `Ingrediensen ${ingredient} finns inte i lager.`,
+          });
+        }
+
+        stockItem.quantity -= 1;
+
+        if (stockItem.quantity < 0) {
+          return res.status(400).json({
+            message: `Lagermängden för ${ingredient} är slut.`,
+          });
+        }
+
+        await stockItem.save();
+        console.log(`Efter uppdatering: ${ingredient} har ${stockItem.quantity} i lager`);
+      }
+    }
+
     const savedOrder = await newOrder.save();
-    res.status(201).json(savedOrder);
+    res.status(201).json({ message: 'Order skapad och lager uppdaterat!', order: savedOrder });
   } catch (err) {
-    console.error('Kunde inte spara beställningen:', err);
+    console.error('Fel vid skapandet av order eller uppdatering av lager:', err);
     res.status(500).json({ message: 'Något gick fel vid skapandet av beställningen.' });
   }
 });
 
+
+
+
+
+//Orderhistorik
+
+
+// Lägg till en ny beställning till orderhistorik
+app.get("/orderhistory/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const orderHistory = await OrderHistory.findOne({ userId });
+
+    if (!orderHistory) {
+      return res.status(404).json({ message: "Ingen orderhistorik hittades för denna användare." });
+    }
+
+    res.status(200).json(orderHistory);
+  } catch (err) {
+    console.error("Fel vid hämtning av orderhistorik:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid hämtning av orderhistorik." });
+  }
+});
+
+
+app.post("/orderhistory", async (req, res) => {
+  try {
+    const { userId, name, items, totalPrice } = req.body;
+
+    // Kontrollera att alla fält finns
+    if (!userId || !name || !items || items.length === 0 || !totalPrice) {
+      return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+    }
+
+    // Hämta användarens orderhistorik eller skapa en ny
+    let orderHistory = await OrderHistory.findOne({ userId });
+
+    if (!orderHistory) {
+      orderHistory = new OrderHistory({ userId, orders: [] });
+    }
+
+    // Lägg till den nya ordern
+    orderHistory.orders.push({
+      name,
+      items,
+      totalPrice,
+      orderDate: new Date(),
+    });
+
+    // Spara ändringar
+    await orderHistory.save();
+
+    res.status(201).json({ message: "Beställningen har lagts till i orderhistorik!", orderHistory });
+  } catch (err) {
+    console.error("Fel vid sparandet av orderhistorik:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid sparandet av orderhistorik." });
+  }
+});
 
 
 // Lagerstatus
@@ -170,6 +365,12 @@ app.get("/stock", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+
+//Middleware
+app.use((req, res) => {
+  res.status(404).json({ message: `Cannot ${req.method} ${req.path}` });
 });
 
 app.listen(PORT, () => {

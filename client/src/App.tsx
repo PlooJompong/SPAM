@@ -49,25 +49,32 @@ import Orders from "./pages/Orders";
 import Stock from "./pages/Stock";
 import UpdateMenu from "./pages/UpdateMenu";
 import { CartProvider } from "./context/CartContext"; // Importera CartProvider
+import AdminPage from "./pages/Admin";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   return (
     <CartProvider> {/* Omslut appen med CartProvider */}
-      <Router>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/confirmation" element={<Confirmation />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/menu" element={<Menu />} />
-          <Route path="/orderhistory" element={<OrderHistory />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/stock" element={<Stock />} />
-          <Route path="/updatemenu" element={<UpdateMenu />} />
-        </Routes>
-      </Router>
+      
+        <Router>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/confirmation" element={<Confirmation />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/orderhistory" element={<OrderHistory />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/stock" element={<Stock />} />
+            <Route path="/updatemenu" element={<UpdateMenu />} />
+          </Routes>
+          </AuthProvider>
+        </Router>
+      
     </CartProvider>
   );
 };

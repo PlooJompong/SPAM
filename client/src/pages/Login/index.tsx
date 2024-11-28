@@ -1,39 +1,49 @@
 import Navbar from '../../components/Navbar';
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [admin, setAdmin] = useState(false);
-  const [message, setMessage] = useState('');
+  // Separata states för skapa användare och inloggning
+  const [createUsername, setCreateUsername] = useState('');
+  const [createPassword, setCreatePassword] = useState('');
+  const [createAdmin, setCreateAdmin] = useState(false);
+  const [createMessage, setCreateMessage] = useState('');
+
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
+
+  const { login } = useAuth();
 
   // Hantera skapande av användare
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:8000/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, admin }),
+        body: JSON.stringify({ username: createUsername, password: createPassword, admin: createAdmin }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        setMessage('Användare skapad!');
-        setUsername('');
-        setPassword('');
-        setAdmin(false);
+        setCreateMessage('Användare skapad!');
+        setCreateUsername('');
+        setCreatePassword('');
+        setCreateAdmin(false);
+      } else if (response.status === 409) {
+        setCreateMessage('Användarnamnet är redan taget. Vänligen välj ett annat.');
       } else {
-        setMessage(`Fel: ${data.message}`);
+        setCreateMessage(`Fel: ${data.message}`);
       }
     } catch (err) {
       console.error("Fel vid kommunikation med servern:", err);
-      setMessage('Kunde inte ansluta till servern.');
+      setCreateMessage('Kunde inte ansluta till servern.');
     }
   };
+  
 
   // Hantera inloggning
   const handleLogin = async (e: React.FormEvent) => {
@@ -43,16 +53,14 @@ const Login: React.FC = () => {
       const response = await fetch('http://localhost:8000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: loginUsername, password: loginPassword }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setLoginMessage(`Välkommen, ${data.user.username}!`);
-        // Reset login form
-        setUsername('');
-        setPassword('');
+        login(data.user.username, data.user.admin); // Spara användaren i context och vidarebefordra
       } else {
         setLoginMessage(`Fel: ${data.message}`);
       }
@@ -64,51 +72,61 @@ const Login: React.FC = () => {
 
   return (
     <>
-            <Navbar />
-      <div className=" flex items-center justify-center space-x-4">
-        <div style={{ marginBottom: '2rem' }} className="font-primary text-teal-900 ">
+      <Navbar />
+      <div className="flex items-center justify-center space-x-4">
+        {/* Formulär för att skapa ny användare */}
+        <div style={{ marginBottom: '2rem' }} className="font-primary text-teal-900">
           <h2>Skapa ny användare</h2>
           <form onSubmit={handleCreateUser}>
             <div>
-              <label htmlFor="username">Användarnamn:</label>
+              <label htmlFor="create-username">Användarnamn:</label>
               <input
                 type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="create-username"
+                value={createUsername}
+                onChange={(e) => setCreateUsername(e.target.value)}
                 required
-                className='mb-4 mt-2 w-full border border-gray-300 p-2'
+                className="mb-4 mt-2 w-full border border-gray-300 p-2"
               />
             </div>
             <div>
-              <label htmlFor="password">Lösenord:</label>
+              <label htmlFor="create-password">Lösenord:</label>
               <input
                 type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                id="create-password"
+                value={createPassword}
+                onChange={(e) => setCreatePassword(e.target.value)}
                 required
-                className='mb-4 mt-2 w-full border border-gray-300 p-2'
+                className="mb-4 mt-2 w-full border border-gray-300 p-2"
+              />
+            </div>
+            <div>
+              <label htmlFor="create-admin">Admin:</label>
+              <input
+                type="checkbox"
+                id="create-admin"
+                checked={createAdmin}
+                onChange={(e) => setCreateAdmin(e.target.checked)}
               />
             </div>
             <button type="submit" className="bg-teal-900 text-white py-2 px-4 rounded">Skapa användare</button>
           </form>
-          {message && <p>{message}</p>}
+          {createMessage && <p>{createMessage}</p>}
         </div>
 
         {/* Formulär för inloggning */}
         <div className="font-primary text-teal-900">
-          <h2 >Logga in</h2>
+          <h2>Logga in</h2>
           <form onSubmit={handleLogin}>
             <div>
               <label htmlFor="login-username">Användarnamn:</label>
               <input
                 type="text"
                 id="login-username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={loginUsername}
+                onChange={(e) => setLoginUsername(e.target.value)}
                 required
-                className='mb-4 mt-2 w-full border border-gray-300 p-2'
+                className="mb-4 mt-2 w-full border border-gray-300 p-2"
               />
             </div>
             <div>
@@ -116,10 +134,10 @@ const Login: React.FC = () => {
               <input
                 type="password"
                 id="login-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
                 required
-                className='mb-4 mt-2 w-full border border-gray-300 p-2'
+                className="mb-4 mt-2 w-full border border-gray-300 p-2"
               />
             </div>
             <button type="submit" className="bg-teal-900 text-white py-2 px-4 rounded">Logga in</button>
@@ -132,5 +150,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
-

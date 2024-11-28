@@ -50,8 +50,6 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// POST: Skapa en ny användare
-
 
 app.post("/users", async (req, res) => {
   try {
@@ -61,8 +59,14 @@ app.post("/users", async (req, res) => {
       return res.status(400).json({ message: "Alla fält är obligatoriska." });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Kontrollera om användaren redan finns
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(409).json({ message: "Användarnamnet är redan taget." });
+    }
 
+    // Skapa en ny användare
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, password: hashedPassword, admin });
     await newUser.save();
 
@@ -72,6 +76,7 @@ app.post("/users", async (req, res) => {
     res.status(500).json({ message: "Något gick fel vid skapandet av användaren." });
   }
 });
+
 
 // POST: Hantera inloggning
 app.post("/login", async (req, res) => {

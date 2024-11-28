@@ -1,4 +1,3 @@
-import Navbar from '../../components/Navbar';
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -72,7 +71,6 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <div className="flex items-center justify-center space-x-4">
         {/* Formulär för att skapa ny användare */}
         <div style={{ marginBottom: '2rem' }} className="font-primary text-teal-900">

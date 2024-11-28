@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 import pizzaLogo from "../../assets/pizzaLogo.png";
 import editLogo from "../../assets/editLogo.svg";
 import lockedLogo from "../../assets/lockedLogo.svg";
@@ -44,7 +43,6 @@ const Orders = () => {
 
   return (
     <>
-      <Navbar />
       <header className="flex h-40 w-full bg-orange-100 px-2">
         <div className="flex h-full w-1/2">
           <Link to="/" className="flex items-center space-x-2">

@@ -8,9 +8,8 @@ export default {
     extend: {
       fontFamily: {
         'primary': ['Special Elite', 'cursive'],
-
-      }
+      },
     },
-  },
-  plugins: [],
+    plugins: [],
+  }
 }

@@ -49,15 +49,19 @@ import Stock from "./pages/Stock";
 import UpdateMenu from "./pages/UpdateMenu";
 import { CartProvider } from "./context/CartContext"; // Importera CartProvider
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "./context/AuthContext";
+import AdminPage from "./pages/Admin";
 
 const App = () => {
   return (
     <CartProvider>
       {/* Omslut appen med CartProvider */}
       <Router>
+        <AuthProvider>
         <Navbar />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/confirmation" element={<Confirmation />} />
@@ -69,7 +73,9 @@ const App = () => {
           <Route path="/stock" element={<Stock />} />
           <Route path="/updatemenu" element={<UpdateMenu />} />
         </Routes>
+        </AuthProvider>
       </Router>
+
     </CartProvider>
   );
 };

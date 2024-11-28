@@ -1,11 +1,9 @@
 import Header from "../../components/Header";
-import Navbar from "../../components/Navbar";
 import orderCheck from "../../assets/orderCheck.svg";
 
 const Confirmation = () => {
   return (
     <>
-      <Navbar />
       <Header title="" />
       <div className="flex h-screen flex-col items-center justify-center bg-orange-100">
         <div className="mb-4 flex items-center">

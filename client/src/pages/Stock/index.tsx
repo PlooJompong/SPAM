@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
 import pizzaLogo from "../../assets/pizzaLogo.png";
 
 const Stock = () => {
@@ -28,7 +27,6 @@ const Stock = () => {
 
   return (
     <>
-      <Navbar />
       <header className="flex h-40 w-full bg-orange-100 px-2">
         <div className="flex w-1/2 items-center">
           <Link to="/" className="flex items-center space-x-2">

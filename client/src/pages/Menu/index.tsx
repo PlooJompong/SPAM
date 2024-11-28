@@ -21,11 +21,11 @@
 //         console.log("Fetching menu...");
 //         const res = await fetch("http://localhost:8000/menu");
 //         console.log("Response status:", res.status);
-  
+
 //         if (!res.ok) {
 //           throw new Error(`HTTP error! Status: ${res.status}`);
 //         }
-  
+
 //         const data: MenuItem[] = await res.json();
 //         console.log("Fetched data:", data);
 //         setMenuItems(data);
@@ -35,7 +35,7 @@
 //         setLoading(false); // Detta ska alltid köras
 //       }
 //     };
-  
+
 //     fetchMenu();
 //   }, []);
 
@@ -63,12 +63,6 @@
 
 // export default Menu;
 
-
-
-
-
-
-
 // import { useEffect, useState } from "react";
 // import Header from "../../components/Header";
 // import Navbar from "../../components/Navbar";
@@ -93,11 +87,11 @@
 //         console.log("Fetching menu...");
 //         const res = await fetch("http://localhost:8000/menu");
 //         console.log("Response status:", res.status);
-  
+
 //         if (!res.ok) {
 //           throw new Error(`HTTP error! Status: ${res.status}`);
 //         }
-  
+
 //         const data: MenuItem[] = await res.json();
 //         console.log("Fetched data:", data);
 //         setMenuItems(data);
@@ -107,7 +101,7 @@
 //         setLoading(false); // Detta ska alltid köras
 //       }
 //     };
-  
+
 //     fetchMenu();
 //   }, []);
 
@@ -151,10 +145,8 @@
 
 // export default Menu;
 
-
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import Navbar from "../../components/Navbar";
 import { useCart } from "../../context/CartContext"; // Importera Context-hooken
 
 interface MenuItem {
@@ -176,11 +168,11 @@ const Menu: React.FC = () => {
         console.log("Fetching menu...");
         const res = await fetch("http://localhost:8000/menu");
         console.log("Response status:", res.status);
-  
+
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
-  
+
         const data: MenuItem[] = await res.json();
         console.log("Fetched data:", data);
         setMenuItems(data);
@@ -190,7 +182,7 @@ const Menu: React.FC = () => {
         setLoading(false);
       }
     };
-  
+
     fetchMenu();
   }, []);
 
@@ -200,7 +192,6 @@ const Menu: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <Header title="MENY" />
       <ul>
         {menuItems.map((item) => (
@@ -209,11 +200,22 @@ const Menu: React.FC = () => {
             <p>Pris: {item.price} kr</p>
             <p>{item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}</p>
             <p>Ingredienser: {item.ingredients.join(", ")}</p>
-            <button onClick={() => addToCart(item)}>Lägg till i varukorg</button>
+            <button onClick={() => addToCart(item)}>
+              Lägg till i varukorg
+            </button>
           </li>
         ))}
       </ul>
-      <div style={{ position: "fixed", bottom: 0, width: "100%", backgroundColor: "#f8f9fa", padding: "10px", borderTop: "1px solid #ccc" }}>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          backgroundColor: "#f8f9fa",
+          padding: "10px",
+          borderTop: "1px solid #ccc",
+        }}
+      >
         <h3>Varukorg</h3>
         <ul>
           {cart.map((cartItem, index) => (

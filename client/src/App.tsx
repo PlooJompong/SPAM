@@ -35,7 +35,6 @@
 
 // export default App;
 
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 import Cart from "./pages/Cart";
@@ -49,11 +48,14 @@ import Orders from "./pages/Orders";
 import Stock from "./pages/Stock";
 import UpdateMenu from "./pages/UpdateMenu";
 import { CartProvider } from "./context/CartContext"; // Importera CartProvider
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
-    <CartProvider> {/* Omslut appen med CartProvider */}
+    <CartProvider>
+      {/* Omslut appen med CartProvider */}
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<About />} />

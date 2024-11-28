@@ -1,11 +1,9 @@
-import Navbar from "../../components/Navbar";
 import pizzaLogo from "../../assets/pizzaLogo.png";
 import { Link } from "react-router-dom";
 
 const Landing: React.FC = () => {
   return (
     <>
-      <Navbar />
       <header className="flex h-40 w-full bg-orange-100 px-2">
         <div className="flex h-full w-1/2 space-x-2">
           <img

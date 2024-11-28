@@ -4,12 +4,10 @@ import pizzaBite from "../../assets/pizzaBite.png";
 import pizzaBox from "../../assets/pizzaBox.png";
 import checkeredPattern from "../../assets/checkeredPattern.png";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 
 const Home = () => {
   return (
     <>
-      <Navbar />
       <header className="relative top-16 flex h-80 w-full bg-orange-100">
         <img src={pizzaHand} alt="" className="h-80" />
         <div className="flex h-full w-full flex-col justify-center">
@@ -24,6 +22,7 @@ const Home = () => {
         </div>
         <img src={pizzaBite} alt="" className="h-80" />
       </header>
+
       <main className="h-76 mt-40 flex w-full">
         <section
           className="flex w-1/2 flex-shrink-0 bg-cover bg-center"
@@ -31,7 +30,7 @@ const Home = () => {
             backgroundImage: `url(${checkeredPattern})`,
           }}
         >
-          <article className="m-auto my-auto flex h-4/6 w-2/4 w-full items-center justify-center border-4 border-teal-900">
+          <article className="m-auto my-auto flex h-4/6 w-2/4 items-center justify-center border-4 border-teal-900">
             <h2 className="text-center font-primary text-2xl text-teal-900">
               <Link to="/menu">
                 JAG ÄR HUNGRIG!
@@ -42,7 +41,8 @@ const Home = () => {
             </h2>
           </article>
         </section>
-        <section className="w-1/3 bg-white p-8">
+
+        <section className="w-1/4 bg-white p-8">
           <h2 className="text-center font-primary text-3xl text-teal-900">
             ÖPPETTIDER
           </h2>
@@ -60,11 +60,10 @@ const Home = () => {
             </Link>
           </p>
         </section>
+
         <section
-          className="w-2/3 max-w-full bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${pizzaBox})`,
-          }}
+          className="w-1/4 max-w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${pizzaBox})` }}
         ></section>
       </main>
     </>

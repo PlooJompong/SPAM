@@ -9,9 +9,6 @@ export default {
       fontFamily: {
         'primary': ['Special Elite', 'cursive'],
       },
-      backgroundImage: {
-        'checkered-pattern': "url('./src/assets/checkeredPattern.png')",
-      }
     },
     plugins: [],
   }

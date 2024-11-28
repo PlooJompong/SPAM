@@ -1,32 +1,17 @@
-import Header from "../../components/Header";
-import twoPizzas from "../../assets/twoPizzas.png";
-import Container from "../../components/Container";
+import Header from '../../components/Header';
+import Container from '../../components/Container';
+import twoPizzas from '../../assets/twoPizzas.png';
 
 const About = () => {
   return (
     <>
       <Header title="Vilka är SPAM Pizza?" />
+
       <Container>
-        <main className="flex h-full flex-col items-center justify-center xl:mx-3 xl:flex-row xl:gap-5">
-          {/* <aside
-            className="w-1/3 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(${twoPizzas})`,
-            }}
-          >
-            <img src={twoPizzas} alt="logo" />
-          </aside> */}
-
-          {/* <section className="min-h-screen flex-1"> */}
-
+        <main className="flex h-full flex-col items-center justify-center xl:flex-row xl:gap-5">
           <img src={twoPizzas} alt="logo" className="my-4" />
 
-          <section className="flex h-full w-full flex-col items-center justify-center gap-5 px-2 text-left">
-            {/* <h2 className="text-center text-[1.5rem] sm:text-[1.875rem]">
-              Välkommen till SPAM Pizza – där vi tar "spam" till en helt ny
-              nivå!
-            </h2> */}
-
+          <section className="flex h-full w-full flex-col items-center justify-center gap-5 text-left">
             <h2 className="text-center text-[1.5rem] sm:text-[1.875rem]">
               SPAM Pizza – där vi tar "spam" till en helt ny nivå!
             </h2>

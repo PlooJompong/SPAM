@@ -147,6 +147,8 @@
 
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
+import Container from "../../components/Container";
+import MenuItemComponent from "./MenuItem";
 import { useCart } from "../../context/CartContext"; // Importera Context-hooken
 
 interface MenuItem {
@@ -191,33 +193,16 @@ const Menu: React.FC = () => {
   }
 
   return (
-    <>
+    <Container>
       <Header title="MENY" />
-      <ul>
+      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6 flex-wrap">
         {menuItems.map((item) => (
-          <li key={item._id}>
-            <h3>{item.name}</h3>
-            <p>Pris: {item.price} kr</p>
-            <p>{item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}</p>
-            <p>Ingredienser: {item.ingredients.join(", ")}</p>
-            <button onClick={() => addToCart(item)}>
-              Lägg till i varukorg
-            </button>
-          </li>
+          <MenuItemComponent key={item._id} item={item} addToCart={addToCart} />
         ))}
       </ul>
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          backgroundColor: "#f8f9fa",
-          padding: "10px",
-          borderTop: "1px solid #ccc",
-        }}
-      >
+      <div className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 right-0">
         <h3>Varukorg</h3>
-        <ul>
+        <ul className="flex flex-col">
           {cart.map((cartItem, index) => (
             <li key={`${cartItem._id}-${index}`}>
               {cartItem.name} - {cartItem.price} kr
@@ -225,7 +210,7 @@ const Menu: React.FC = () => {
           ))}
         </ul>
       </div>
-    </>
+    </Container>
   );
 };
 

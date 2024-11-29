@@ -22,8 +22,6 @@
 // export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 //   const [cart, setCart] = useState<MenuItem[]>([]);
 
-  
-
 //   const addToCart = (item: MenuItem) => {
 //     setCart((prevCart) => [...prevCart, item]);
 //   };
@@ -44,8 +42,6 @@
 //   return context;
 // };
 
-
-
 import React, { createContext, useState, ReactNode, useContext } from "react";
 
 interface MenuItem {
@@ -54,29 +50,58 @@ interface MenuItem {
   price: number;
   vegetarian: boolean;
   ingredients: string[];
+  quantity: number;
 }
 
 interface CartContextType {
   cart: MenuItem[];
   addToCart: (item: MenuItem) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   calculateTotalPrice: () => number; // Ny funktion
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CartProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [cart, setCart] = useState<MenuItem[]>([]);
 
   const addToCart = (item: MenuItem) => {
-    setCart((prevCart) => [...prevCart, item]);
+    // Kolla om menyartikeln redan finns i varukorgen
+    const existingItem = cart.find((cartItem) => cartItem._id === item._id);
+    if (existingItem) {
+      setCart((prevCart) =>
+        prevCart.map((cartItem) =>
+          cartItem._id === item._id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        )
+      );
+    } else {
+      // Om den inte finns, lägg till den med  1
+      setCart((prevCart) => [...prevCart, { ...item, quantity: 1 }]);
+    }
+  };
+
+  const updateQuantity = (id: string, quantity: number) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item._id === id
+          ? { ...item, quantity: Math.max(1, item.quantity + quantity) }
+          : item
+      )
+    );
   };
 
   const calculateTotalPrice = (): number => {
-    return cart.reduce((total, item) => total + item.price, 0);
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, calculateTotalPrice }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, updateQuantity, calculateTotalPrice }}
+    >
       {children}
     </CartContext.Provider>
   );

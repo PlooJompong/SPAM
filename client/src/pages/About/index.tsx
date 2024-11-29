@@ -1,11 +1,11 @@
-import Header from '../../components/Header';
-import Container from '../../components/Container';
-import twoPizzas from '../../assets/twoPizzas.png';
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
+import twoPizzas from "../../assets/twoPizzas.png";
 
-const About = () => {
+const About: React.FC = () => {
   return (
     <>
-      <Header title="Vilka är SPAM Pizza?" />
+      <CustomerHeader title="Vilka är SPAM Pizza?" />
 
       <Container>
         <main className="flex h-full flex-col items-center justify-center xl:flex-row xl:gap-5">

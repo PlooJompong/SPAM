@@ -145,9 +145,9 @@
 
 // export default Menu;
 
-import { useEffect, useState } from "react";
-import Header from "../../components/Header";
-import { useCart } from "../../context/CartContext"; // Importera Context-hooken
+import { useEffect, useState } from 'react';
+import Header from '../../components/CustomerHeader';
+import { useCart } from '../../context/CartContext'; // Importera Context-hooken
 
 interface MenuItem {
   _id: string;
@@ -165,19 +165,19 @@ const Menu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        console.log("Fetching menu...");
-        const res = await fetch("http://localhost:8000/menu");
-        console.log("Response status:", res.status);
+        console.log('Fetching menu...');
+        const res = await fetch('http://localhost:8000/menu');
+        console.log('Response status:', res.status);
 
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
 
         const data: MenuItem[] = await res.json();
-        console.log("Fetched data:", data);
+        console.log('Fetched data:', data);
         setMenuItems(data);
       } catch (err) {
-        console.error("Error fetching menu:", err);
+        console.error('Error fetching menu:', err);
       } finally {
         setLoading(false);
       }
@@ -198,8 +198,8 @@ const Menu: React.FC = () => {
           <li key={item._id}>
             <h3>{item.name}</h3>
             <p>Pris: {item.price} kr</p>
-            <p>{item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}</p>
-            <p>Ingredienser: {item.ingredients.join(", ")}</p>
+            <p>{item.vegetarian ? 'Vegetarisk' : 'Ej vegetarisk'}</p>
+            <p>Ingredienser: {item.ingredients.join(', ')}</p>
             <button onClick={() => addToCart(item)}>
               Lägg till i varukorg
             </button>
@@ -208,12 +208,12 @@ const Menu: React.FC = () => {
       </ul>
       <div
         style={{
-          position: "fixed",
+          position: 'fixed',
           bottom: 0,
-          width: "100%",
-          backgroundColor: "#f8f9fa",
-          padding: "10px",
-          borderTop: "1px solid #ccc",
+          width: '100%',
+          backgroundColor: '#f8f9fa',
+          padding: '10px',
+          borderTop: '1px solid #ccc',
         }}
       >
         <h3>Varukorg</h3>

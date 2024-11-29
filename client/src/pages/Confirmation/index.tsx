@@ -1,5 +1,5 @@
-import Header from "../../components/Header";
-import orderCheck from "../../assets/orderCheck.svg";
+import Header from '../../components/CustomerHeader';
+import orderCheck from '../../assets/orderCheck.svg';
 
 const Confirmation = () => {
   return (

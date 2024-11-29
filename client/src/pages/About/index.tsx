@@ -1,6 +1,6 @@
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
-import twoPizzas from "../../assets/twoPizzas.png";
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
+import twoPizzas from '../../assets/twoPizzas.png';
 
 const About: React.FC = () => {
   return (

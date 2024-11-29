@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
-import pizzaLogo from "../../assets/pizzaLogo.png";
-import editLogo from "../../assets/editLogo.svg";
-import lockedLogo from "../../assets/lockedLogo.svg";
-import margherita from "../../assets/margherita.png";
+import { Link } from 'react-router-dom';
+import pizzaLogo from '../../assets/pizzaLogo.png';
+import editLogo from '../../assets/editLogo.svg';
+import lockedLogo from '../../assets/lockedLogo.svg';
+import margherita from '../../assets/margherita.png';
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState, useEffect } from "react";
-import Container from "../../components/Container";
+import { useState, useEffect } from 'react';
+import Container from '../../components/Container';
+import EmployeeHeader from '../../components/EmployeeHeader';
 
 interface OrderItem {
   _id: string;
@@ -31,11 +32,11 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:8000/order");
+        const response = await fetch('http://localhost:8000/order');
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.error('Error fetching orders:', error);
       }
     };
 
@@ -45,7 +46,8 @@ const Orders = () => {
   return (
     <>
       <Container>
-        <header className="flex h-40 w-full bg-orange-100 px-2">
+        <EmployeeHeader title="Beställningar" />
+        {/* <header className="flex h-40 w-full bg-orange-100 px-2">
           <Link to="/" className="flex items-center space-x-2 w-1/2">
             <img src={pizzaLogo} alt="logo" className="h-32 w-32" />
             <h1 className="text-3xl text-teal-900">SPAM PIZZA</h1>
@@ -53,7 +55,7 @@ const Orders = () => {
           <h2 className="text-2xl text-teal-900 w-1/2 flex items-center">
             Beställningar
           </h2>
-        </header>
+        </header> */}
 
         <main className="flex h-full w-full justify-center bg-orange-100 p-4 font-sans">
           {/* Container för båda kolumner */}
@@ -74,7 +76,7 @@ const Orders = () => {
                   {/* Order-rad */}
                   <div
                     className={`flex justify-between items-center border p-4 rounded-lg cursor-pointer ${
-                      selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
+                      selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
                     }`}
                     onClick={() =>
                       setSelectedOrder(

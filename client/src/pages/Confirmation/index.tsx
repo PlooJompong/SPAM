@@ -1,10 +1,10 @@
-import Header from '../../components/CustomerHeader';
+import CustomHeader from '../../components/CustomerHeader';
 import orderCheck from '../../assets/orderCheck.svg';
 
 const Confirmation = () => {
   return (
     <>
-      <Header title="" />
+      <CustomHeader title="Orderbekräftelse" />
       <div className="flex h-screen flex-col items-center justify-center bg-orange-100">
         <div className="mb-4 flex items-center">
           <img

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Header from "../../components/CustomerHeader";
-import { useAuth } from "../../context/AuthContext";
+import React, { useEffect, useState } from 'react';
+import CustomerHeader from '../../components/CustomerHeader';
+import { useAuth } from '../../context/AuthContext';
 
 interface OrderItem {
   _id: string;
@@ -21,26 +21,28 @@ const TestHistory: React.FC = () => {
   const { user } = useAuth(); // Hämta inloggad användare från AuthContext
   const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
       if (!user) {
-        setError("Du måste vara inloggad för att se din orderhistorik.");
+        setError('Du måste vara inloggad för att se din orderhistorik.');
         setLoading(false);
         return;
       }
 
       try {
-        const response = await fetch(`http://localhost:8000/orderhistory/${user.username}`);
+        const response = await fetch(
+          `http://localhost:8000/orderhistory/${user.username}`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
       } catch (err) {
-        console.error("Fel vid hämtning av orderhistorik:", err);
-        setError("Kunde inte hämta orderhistoriken. Försök igen senare.");
+        console.error('Fel vid hämtning av orderhistorik:', err);
+        setError('Kunde inte hämta orderhistoriken. Försök igen senare.');
       } finally {
         setLoading(false);
       }
@@ -51,7 +53,7 @@ const TestHistory: React.FC = () => {
 
   return (
     <>
-      <Header title="Orderhistorik" />
+      <CustomerHeader title="Orderhistorik" />
       <main className="primary-font flex h-screen w-full items-center justify-center bg-orange-100 text-teal-900">
         {loading ? (
           <p>Laddar din orderhistorik...</p>

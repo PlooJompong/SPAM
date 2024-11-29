@@ -1,74 +1,88 @@
-import pizzaLogo from '../../assets/pizzaLogo.png';
-import pizzaHand from '../../assets/pizzaHand.png';
-import pizzaBite from '../../assets/pizzaBite.png';
-import pizzaBox from '../../assets/pizzaBox.png';
-import checkeredPattern from '../../assets/checkeredPattern.png';
-import { Link } from 'react-router-dom';
-import Container from '../../components/Container';
+import { Link } from "react-router-dom";
+import pizzaLogo from "../../assets/pizzaLogo.png";
+import pizzaHand from "../../assets/pizzaHand.png";
+import pizzaBite from "../../assets/pizzaBite.png";
+import pizzaBox from "../../assets/pizzaBox.png";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <>
-      <Container bgColor="bg-color-100">
-        <header className="relative top-16 flex h-80 w-full bg-orange-100">
-          <img src={pizzaHand} alt="" className="h-80" />
-          <div className="flex h-full w-full flex-col justify-center">
-            <h1 className="flex justify-center text-center align-middle font-primary text-5xl font-bold text-teal-900">
-              SPAM PIZZA
-            </h1>
-            <img
-              src={pizzaLogo}
-              alt="logo"
-              className="left -1/2-translate-x-1/2 h-32 w-32 transform self-center"
-            />
-          </div>
-          <img src={pizzaBite} alt="" className="h-80" />
-        </header>
+      <div className="lg:hidden">
+        <CustomerHeader title="SPAM PIZZA" />
 
-        <main className="h-76 mt-40 flex w-full">
-          <section
-            className="flex w-1/2 flex-shrink-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${checkeredPattern})`,
-            }}
-          >
-            <article className="m-auto my-auto flex h-4/6 w-2/4 items-center justify-center border-4 border-teal-900">
-              <h2 className="text-center font-primary text-2xl text-teal-900">
+        <Container>
+          <section className="my-5 flex w-full items-center justify-center gap-5">
+            <Link to="/menu">
+              <button className="rounded-full bg-teal-900 px-8 py-2 text-white">
+                Meny
+              </button>
+            </Link>
+
+            <Link to="/about">
+              <button className="rounded-full bg-teal-900 px-8 py-2 text-white">
+                Om oss
+              </button>
+            </Link>
+          </section>
+
+          <section className="flex items-center justify-center">
+            <img src={pizzaBox} alt="pizzaBox" />
+          </section>
+
+          <section className="my-5 flex flex-col gap-3 text-center">
+            <h2 className="text-[1.5rem]">ÖPPETTIDER</h2>
+            <p>TIS-TORS 12.00-23.00</p>
+            <p>FRE-LÖR 12.00-01.00</p>
+            <p>SÖN 10.00-18.00</p>
+            <p>STORGATAN 17</p>
+            <p>081 000 07 00</p>
+          </section>
+        </Container>
+      </div>
+
+      <div className="hidden lg:block">
+        <Container>
+          <header className="flex h-80 w-full bg-orange-100">
+            <img src={pizzaHand} alt="pizzaHand" />
+            <div className="flex h-full w-full flex-col justify-center">
+              <h1 className="flex justify-center text-center align-middle font-primary text-5xl font-bold text-teal-900">
+                SPAM PIZZA
+              </h1>
+              <img
+                src={pizzaLogo}
+                alt="logo"
+                className="aspect-square w-32 self-center"
+              />
+            </div>
+            <img src={pizzaBite} alt="pizzaBite" />
+          </header>
+
+          <main className="mt-40 flex w-full">
+            <section className="flex w-1/2 items-center justify-center bg-[url('/src/assets/checkeredPattern.png')] text-center">
+              <div className="flex h-40 w-2/3 items-center justify-center border-8 border-teal-900">
                 <Link to="/menu">
-                  JAG ÄR HUNGRIG!
-                  <br />
-                  <br />
-                  TA MIG TILL BESTÄLLNINGEN!
+                  <h2 className="text-[1.5rem]">
+                    JAG ÄR HUNGRIG! TA MIG TILL BESTÄLLNINGEN!
+                  </h2>
                 </Link>
-              </h2>
-            </article>
-          </section>
+              </div>
+            </section>
 
-          <section className="w-1/4 bg-white p-8">
-            <h2 className="text-center font-primary text-3xl text-teal-900">
-              ÖPPETTIDER
-            </h2>
-            <p className="text-center font-primary text-teal-900">
-              TIS-TORS 12.00-23.00 <br />
-              FRE-LÖR 12.00-01.00 <br />
-              SÖN 10.00-18.00 <br />
-              <br />
-              STORGATAN 17 <br />
-              <br />
-              08-100 007 00 <br />
-              <br />
-              <Link className="underline" to="/menu">
-                MENY
-              </Link>
-            </p>
-          </section>
+            <section className="flex w-1/4 flex-col gap-3 text-center">
+              <h2 className="text-[1.75rem]">ÖPPETTIDER</h2>
+              <p>TIS-TORS 12.00-23.00</p>
+              <p>FRE-LÖR 12.00-01.00</p>
+              <p>SÖN 10.00-18.00</p>
+              <p>STORGATAN 17</p>
+              <p>081 000 07 00</p>
+            </section>
 
-          <section
-            className="w-1/4 max-w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${pizzaBox})` }}
-          ></section>
-        </main>
-      </Container>
+            <img src={pizzaBox} alt="pizzaBox" className="w-1/4" />
+          </main>
+        </Container>
+      </div>
     </>
   );
 };

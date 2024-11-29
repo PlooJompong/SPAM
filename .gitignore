@@ -11,6 +11,9 @@ yarn-error.log*
 # Environment variables
 .env
 
+# Prettier
+.prettierrc
+
 # Build outputs
 dist/
 build/

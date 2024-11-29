@@ -1,6 +1,12 @@
-import pizzaLogo from "../assets/pizzaLogo.png";
+import pizzaLogo from '../assets/pizzaLogo.png';
 
-const EmployeeHeader: React.FC = () => {
+interface EmployeeHeaderProps {
+  title: string;
+}
+
+const EmployeeHeader: React.FC<EmployeeHeaderProps> = ({
+  title,
+}: EmployeeHeaderProps) => {
   return (
     <header className="flex w-full flex-col items-center justify-center bg-orange-100 font-primary text-teal-900">
       <section className="mx-auto flex w-full max-w-screen-2xl flex-col items-center justify-start">
@@ -13,7 +19,7 @@ const EmployeeHeader: React.FC = () => {
           <h1 className="text-[1.75rem] sm:text-[2.25rem]">SPAM PIZZA</h1>
         </div>
 
-        <h2 className="text-center text-[1.5rem] sm:text-[2rem]">Välkommen</h2>
+        <h2 className="text-center text-[1.5rem] sm:text-[2rem]">{title}</h2>
       </section>
     </header>
   );

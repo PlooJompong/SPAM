@@ -1,6 +1,6 @@
-import React from "react";
-import { useCart } from "../../context/CartContext";
-import { useAuth } from "../../context/AuthContext"; // Importera AuthContext för att få användarinfo
+import React from 'react';
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext'; // Importera AuthContext för att få användarinfo
 
 const Test: React.FC = () => {
   const { cart, addToCart, calculateTotalPrice } = useCart();
@@ -9,30 +9,31 @@ const Test: React.FC = () => {
   // Funktion för att lägga till dummydata i varukorgen
   const addDummyData = () => {
     addToCart({
-      _id: "1",
-      name: "Pizza",
+      _id: '1',
+      name: 'Pizza',
       price: 120,
       vegetarian: true,
-      ingredients: ["Tomatsås"],
+      ingredients: ['Tomatsås'],
+      quantity: 1,
     });
   };
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert("Varukorgen är tom. Lägg till något innan du beställer!");
+      alert('Varukorgen är tom. Lägg till något innan du beställer!');
       return;
     }
 
     if (!user) {
-      alert("Du måste vara inloggad för att lägga en beställning.");
+      alert('Du måste vara inloggad för att lägga en beställning.');
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8000/orders", {
-        method: "POST",
+      const response = await fetch('http://localhost:8000/orders', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: user.username, // Använd användarens namn från AuthContext
@@ -47,8 +48,8 @@ const Test: React.FC = () => {
       }
 
       const data = await response.json();
-      alert("Din beställning har skickats!");
-      console.log("Beställning skickad:", data);
+      alert('Din beställning har skickats!');
+      console.log('Beställning skickad:', data);
 
       // Skicka till orderhistorik
       await addToOrderHistory({
@@ -61,8 +62,8 @@ const Test: React.FC = () => {
       // Rensa varukorgen (valfritt)
       // clearCart();
     } catch (error) {
-      console.error("Kunde inte skicka beställningen:", error);
-      alert("Något gick fel. Försök igen.");
+      console.error('Kunde inte skicka beställningen:', error);
+      alert('Något gick fel. Försök igen.');
     }
   };
 
@@ -70,13 +71,19 @@ const Test: React.FC = () => {
   const addToOrderHistory = async (order: {
     userId: string;
     name: string;
-    items: Array<{ _id: string; name: string; price: number; vegetarian: boolean; ingredients: string[] }>;
+    items: Array<{
+      _id: string;
+      name: string;
+      price: number;
+      vegetarian: boolean;
+      ingredients: string[];
+    }>;
     totalPrice: number;
   }) => {
     try {
-      const response = await fetch("http://localhost:8000/orderhistory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:8000/orderhistory', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order),
       });
 
@@ -85,9 +92,9 @@ const Test: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Order tillagd i historik:", data);
+      console.log('Order tillagd i historik:', data);
     } catch (error) {
-      console.error("Kunde inte lägga till order i historik:", error);
+      console.error('Kunde inte lägga till order i historik:', error);
     }
   };
 
@@ -108,7 +115,11 @@ const Test: React.FC = () => {
           <h2>Totalpris: {calculateTotalPrice()} kr</h2>
           <button
             onClick={handleOrder}
-            style={{ padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
+            style={{
+              padding: '10px 20px',
+              fontSize: '16px',
+              cursor: 'pointer',
+            }}
           >
             Beställ
           </button>
@@ -118,7 +129,7 @@ const Test: React.FC = () => {
       {/* Knapp för att lägga till dummydata */}
       <button
         onClick={addDummyData}
-        style={{ padding: "10px 20px", marginTop: "20px", cursor: "pointer" }}
+        style={{ padding: '10px 20px', marginTop: '20px', cursor: 'pointer' }}
       >
         Lägg till Pizza
       </button>

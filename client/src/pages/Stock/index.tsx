@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import pizzaLogo from "../../assets/pizzaLogo.png";
+// import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+// import pizzaLogo from '../../assets/pizzaLogo.png';
+import EmployeeHeader from '../../components/EmployeeHeader';
 
 const Stock = () => {
   const [stockData, setStockData] = useState([]);
@@ -10,7 +11,7 @@ const Stock = () => {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/stock");
+        const response = await fetch('http://localhost:8000/stock');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -18,7 +19,7 @@ const Stock = () => {
         setStockData(data);
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || "An error occurred");
+        setError(err.message || 'An error occurred');
         setLoading(false);
       }
     };
@@ -27,7 +28,8 @@ const Stock = () => {
 
   return (
     <>
-      <header className="flex h-40 w-full bg-orange-100 px-2">
+      <EmployeeHeader title="Lagerstatus" />
+      {/* <header className="flex h-40 w-full bg-orange-100 px-2">
         <div className="flex w-1/2 items-center">
           <Link to="/" className="flex items-center space-x-2">
             <img
@@ -43,7 +45,8 @@ const Stock = () => {
         <h2 className="flex h-full w-1/2 items-center font-primary text-2xl text-teal-900">
           Lagerstatus
         </h2>
-      </header>
+      </header> */}
+
       <main className="m-auto flex h-full w-full justify-center bg-orange-100 p-4">
         {loading ? (
           <p>Loading...</p>

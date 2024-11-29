@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import Header from "../../components/CustomerHeader";
-import Container from "../../components/Container";
-import MenuItemComponent from "./MenuItem";
-import { useCart } from "../../context/CartContext"; // Importera Context-hooken
+import { useEffect, useState } from 'react';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
+import MenuItemComponent from './MenuItem';
+import { useCart } from '../../context/CartContext'; // Importera Context-hooken
 
-
-interface MenuItem {
+export interface MenuItem {
   _id: string;
   name: string;
   price: number;
   vegetarian: boolean;
   ingredients: string[];
+  quantity: number;
 }
 
 const Menu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { cart, addToCart } = useCart(); // Använd Context
+  const { cart } = useCart(); // Använd Context
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -48,10 +48,10 @@ const Menu: React.FC = () => {
 
   return (
     <Container>
-      <Header title="MENY" />
-      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6 flex-wrap">
+      <CustomerHeader title="MENY" />
+      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6">
         {menuItems.map((item) => (
-          <MenuItemComponent key={item._id} item={item} addToCart={addToCart} />
+          <MenuItemComponent key={item._id} item={item} />
         ))}
       </ul>
       <div className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 right-0">

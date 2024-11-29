@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "../../components/Header";
+import Header from "../../components/CustomerHeader";
 import Container from "../../components/Container";
 import MenuItemComponent from "./MenuItem";
 import { useCart } from "../../context/CartContext"; // Importera Context-hooken

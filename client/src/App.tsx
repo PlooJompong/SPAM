@@ -52,7 +52,7 @@ import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import AdminPage from "./pages/Admin";
 import Test from "./pages/Test";
-import TestHistory from "./pages/TestHistory";
+
 
 
 const App = () => {
@@ -67,7 +67,6 @@ const App = () => {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/test" element={<Test />} />
-          <Route path="/testhistory" element={<TestHistory />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/home" element={<Home />} />

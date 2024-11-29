@@ -68,7 +68,7 @@ const Stock = () => {
               {stockData.map((item: any) => (
                 <tr key={item._id} className="text-start">
                   <td className="border border-teal-900 p-2 text-teal-900">
-                    {item.ingredient}
+                    {item.name}
                   </td>
                   <td className="w-40 border border-teal-900 p-2 text-center text-teal-900">
                     {item.quantity === 0 ? (

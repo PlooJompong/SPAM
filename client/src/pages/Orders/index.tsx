@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom';
-import pizzaLogo from '../../assets/pizzaLogo.png';
-import editLogo from '../../assets/editLogo.svg';
-import lockedLogo from '../../assets/lockedLogo.svg';
-import margherita from '../../assets/margherita.png';
+//import { Link } from "react-router-dom";
+//import pizzaLogo from "../../assets/pizzaLogo.png";
+import editLogo from "../../assets/editLogo.svg";
+import lockedLogo from "../../assets/lockedLogo.svg";
+import margherita from "../../assets/margherita.png";
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState, useEffect } from 'react';
-import Container from '../../components/Container';
-import EmployeeHeader from '../../components/EmployeeHeader';
+import { useState, useEffect } from "react";
+import Container from "../../components/Container";
+import EmployeeHeader from "../../components/EmployeeHeader";
 
 interface OrderItem {
   _id: string;
@@ -15,7 +15,6 @@ interface OrderItem {
   vegetarian: boolean;
   ingredients: string[];
   quantity: number;
-  
 }
 
 interface Order {
@@ -26,22 +25,39 @@ interface Order {
   orderDate: string;
   locked: boolean;
   done: boolean;
-  comment: string;  
+  comment: string;
 }
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
+  // Formattering av datum och tid
+  const formatOrderDate = (isoDate: string) => {
+    const date = new Date(isoDate);
+    const datePart = new Intl.DateTimeFormat("sv-SE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date);
+    const timePart = new Intl.DateTimeFormat("sv-SE", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+    return `${datePart}, ${timePart}`;
+  };
+
   // Hämta ordrar från backend
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://node-mongodb-api-ks7o.onrender.com/order');
+        const response = await fetch(
+          "https://node-mongodb-api-ks7o.onrender.com/order"
+        );
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
       }
     };
 
@@ -50,7 +66,7 @@ const Orders = () => {
 
   return (
     <>
-      <Container>
+      <Container bgColor="bg-orange-100">
         <EmployeeHeader title="Beställningar" />
         {/* <header className="flex h-40 w-full bg-orange-100 px-2">
           <Link to="/" className="flex items-center space-x-2 w-1/2">
@@ -81,7 +97,7 @@ const Orders = () => {
                   {/* Order-rad */}
                   <div
                     className={`flex justify-between items-center border p-4 rounded-lg cursor-pointer ${
-                      selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
+                      selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
                     }`}
                     onClick={() =>
                       setSelectedOrder(
@@ -89,7 +105,14 @@ const Orders = () => {
                       )
                     }
                   >
-                    <div>Beställning {order._id} {order.orderDate}</div>
+                    <div>
+                      <div className="font-semibold">
+                        Beställning {order._id}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {formatOrderDate(order.orderDate)}
+                      </div>
+                    </div>
                     <div className="flex items-center space-x-5">
                       <input
                         type="checkbox"
@@ -117,9 +140,8 @@ const Orders = () => {
                             <div>
                               <div className="text-teal-900">{item.name}</div>
                               <div className="text-sm text-gray-500">
-                                {item.quantity}
+                                Antal: {item.quantity}
                               </div>
-                              
                             </div>
                           </div>
                           <div className="text-teal-900">{item.price} kr</div>
@@ -144,12 +166,10 @@ const Orders = () => {
                   <div className="flex items-center justify-between text-xl font-semibold text-teal-900 mb-4">
                     <h2 className="text-lg font-bold text-teal-900">
                       Beställning {selectedOrder}
-                      
                     </h2>
                     <button>
                       <img src={editLogo} alt="Edit" className="h-6 w-6" />
                     </button>
-                    
                   </div>
 
                   {/* Orderdetaljer */}
@@ -168,11 +188,11 @@ const Orders = () => {
                                 alt="Pizza"
                                 className="h-16 w-16 rounded-md object-cover"
                               />
-                              
+
                               <div className="flex flex-col justify-center">
                                 <div className="text-teal-900">{item.name}</div>
                                 <div className="text-sm text-gray-500">
-                                  {item.quantity}
+                                  Antal: {item.quantity}
                                 </div>
                               </div>
                             </div>
@@ -180,7 +200,6 @@ const Orders = () => {
                               <div className="text-teal-900">{item.price}</div>
                               <div className="text-teal-900">kr</div>
                             </div>
-                            
                           </div>
                         ))}
                         {/* Totalen */}

@@ -8,6 +8,7 @@ import Stock from './models/stockStatus.js';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import OrderHistory from './models/orderHistory.js'; 
+import validateApiKey from './middlewares/validateApiKey.js';
 
 dotenv.config();
 
@@ -40,9 +41,18 @@ app.get("/", async (req, res) => {
 //     res.status(500).json(err);
 //   }
 // });
+app.use((req, res, next) => {
+  if (!req.header("x-api-key")) {
+    req.headers["x-api-key"] = process.env.API_KEY; // Sätter API-nyckeln automatiskt
+    console.log("API-nyckel automatiskt tillagd:", process.env.API_KEY);
+  }
+  next();
+});
+
+app.use(validateApiKey);
 
 // Hämta alla användare
-app.get("/users", async (req, res) => {
+app.get("/users",validateApiKey, async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -52,7 +62,7 @@ app.get("/users", async (req, res) => {
 });
 
 
-app.post("/users", async (req, res) => {
+app.post("/users",validateApiKey, async (req, res) => {
   try {
     const { username, password, admin } = req.body;
 
@@ -155,6 +165,33 @@ app.put("/menu/:id", async (req, res) => {
   }
 });
 
+app.post("/menu", async (req, res) => {
+  try {
+    const { name, price, vegetarian, ingredients } = req.body; // Hämta data från request-body
+
+    // Kontrollera att alla nödvändiga fält finns
+    if (!name || !price || !Array.isArray(ingredients)) {
+      return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+    }
+
+    // Skapa en ny menyartikel
+    const newMenuItem = new Menu({
+      name,
+      price,
+      vegetarian,
+      ingredients,
+    });
+
+    // Spara den nya artikeln i databasen
+    const savedMenuItem = await newMenuItem.save();
+
+    // Returnera det sparade objektet
+    res.status(201).json({ message: "Menyartikel skapad!", menu: savedMenuItem });
+  } catch (err) {
+    console.error("Fel vid skapandet av menyartikel:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid skapandet av menyartikel." });
+  }
+});
 
 
 

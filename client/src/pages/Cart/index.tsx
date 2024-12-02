@@ -2,9 +2,11 @@ import React from "react";
 import { useCart } from "../../context/CartContext";
 import { GoPlus } from "react-icons/go";
 import { HiMinusSm } from "react-icons/hi";
+import { useAuth } from "../../context/AuthContext";
 
 const Cart: React.FC = () => {
-  const { cart, calculateTotalPrice, updateQuantity } = useCart();
+  const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
+  const { user } = useAuth();
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -16,6 +18,11 @@ const Cart: React.FC = () => {
       return;
     }
 
+    if (!user) {
+      alert("Du måste vara inloggad för att lägga en beställning.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:8000/orders", {
         method: "POST",
@@ -23,7 +30,7 @@ const Cart: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: "Kundens Namn", // Lägg till ett namn här
+          name: user.username, // Använd användarens namn från AuthContext
           items: cart, // Skickar varukorgens innehåll
           totalPrice: calculateTotalPrice(), // Skickar totalpriset
           orderDate: new Date().toISOString(), // Lägg till orderdatum
@@ -38,11 +45,49 @@ const Cart: React.FC = () => {
       alert("Din beställning har skickats!");
       console.log("Beställning skickad:", data);
 
-      // Rensa varukorgen (valfritt)
-      // clearCart();
+      // Skicka till orderhistorik
+      await addToOrderHistory({
+        userId: user.username, // Unik användaridentifierare
+        name: user.username,
+        items: cart,
+        totalPrice: calculateTotalPrice(),
+      });
+
+      // Rensa varukorgen efter beställning
+      clearCart();
     } catch (error) {
       console.error("Kunde inte skicka beställningen:", error);
       alert("Något gick fel. Försök igen.");
+    }
+  };
+
+  const addToOrderHistory = async (order: {
+    userId: string;
+    name: string;
+    items: Array<{
+      _id: string;
+      name: string;
+      price: number;
+      vegetarian: boolean;
+      ingredients: string[];
+    }>;
+    totalPrice: number;
+  }) => {
+    try {
+      const response = await fetch("http://localhost:8000/orderhistory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Order tillagd i historik:", data);
+    } catch (error) {
+      console.error("Kunde inte lägga till order i historik:", error);
     }
   };
 
@@ -82,12 +127,20 @@ const Cart: React.FC = () => {
             <span>Totalpris:</span>
             <span>{calculateTotalPrice()} kr</span>
           </h2>
-          <button
-            onClick={handleOrder}
-            className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer self-end"
-          >
-            Beställ
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={handleOrder}
+              className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer"
+            >
+              Beställ
+            </button>
+            <button
+              onClick={clearCart}
+              className="bg-red-600 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer"
+            >
+              Rensa varukorg
+            </button>
+          </div>
         </div>
       )}
     </article>

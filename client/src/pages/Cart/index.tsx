@@ -24,7 +24,7 @@ const Cart: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/orders", {
+      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ const Cart: React.FC = () => {
     totalPrice: number;
   }) => {
     try {
-      const response = await fetch("http://localhost:8000/orderhistory", {
+      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/orderhistory", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),

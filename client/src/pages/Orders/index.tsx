@@ -37,7 +37,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:8000/order');
+        const response = await fetch('https://node-mongodb-api-ks7o.onrender.com/order');
         const data = await response.json();
         setOrders(data);
       } catch (error) {

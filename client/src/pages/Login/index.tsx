@@ -19,7 +19,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/users", {
+      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/login", {
+      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

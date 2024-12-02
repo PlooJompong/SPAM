@@ -229,6 +229,23 @@ app.delete("/orders/:id", async (req, res) => {
   }
 });
 
+app.patch("/orders/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body; // Allow partial updates (e.g., { done: true })
+
+    const updatedOrder = await Order.findByIdAndUpdate(id, updates, { new: true });
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Ordern hittades inte." });
+    }
+
+    res.status(200).json({ message: "Order uppdaterad!", order: updatedOrder });
+  } catch (err) {
+    console.error("Fel vid uppdatering av order:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
+  }
+});
 
 
 // app.post('/orders', async (req, res) => {

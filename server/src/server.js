@@ -170,6 +170,14 @@ app.get("/order", async (req, res) => {
   }
 
 })
+app.get("/orders:id", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    res.status(200).json(order);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
 app.put("/orders/:id", async (req, res) => {
   try {
@@ -251,13 +259,13 @@ app.delete("/orders/:id", async (req, res) => {
 
 app.post('/orders', async (req, res) => {
   try {
-    const { name, items, totalPrice, orderDate } = req.body;
+    const { name, items, totalPrice, orderDate, quantity, locked, done, comment } = req.body;
 
     if (!name || !items || items.length === 0 || !totalPrice) {
       return res.status(400).json({ message: 'Namn, varor och totalpris krävs.' });
     }
 
-    const newOrder = new Order({ name, items, totalPrice, orderDate });
+    const newOrder = new Order({ name, items, totalPrice, orderDate, quantity, locked, done, comment });
 
     for (const item of items) {
       console.log('Bearbetar artikel:', item.name);

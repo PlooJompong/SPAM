@@ -7,6 +7,9 @@ interface MenuItem {
   vegetarian: boolean;
   ingredients: string[];
   quantity: number;
+  comment: string;
+  locked: boolean;
+  done: boolean;
 }
 
 interface CartContextType {

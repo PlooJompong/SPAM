@@ -14,6 +14,8 @@ interface OrderItem {
   price: number;
   vegetarian: boolean;
   ingredients: string[];
+  quantity: number;
+  
 }
 
 interface Order {
@@ -22,6 +24,9 @@ interface Order {
   items: OrderItem[];
   totalPrice: number;
   orderDate: string;
+  locked: boolean;
+  done: boolean;
+  comment: string;  
 }
 
 const Orders = () => {
@@ -84,7 +89,7 @@ const Orders = () => {
                       )
                     }
                   >
-                    <div>Beställning {order._id}</div>
+                    <div>Beställning {order._id} {order.orderDate}</div>
                     <div className="flex items-center space-x-5">
                       <input
                         type="checkbox"
@@ -112,8 +117,9 @@ const Orders = () => {
                             <div>
                               <div className="text-teal-900">{item.name}</div>
                               <div className="text-sm text-gray-500">
-                                Antal: 1
+                                {item.quantity}
                               </div>
+                              
                             </div>
                           </div>
                           <div className="text-teal-900">{item.price} kr</div>
@@ -138,10 +144,12 @@ const Orders = () => {
                   <div className="flex items-center justify-between text-xl font-semibold text-teal-900 mb-4">
                     <h2 className="text-lg font-bold text-teal-900">
                       Beställning {selectedOrder}
+                      
                     </h2>
                     <button>
                       <img src={editLogo} alt="Edit" className="h-6 w-6" />
                     </button>
+                    
                   </div>
 
                   {/* Orderdetaljer */}
@@ -160,10 +168,11 @@ const Orders = () => {
                                 alt="Pizza"
                                 className="h-16 w-16 rounded-md object-cover"
                               />
+                              
                               <div className="flex flex-col justify-center">
                                 <div className="text-teal-900">{item.name}</div>
                                 <div className="text-sm text-gray-500">
-                                  Antal: 1
+                                  {item.quantity}
                                 </div>
                               </div>
                             </div>
@@ -171,6 +180,7 @@ const Orders = () => {
                               <div className="text-teal-900">{item.price}</div>
                               <div className="text-teal-900">kr</div>
                             </div>
+                            
                           </div>
                         ))}
                         {/* Totalen */}

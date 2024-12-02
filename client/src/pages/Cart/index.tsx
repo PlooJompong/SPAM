@@ -3,10 +3,12 @@ import { useCart } from "../../context/CartContext";
 import { GoPlus } from "react-icons/go";
 import { HiMinusSm } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -23,18 +25,37 @@ const Cart: React.FC = () => {
       return;
     }
 
+    // Skapa beställdOrder
+    const beställdOrder = {
+      name: user.username, // Använd användarens namn från AuthContext
+      items: cart.map((item) => ({
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        vegetarian: item.vegetarian,
+        ingredients: item.ingredients,
+        quantity: item.quantity,
+      })),
+      totalPrice: calculateTotalPrice(),
+      orderDate: new Date().toISOString(),
+      locked: true,
+      done: true,
+      comment: "",
+    };
+
     try {
       const response = await fetch("http://localhost:8000/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: JSON.stringify(beställdOrder),
+        /*      body: JSON.stringify({
           name: user.username, // Använd användarens namn från AuthContext
           items: cart, // Skickar varukorgens innehåll
           totalPrice: calculateTotalPrice(), // Skickar totalpriset
           orderDate: new Date().toISOString(), // Lägg till orderdatum
-        }),
+        }), */
       });
 
       if (!response.ok) {
@@ -42,8 +63,11 @@ const Cart: React.FC = () => {
       }
 
       const data = await response.json();
-      alert("Din beställning har skickats!");
+      /* alert("Din beställning har skickats!"); */
       console.log("Beställning skickad:", data);
+      navigate("/confirmation", {
+        state: { order: beställdOrder },
+      });
 
       // Skicka till orderhistorik
       await addToOrderHistory({

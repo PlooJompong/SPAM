@@ -7,7 +7,7 @@ import Order from './models/orders.js';
 import Stock from './models/stockStatus.js';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import OrderHistory from './models/orderHistory.js'; 
+import OrderHistory from './models/orderHistory.js';
 
 dotenv.config();
 
@@ -17,9 +17,9 @@ const MONGO_URI = process.env.MONGO_URI;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000',
-}));
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+// }));
 
 mongoose
   .connect(process.env.MONGO_URI, {})
@@ -98,9 +98,9 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Fel lösenord." });
     }
 
-    res.status(200).json({ 
-      message: "Inloggning lyckades!", 
-      user: { username: user.username, admin: user.admin } 
+    res.status(200).json({
+      message: "Inloggning lyckades!",
+      user: { username: user.username, admin: user.admin }
     });
   } catch (err) {
     console.error("Fel vid inloggning:", err);
@@ -179,21 +179,60 @@ app.get("/orders:id", async (req, res) => {
   }
 })
 
+
+// ALEXS
+// app.put("/orders/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params; // ID för den order som ska uppdateras
+//     const { name, items, totalPrice, orderDate } = req.body; // Nya värden från body
+
+//     // Kontrollera att obligatoriska fält finns
+//     if (!name || !items || !totalPrice || !Array.isArray(items)) {
+//       return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+//     }
+
+//     // Hitta och uppdatera ordern i databasen
+//     const updatedOrder = await Order.findByIdAndUpdate(
+//       id,
+//       { name, items, totalPrice, orderDate },
+//       { new: true } // Returnera den uppdaterade ordern
+//     );
+
+//     if (!updatedOrder) {
+//       return res.status(404).json({ message: "Ordern hittades inte." });
+//     }
+
+//     res.status(200).json({ message: "Order uppdaterad!", order: updatedOrder });
+//   } catch (err) {
+//     console.error("Fel vid uppdatering av order:", err);
+//     res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
+//   }
+// });
+
+// ----- PLOOS -----
 app.put("/orders/:id", async (req, res) => {
   try {
-    const { id } = req.params; // ID för den order som ska uppdateras
-    const { name, items, totalPrice, orderDate } = req.body; // Nya värden från body
+    const { id } = req.params;
+    const { name, items, totalPrice, orderDate, done, locked, comment } = req.body;
 
-    // Kontrollera att obligatoriska fält finns
-    if (!name || !items || !totalPrice || !Array.isArray(items)) {
+    // Validate the request body (optional fields like done/locked don't need validation here)
+    if (!name || !items || !Array.isArray(items) || !totalPrice) {
       return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
     }
 
-    // Hitta och uppdatera ordern i databasen
+    // Update the order
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
-      { name, items, totalPrice, orderDate },
-      { new: true } // Returnera den uppdaterade ordern
+      {
+        name,
+        items,
+        totalPrice,
+        orderDate,
+        done: done ?? false, // Use provided value or default to false
+        locked: locked ?? false, // Use provided value or default to false
+        comment: comment ?? "", // Optional comment update
+      },
+      { new: true }
     );
 
     if (!updatedOrder) {
@@ -206,6 +245,26 @@ app.put("/orders/:id", async (req, res) => {
     res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
   }
 });
+
+// app.patch("/orders/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const updates = req.body; // Allow partial updates (e.g., { done: true })
+
+//     const updatedOrder = await Order.findByIdAndUpdate(id, updates, { new: true });
+
+//     if (!updatedOrder) {
+//       return res.status(404).json({ message: "Ordern hittades inte." });
+//     }
+
+//     res.status(200).json({ message: "Order uppdaterad!", order: updatedOrder });
+//   } catch (err) {
+//     console.error("Fel vid uppdatering av order:", err);
+//     res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
+//   }
+// });
+
+// -----
 
 app.delete("/orders/:id", async (req, res) => {
   try {
@@ -259,13 +318,13 @@ app.delete("/orders/:id", async (req, res) => {
 
 app.post('/orders', async (req, res) => {
   try {
-    const { name, items, totalPrice, orderDate, quantity, locked, done, comment } = req.body;
+    const { name, items, totalPrice, orderDate, quantity, } = req.body;
 
     if (!name || !items || items.length === 0 || !totalPrice) {
       return res.status(400).json({ message: 'Namn, varor och totalpris krävs.' });
     }
 
-    const newOrder = new Order({ name, items, totalPrice, orderDate, quantity, locked, done, comment });
+    const newOrder = new Order({ name, items, totalPrice, orderDate, quantity, comment: req.body.comment || "", locked: req.body.locked ?? false, done: req.body.done ?? false });
 
     for (const item of items) {
       console.log('Bearbetar artikel:', item.name);

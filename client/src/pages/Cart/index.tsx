@@ -26,7 +26,7 @@ const Cart: React.FC = () => {
     }
 
     // Skapa beställdOrder
-    const beställdOrder = {
+    const createdOrder = {
       name: user.username, // Använd användarens namn från AuthContext
       items: cart.map((item) => ({
         _id: item._id,
@@ -49,7 +49,7 @@ const Cart: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(beställdOrder),
+        body: JSON.stringify(createdOrder),
         /*      body: JSON.stringify({
           name: user.username, // Använd användarens namn från AuthContext
           items: cart, // Skickar varukorgens innehåll
@@ -66,7 +66,7 @@ const Cart: React.FC = () => {
       /* alert("Din beställning har skickats!"); */
       console.log("Beställning skickad:", data);
       navigate("/confirmation", {
-        state: { order: beställdOrder },
+        state: { order: createdOrder },
       });
 
       // Skicka till orderhistorik

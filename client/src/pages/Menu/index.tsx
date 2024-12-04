@@ -20,7 +20,8 @@ export interface MenuItem {
 const Menu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { cart, updateQuantity, removeItemFromCart } = useCart(); // Använd Context
+  const { cart, updateQuantity, removeItemFromCart, calculateTotalPrice } =
+    useCart(); // Använd Context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,34 +77,33 @@ const Menu: React.FC = () => {
       </ul>
       <div className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">
         <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
-        <ul className="flex flex-col">
+        <ul className="flex flex-col font-sans">
           {cart.map((cartItem, index) => (
             <li
               key={`${cartItem._id}-${index}`}
-              className="flex justify-between items-center border-b  border-gray-300 p-2 py-2.5"
+              className=" grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-4 border-b border-gray-300 p-2 py-2.5"
             >
-              <span>
-                {cartItem.name}
-                {/* , {cartItem.price} kr */}
-              </span>
-              <div className="flex items-center gap-2 font-sans ">
-                <HiMinusSm
-                  className="cursor-pointer"
-                  onClick={() => handleQuantityChange(cartItem._id, -1)}
-                />
-                <span>{cartItem.quantity}</span>
-                <GoPlus
-                  className="cursor-pointer"
-                  onClick={() => handleQuantityChange(cartItem._id, 1)}
-                />
-              </div>
+              <span>{cartItem.name}</span>
+              <HiMinusSm
+                className="cursor-pointer justify-self-center "
+                onClick={() => handleQuantityChange(cartItem._id, -1)}
+              />
+              <span className="text-center  ">{cartItem.quantity}</span>
+              <GoPlus
+                className="cursor-pointer justify-self-center  "
+                onClick={() => handleQuantityChange(cartItem._id, 1)}
+              />
               <FaRegTrashCan
-                className="text-red-500 cursor-pointer hover:text-red-700"
+                className="text-red-500 cursor-pointer hover:text-red-700 justify-self-end"
                 onClick={() => removeFromCart(cartItem._id)}
               />
             </li>
           ))}
         </ul>
+        <div className="flex justify-between items-center font-sans">
+          <p className=" px-1 py-4 font-bold">Totalsumma</p>
+          <p className="">{calculateTotalPrice()} kr</p>
+        </div>
         <button
           className="bg-teal-900 text-white p-2 text-sm rounded-full mx-auto block mt-4 font-sans"
           onClick={cartClick}

@@ -1,7 +1,5 @@
-// import { Link } from 'react-router-dom';
-import { useEffect, useState } from "react";
-// import pizzaLogo from '../../assets/pizzaLogo.png';
-import EmployeeHeader from "../../components/EmployeeHeader";
+import { useEffect, useState } from 'react';
+import EmployeeHeader from '../../components/EmployeeHeader';
 
 const Stock = () => {
   const [stockData, setStockData] = useState([]);
@@ -20,7 +18,7 @@ const Stock = () => {
         setStockData(data);
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || "An error occurred");
+        setError(err.message || 'An error occurred');
         setLoading(false);
       }
     };
@@ -30,23 +28,6 @@ const Stock = () => {
   return (
     <>
       <EmployeeHeader title="Lagerstatus" />
-      {/* <header className="flex h-40 w-full bg-orange-100 px-2">
-        <div className="flex w-1/2 items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <img
-              src={pizzaLogo}
-              alt="logo"
-              className="left -1/2-translate-x-1/2 h-32 w-32 transform self-center"
-            />
-            <h1 className="flex items-center justify-center whitespace-nowrap bg-orange-100 font-primary text-3xl text-teal-900">
-              SPAM PIZZA
-            </h1>
-          </Link>
-        </div>
-        <h2 className="flex h-full w-1/2 items-center font-primary text-2xl text-teal-900">
-          Lagerstatus
-        </h2>
-      </header> */}
 
       <main className="m-auto flex h-full w-full justify-center bg-orange-100 p-4">
         {loading ? (

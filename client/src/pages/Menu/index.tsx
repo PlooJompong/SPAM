@@ -11,6 +11,9 @@ export interface MenuItem {
   vegetarian: boolean;
   ingredients: string[];
   quantity: number;
+  comment: string;
+  locked: boolean;
+  done: boolean;
 }
 
 const Menu: React.FC = () => {
@@ -22,7 +25,10 @@ const Menu: React.FC = () => {
     const fetchMenu = async () => {
       try {
         console.log('Fetching menu...');
-        const res = await fetch('https://node-mongodb-api-ks7o.onrender.com/menu');
+        const res = await fetch(
+          'http://localhost:8000/menu'
+          // 'https://node-mongodb-api-ks7o.onrender.com/menu'
+        );
         console.log('Response status:', res.status);
 
         if (!res.ok) {

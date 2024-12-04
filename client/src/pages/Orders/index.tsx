@@ -1,12 +1,12 @@
 //import { Link } from "react-router-dom";
 //import pizzaLogo from "../../assets/pizzaLogo.png";
-import editLogo from "../../assets/editLogo.svg";
-import lockedLogo from "../../assets/lockedLogo.svg";
-import margherita from "../../assets/margherita.png";
+import editLogo from '../../assets/editLogo.svg';
+import lockedLogo from '../../assets/lockedLogo.svg';
+import margherita from '../../assets/margherita.png';
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState, useEffect } from "react";
-import Container from "../../components/Container";
-import EmployeeHeader from "../../components/EmployeeHeader";
+import { useState, useEffect } from 'react';
+import Container from '../../components/Container';
+import EmployeeHeader from '../../components/EmployeeHeader';
 
 interface OrderItem {
   _id: string;
@@ -35,14 +35,14 @@ const Orders = () => {
   // Formattering av datum och tid
   const formatOrderDate = (isoDate: string) => {
     const date = new Date(isoDate);
-    const datePart = new Intl.DateTimeFormat("sv-SE", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+    const datePart = new Intl.DateTimeFormat('sv-SE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     }).format(date);
-    const timePart = new Intl.DateTimeFormat("sv-SE", {
-      hour: "2-digit",
-      minute: "2-digit",
+    const timePart = new Intl.DateTimeFormat('sv-SE', {
+      hour: '2-digit',
+      minute: '2-digit',
     }).format(date);
     return `${datePart}, ${timePart}`;
   };
@@ -51,13 +51,14 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(
-          "https://node-mongodb-api-ks7o.onrender.com/order"
-        );
+        const response = await fetch(`http://localhost:8000/orders`);
+        //   (
+        //   "https://node-mongodb-api-ks7o.onrender.com/order"
+        // );
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.error('Error fetching orders:', error);
       }
     };
 
@@ -97,7 +98,7 @@ const Orders = () => {
                   {/* Order-rad */}
                   <div
                     className={`flex justify-between items-center border p-4 rounded-lg cursor-pointer ${
-                      selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
+                      selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
                     }`}
                     onClick={() =>
                       setSelectedOrder(

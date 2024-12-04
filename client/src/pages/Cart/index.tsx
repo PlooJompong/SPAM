@@ -1,9 +1,9 @@
-import React from "react";
-import { useCart } from "../../context/CartContext";
-import { GoPlus } from "react-icons/go";
-import { HiMinusSm } from "react-icons/hi";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useCart } from '../../context/CartContext';
+import { GoPlus } from 'react-icons/go';
+import { HiMinusSm } from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
@@ -16,12 +16,12 @@ const Cart: React.FC = () => {
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert("Varukorgen är tom. Lägg till något innan du beställer!");
+      alert('Varukorgen är tom. Lägg till något innan du beställer!');
       return;
     }
 
     if (!user) {
-      alert("Du måste vara inloggad för att lägga en beställning.");
+      alert('Du måste vara inloggad för att lägga en beställning.');
       return;
     }
 
@@ -38,25 +38,23 @@ const Cart: React.FC = () => {
       })),
       totalPrice: calculateTotalPrice(),
       orderDate: new Date().toISOString(),
-      locked: true,
-      done: true,
-      comment: "",
+      locked: false,
+      done: false,
+      comment: '',
     };
 
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createdOrder),
-        /*      body: JSON.stringify({
-          name: user.username, // Använd användarens namn från AuthContext
-          items: cart, // Skickar varukorgens innehåll
-          totalPrice: calculateTotalPrice(), // Skickar totalpriset
-          orderDate: new Date().toISOString(), // Lägg till orderdatum
-        }), */
-      });
+      const response = await fetch(
+        'http://localhost:8000/orders',
+        // 'https://node-mongodb-api-ks7o.onrender.com/orders',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(createdOrder),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -64,56 +62,60 @@ const Cart: React.FC = () => {
 
       const data = await response.json();
       /* alert("Din beställning har skickats!"); */
-      console.log("Beställning skickad:", data);
-      navigate("/confirmation", {
+      console.log('Beställning skickad:', data);
+      navigate('/confirmation', {
         state: { order: createdOrder },
       });
 
       // Skicka till orderhistorik
-      await addToOrderHistory({
-        userId: user.username, // Unik användaridentifierare
-        name: user.username,
-        items: cart,
-        totalPrice: calculateTotalPrice(),
-      });
+      // await addToOrderHistory({
+      //   // userId: user.username, // Unik användaridentifierare
+      //   name: user.username,
+      //   items: cart,
+      //   totalPrice: calculateTotalPrice(),
+      // });
 
       // Rensa varukorgen efter beställning
       clearCart();
     } catch (error) {
-      console.error("Kunde inte skicka beställningen:", error);
-      alert("Något gick fel. Försök igen.");
+      console.error('Kunde inte skicka beställningen:', error);
+      alert('Något gick fel. Försök igen.');
     }
   };
 
-  const addToOrderHistory = async (order: {
-    userId: string;
-    name: string;
-    items: Array<{
-      _id: string;
-      name: string;
-      price: number;
-      vegetarian: boolean;
-      ingredients: string[];
-    }>;
-    totalPrice: number;
-  }) => {
-    try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/orderhistory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(order),
-      });
+  // const addToOrderHistory = async (order: {
+  //   // userId: string;
+  //   name: string;
+  //   items: Array<{
+  //     _id: string;
+  //     name: string;
+  //     price: number;
+  //     vegetarian: boolean;
+  //     ingredients: string[];
+  //   }>;
+  //   totalPrice: number;
+  // }) => {
+  //   try {
+  //     const response = await fetch(
+  //       // 'https://node-mongodb-api-ks7o.onrender.com/orderhistory',
+  //       'https://localhost:8000/orderhistory',
+  //       {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify(order),
+  //       }
+  //     );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
 
-      const data = await response.json();
-      console.log("Order tillagd i historik:", data);
-    } catch (error) {
-      console.error("Kunde inte lägga till order i historik:", error);
-    }
-  };
+  //     const data = await response.json();
+  //     console.log('Order tillagd i historik:', data);
+  //   } catch (error) {
+  //     console.error('Kunde inte lägga till order i historik:', error);
+  //   }
+  // };
 
   return (
     <article className="flex flex-col p-4">

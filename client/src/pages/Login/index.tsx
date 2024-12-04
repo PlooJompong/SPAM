@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const Login: React.FC = () => {
   // Separata states för skapa användare och inloggning
-  const [createUsername, setCreateUsername] = useState("");
-  const [createPassword, setCreatePassword] = useState("");
+  const [createUsername, setCreateUsername] = useState('');
+  const [createPassword, setCreatePassword] = useState('');
   const [createAdmin, setCreateAdmin] = useState(false);
-  const [createMessage, setCreateMessage] = useState("");
+  const [createMessage, setCreateMessage] = useState('');
 
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [loginMessage, setLoginMessage] = useState("");
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
 
   const { login } = useAuth();
 
@@ -19,33 +19,37 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: createUsername,
-          password: createPassword,
-          admin: createAdmin,
-        }),
-      });
+      const response = await fetch(
+        // "https://node-mongodb-api-ks7o.onrender.com/users"
+        'http://localhost:8000/users',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: createUsername,
+            password: createPassword,
+            admin: createAdmin,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        setCreateMessage("Användare skapad!");
-        setCreateUsername("");
-        setCreatePassword("");
+        setCreateMessage('Användare skapad!');
+        setCreateUsername('');
+        setCreatePassword('');
         setCreateAdmin(false);
       } else if (response.status === 409) {
         setCreateMessage(
-          "Användarnamnet är redan taget. Vänligen välj ett annat."
+          'Användarnamnet är redan taget. Vänligen välj ett annat.'
         );
       } else {
         setCreateMessage(`Fel: ${data.message}`);
       }
     } catch (err) {
-      console.error("Fel vid kommunikation med servern:", err);
-      setCreateMessage("Kunde inte ansluta till servern.");
+      console.error('Fel vid kommunikation med servern:', err);
+      setCreateMessage('Kunde inte ansluta till servern.');
     }
   };
 
@@ -54,14 +58,18 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: loginUsername,
-          password: loginPassword,
-        }),
-      });
+      const response = await fetch(
+        'http://localhost:8000/login',
+        // 'https://node-mongodb-api-ks7o.onrender.com/login',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: loginUsername,
+            password: loginPassword,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -72,8 +80,8 @@ const Login: React.FC = () => {
         setLoginMessage(`Fel: ${data.message}`);
       }
     } catch (err) {
-      console.error("Fel vid kommunikation med servern:", err);
-      setLoginMessage("Kunde inte ansluta till servern.");
+      console.error('Fel vid kommunikation med servern:', err);
+      setLoginMessage('Kunde inte ansluta till servern.');
     }
   };
 

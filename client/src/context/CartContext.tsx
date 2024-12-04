@@ -17,7 +17,7 @@ interface CartContextType {
   addToCart: (item: MenuItem) => void;
   updateQuantity: (id: string, quantity: number) => void;
   calculateTotalPrice: () => number;
-  /*   removeItemFromCart: (id: string) => void; */
+  removeItemFromCart: (id: string) => void;
   clearCart: () => void;
 }
 
@@ -60,9 +60,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  /*   const removeItemFromCart = (id: string) => {
+  const removeItemFromCart = (id: string) => {
     setCart((prevCart) => prevCart.filter((item) => item._id !== id));
-  }; */
+  };
 
   const clearCart = () => {
     setCart([]); // Töm varukorgen
@@ -75,7 +75,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         addToCart,
         updateQuantity,
         calculateTotalPrice,
-        /* removeItemFromCart, */
+        removeItemFromCart,
         clearCart,
       }}
     >

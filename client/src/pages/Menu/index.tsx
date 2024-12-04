@@ -4,7 +4,7 @@ import Container from "../../components/Container";
 import MenuItemComponent from "./MenuItem";
 import { useCart } from "../../context/CartContext"; // Importera Context-hooken
 import { useNavigate } from "react-router-dom";
-/* import { FaRegTrashCan } from "react-icons/fa6"; */
+import { FaRegTrashCan } from "react-icons/fa6";
 import { HiMinusSm } from "react-icons/hi";
 import { GoPlus } from "react-icons/go";
 
@@ -20,7 +20,7 @@ export interface MenuItem {
 const Menu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { cart, updateQuantity /* , removeItemFromCart */ } = useCart(); // Använd Context
+  const { cart, updateQuantity, removeItemFromCart } = useCart(); // Använd Context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,10 +61,10 @@ const Menu: React.FC = () => {
     updateQuantity(itemId, change);
   };
 
-  /*   const removeFromCart = (id: string) => {
+  const removeFromCart = (id: string) => {
     console.log(`Removed pizza with ID: ${id}`);
     removeItemFromCart(id);
-  }; */
+  };
 
   return (
     <Container>
@@ -97,10 +97,10 @@ const Menu: React.FC = () => {
                   onClick={() => handleQuantityChange(cartItem._id, 1)}
                 />
               </div>
-              {/*     <FaRegTrashCan
+              <FaRegTrashCan
                 className="text-red-500 cursor-pointer hover:text-red-700"
                 onClick={() => removeFromCart(cartItem._id)}
-              /> */}
+              />
             </li>
           ))}
         </ul>

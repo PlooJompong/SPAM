@@ -162,7 +162,7 @@ const Cart: React.FC = () => {
             </button>
             <button
               onClick={clearCart}
-              className="bg-red-600 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer"
+              className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red8-00"
             >
               Rensa varukorg
             </button>

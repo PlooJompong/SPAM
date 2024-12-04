@@ -126,7 +126,7 @@ const Login: React.FC = () => {
             </fieldset>
             <button
               type="submit"
-              className="bg-teal-900 text-white py-2 px-4 rounded"
+              className="bg-teal-900 text-white py-2 px-4 rounded hover:bg-teal-800"
             >
               Skapa användare
             </button>
@@ -165,7 +165,7 @@ const Login: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-teal-900 text-white py-2 px-4 rounded"
+              className="bg-teal-900 hover:bg-teal-800 text-white py-2 px-4 rounded"
             >
               Logga in
             </button>

@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import Container from "../../components/Container";
+import EmployeeHeader from "../../components/EmployeeHeader";
+import UpdateItemComponent from "./UpdateItem";
 
-interface MenuItem {
+        
+export interface MenuItem {
   _id: string;
   name: string;
   price: number;
   vegetarian: boolean;
   ingredients: string[];
+  comment?: string;
+  locked?: boolean;
+  done?: boolean;
 }
 
 const UpdateMenu: React.FC = () => {
@@ -148,97 +155,107 @@ const UpdateMenu: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Uppdatera Meny</h1>
-      <ul>
-        {menuItems.map((item) => (
-          <li key={item._id}>
-            <h3>{item.name}</h3>
-            <p>Pris: {item.price} kr</p>
-            <p>{item.vegetarian ? 'Vegetarisk' : 'Ej vegetarisk'}</p>
-            <p>Ingredienser: {item.ingredients.join(', ')}</p>
-            <button onClick={() => handleEdit(item)}>Redigera</button>
+    <Container bgColor="bg-orange-100">
+      <EmployeeHeader title="Ändra meny" />
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
+        {menuItems.map((item) => (´´
+          <li key={item._id} className="sm:w-full md:w-1/2">
+            <UpdateItemComponent item={item} handleEdit={handleEdit} />
           </li>
         ))}
       </ul>
-
-      {/* Redigeringsformulär */}
-      {editingItem && (
-        <form onSubmit={handleUpdate}>
-          <h2>Redigera: {editingItem.name}</h2>
-          <label>
-            Namn:
-            <input
-              type="text"
-              name="name"
-              value={formData.name || ''}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Pris:
-            <input
-              type="number"
-              name="price"
-              value={formData.price || 0}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Vegetarisk:
-            <select
-              name="vegetarian"
-              value={formData.vegetarian ? 'true' : 'false'}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  vegetarian: e.target.value === 'true',
-                }))
-              }
-            >
-              <option value="true">Ja</option>
-              <option value="false">Nej</option>
-            </select>
-          </label>
-          <br />
-          <label>
-            Ingredienser:
-            <textarea
-              name="ingredients"
-              value={(formData.ingredients || []).join(', ')}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  ingredients: e.target.value
-                    .split(',')
-                    .map((ing) => ing.trim()),
-                }))
-              }
-              required
-            />
-          </label>
-          <br />
-          <button type="submit">Spara ändringar</button>
-          <button
-            type="button"
-            onClick={() => setEditingItem(null)}
-            style={{ marginLeft: '10px' }}
+      <section className="flex flex-wrap gap-2 justify-center items-start h-auto mt-8  lg:flex-nowrap md:flex-nowrap">
+        {/* Redigeringsformulär */}
+        {editingItem && (
+          <form
+            onSubmit={handleUpdate}
+            className="flex flex-col gap-2 lg:w-96 lg:w-80 md:w-80 sm:w-80 rounded-md border-2 border-teal-900 p-4"
           >
-            Avbryt
-          </button>
-        </form>
-      )}
+            <h2>Redigerar "{editingItem.name}"</h2>
+            <label className="flex gap-1">
+              Namn
+              <input
+                type="text"
+                name="name"
+                value={formData.name || ""}
+                onChange={handleChange}
+                required
+                className="w-full focus:outline-teal-900 rounded-md focus:p-1"
+              />
+            </label>
 
-      {/* Formulär för ny artikel */}
-      <div style={{ marginTop: '20px' }}>
-        <h2>Lägg till ny artikel</h2>
-        <form onSubmit={handleAddNewItem}>
-          <label>
-            Namn:
+            <label className="flex gap-1">
+              Pris
+              <input
+                type="number"
+                name="price"
+                value={formData.price || 0}
+                onChange={handleChange}
+                required
+                className="w-full focus:outline-teal-900 rounded-md focus:p-1"
+              />
+            </label>
+
+            <label className="flex gap-1">
+              Vegetarisk
+              <select
+                name="vegetarian"
+                value={formData.vegetarian ? "true" : "false"}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    vegetarian: e.target.value === "true",
+                  }))
+                }
+                className="focus:outline-teal-900 rounded-md"
+              >
+                <option value="true">Ja</option>
+                <option value="false">Nej</option>
+              </select>
+            </label>
+
+            <label>
+              Ingredienser:
+              <textarea
+                name="ingredients"
+                value={(formData.ingredients || []).join(", ")}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    ingredients: e.target.value
+                      .split(",")
+                      .map((ing) => ing.trim()),
+                  }))
+                }
+                required
+                className="w-full focus:outline-teal-900 rounded-md h-24 focus:p-1"
+              />
+            </label>
+
+            <button
+              type="submit"
+              className="bg-teal-900 text-white rounded-md px-4 py-2 hover:bg-teal-800"
+            >
+              Spara ändringar
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditingItem(null)}
+              className="bg-red-900 text-white rounded-md px-4 py-2 hover:bg-red-800"
+            >
+              Avbryt
+            </button>
+          </form>
+        )}
+
+        {/* Formulär för ny artikel */}
+        <form
+          onSubmit={handleAddNewItem}
+          className="flex flex-col gap-2 w-96 rounded-md border-2 border-teal-900 p-4"
+        >
+          <h2 className="text-xl">Lägg till ny pizza</h2>
+          <label className="flex gap-1">
+            Namn
             <input
               type="text"
               name="name"
@@ -247,11 +264,11 @@ const UpdateMenu: React.FC = () => {
                 setNewItem((prev) => ({ ...prev, name: e.target.value }))
               }
               required
+              className="w-full focus:outline-teal-900 rounded-md focus:p-1"
             />
           </label>
-          <br />
-          <label>
-            Pris:
+          <label className="flex gap-1">
+            Pris
             <input
               type="number"
               name="price"
@@ -263,11 +280,12 @@ const UpdateMenu: React.FC = () => {
                 }))
               }
               required
+              className="w-full focus:outline-teal-900 rounded-md focus:p-1"
             />
           </label>
-          <br />
-          <label>
-            Vegetarisk:
+
+          <label className="flex gap-1">
+            Vegetarisk
             <select
               name="vegetarian"
               value={newItem.vegetarian ? 'true' : 'false'}
@@ -277,13 +295,14 @@ const UpdateMenu: React.FC = () => {
                   vegetarian: e.target.value === 'true',
                 }))
               }
+              className="focus:outline-teal-900 rounded-md"
             >
               <option value="true">Ja</option>
               <option value="false">Nej</option>
             </select>
           </label>
-          <br />
-          <label>
+
+          <label className="flex flex-col gap-1">
             Ingredienser (kommaseparerade):
             <textarea
               name="ingredients"
@@ -297,13 +316,19 @@ const UpdateMenu: React.FC = () => {
                 }))
               }
               required
+              className="w-full focus:outline-teal-900 rounded-md h-24 focus:p-1"
             />
           </label>
           <br />
-          <button type="submit">Lägg till artikel</button>
+          <button
+            type="submit"
+            className="bg-teal-900 text-white rounded-md px-4 py-2 hover:bg-teal-800"
+          >
+            Lägg till pizza
+          </button>
         </form>
-      </div>
-    </div>
+      </section>
+    </Container>
   );
 };
 

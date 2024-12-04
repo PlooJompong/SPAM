@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
-import MenuItemComponent from './MenuItem';
-import { useCart } from '../../context/CartContext'; // Importera Context-hooken
+import { useEffect, useState } from "react";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
+import MenuItemComponent from "./MenuItem";
+import { useCart } from "../../context/CartContext"; // Importera Context-hooken
 
 export interface MenuItem {
   _id: string;
@@ -37,11 +37,11 @@ const Menu: React.FC = () => {
         }
 
         const data: MenuItem[] = await res.json();
-        console.log('Fetched data:', data);
+        console.log("Fetched data:", data);
         setMenuItems(data);
         setFilteredMenuItems(data); // Sätt initiala filtrerade alternativ till alla objekt
       } catch (err) {
-        console.error('Error fetching menu:', err);
+        console.error("Error fetching menu:", err);
       } finally {
         setLoading(false);
       }
@@ -74,6 +74,9 @@ const Menu: React.FC = () => {
   return (
     <Container>
       <CustomerHeader title="MENY" />
+      <ul className="flex flex-col flex-wrap h-[500px] m-auto w-5/6">
+        {menuItems.map((item) => (
+
       <div className="mb-4">
         <button
           onClick={sortByPrice}
@@ -96,6 +99,7 @@ const Menu: React.FC = () => {
       </div>
       <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6">
         {filteredMenuItems.map((item) => (
+
           <MenuItemComponent key={item._id} item={item} />
         ))}
       </ul>

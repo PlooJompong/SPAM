@@ -1,7 +1,7 @@
-import React from 'react';
-import { useCart } from '../../context/CartContext';
-import { FaCirclePlus } from 'react-icons/fa6';
-import { MenuItem } from './index.tsx';
+import React from "react";
+import { useCart } from "../../context/CartContext";
+import { FaCirclePlus } from "react-icons/fa6";
+import { MenuItem } from "./index.tsx";
 
 interface MenuItemProps {
   item: MenuItem;
@@ -20,10 +20,10 @@ const MenuItemComponent: React.FC<MenuItemProps> = ({ item }) => {
         </div>
 
         <p className="font-primary text-lg text-teal-900 italic">
-          {item.vegetarian ? 'Vegetarisk' : 'Ej vegetarisk'}
+          {item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}
         </p>
         <p className="font-primary text-lg text-teal-900">
-          {item.ingredients.join(', ')}
+          {item.ingredients.join(", ")}
         </p>
       </div>
       <FaCirclePlus

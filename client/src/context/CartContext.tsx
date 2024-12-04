@@ -17,6 +17,7 @@ interface CartContextType {
   addToCart: (item: MenuItem) => void;
   updateQuantity: (id: string, quantity: number) => void;
   calculateTotalPrice: () => number;
+  removeItemFromCart: (id: string) => void;
   clearCart: () => void;
 }
 
@@ -43,19 +44,24 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const updateQuantity = (id: string, quantity: number) => {
-    setCart((prevCart) =>
-      prevCart
-        .map((item) =>
-          item._id === id
-            ? { ...item, quantity: Math.max(0, item.quantity + quantity) }
-            : item
-        )
-        .filter((item) => item.quantity > 0) // Ta bort objekt med quantity 0
+    setCart(
+      (prevCart) =>
+        prevCart
+          .map((item) =>
+            item._id === id
+              ? { ...item, quantity: Math.max(0, item.quantity + quantity) }
+              : item
+          )
+          .filter((item) => item.quantity > 0) // Ta bort objekt med quantity 0
     );
   };
 
   const calculateTotalPrice = (): number => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const removeItemFromCart = (id: string) => {
+    setCart((prevCart) => prevCart.filter((item) => item._id !== id));
   };
 
   const clearCart = () => {
@@ -64,7 +70,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateQuantity, calculateTotalPrice, clearCart }}
+      value={{
+        cart,
+        addToCart,
+        updateQuantity,
+        calculateTotalPrice,
+        removeItemFromCart,
+        clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>
@@ -78,4 +91,3 @@ export const useCart = (): CartContextType => {
   }
   return context;
 };
-

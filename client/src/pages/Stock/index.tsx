@@ -1,7 +1,7 @@
 // import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 // import pizzaLogo from '../../assets/pizzaLogo.png';
-import EmployeeHeader from '../../components/EmployeeHeader';
+import EmployeeHeader from "../../components/EmployeeHeader";
 
 const Stock = () => {
   const [stockData, setStockData] = useState([]);
@@ -11,7 +11,8 @@ const Stock = () => {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch('https://node-mongodb-api-ks7o.onrender.com/stock');
+        const response = await fetch('http://localhost:8000/stock');
+        // ('https://node-mongodb-api-ks7o.onrender.com/stock');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -19,7 +20,7 @@ const Stock = () => {
         setStockData(data);
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || 'An error occurred');
+        setError(err.message || "An error occurred");
         setLoading(false);
       }
     };
@@ -59,7 +60,7 @@ const Stock = () => {
                 <th className="border border-teal-900 p-2 text-start">
                   Artikel
                 </th>
-                <th className="w-44 border border-teal-900 p-2 text-center">
+                <th className="w-44 border border-teal-900 p-2 text-center lg:table-cell md:table-cell sm:hidden">
                   Status
                 </th>
                 <th className="w-44 border border-teal-900 p-2 text-center">
@@ -73,7 +74,7 @@ const Stock = () => {
                   <td className="border border-teal-900 p-2 text-teal-900">
                     {item.name}
                   </td>
-                  <td className="w-40 border border-teal-900 p-2 text-center text-teal-900">
+                  <td className="w-40 border border-teal-900 p-2 text-center text-teal-900 sm:hidden md:table-cell lg:table-cell">
                     {item.quantity === 0 ? (
                       <span className="inline-block rounded-xl bg-zinc-200 px-2 py-1 font-bold text-zinc-400">
                         Slut i lager

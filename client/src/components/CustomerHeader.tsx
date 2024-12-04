@@ -18,9 +18,13 @@ const CustomerHeader: React.FC<CustomerHeaderProps> = ({
         <img src={pizzaLogo} alt="logo" className="aspect-square w-[160px]" />
       </Link>
 
-      <div className="flex h-[140px] w-full items-center justify-center bg-[url('/src/assets/checkeredPattern.png')]">
+      {/* <div className="flex h-[140px] w-full items-center justify-center bg-[url('/src/assets/border.png')]">
         <h1 className="text-[2.25rem]">{title}</h1>
+      </div> */}
+      <div className="w-full bg-[url('/src/assets/border.png')] mb-4">
+        <div className="h-[60px]"></div>
       </div>
+      <h1 className="text-[2.25rem]">{title}</h1>
     </header>
   );
 };

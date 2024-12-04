@@ -11,24 +11,26 @@ export interface MenuItem {
   vegetarian: boolean;
   ingredients: string[];
   quantity: number;
-  comment?: string;
-  locked?: boolean;
-  done?: boolean;
+  comment: string;
+  locked: boolean;
+  done: boolean;
 }
 
 const Menu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { cart } = useCart(); // Använd Context
+  const [filteredMenuItems, setFilteredMenuItems] = useState<MenuItem[]>([]);
 
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        console.log("Fetching menu...");
+        console.log('Fetching menu...');
         const res = await fetch(
-          "https://node-mongodb-api-ks7o.onrender.com/menu"
+          'http://localhost:8000/menu'
+          // 'https://node-mongodb-api-ks7o.onrender.com/menu'
         );
-        console.log("Response status:", res.status);
+        console.log('Response status:', res.status);
 
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -37,6 +39,7 @@ const Menu: React.FC = () => {
         const data: MenuItem[] = await res.json();
         console.log("Fetched data:", data);
         setMenuItems(data);
+        setFilteredMenuItems(data); // Sätt initiala filtrerade alternativ till alla objekt
       } catch (err) {
         console.error("Error fetching menu:", err);
       } finally {
@@ -47,6 +50,23 @@ const Menu: React.FC = () => {
     fetchMenu();
   }, []);
 
+    // Funktion för att sortera efter pris
+    const sortByPrice = () => {
+      const sortedItems = [...filteredMenuItems].sort((a, b) => a.price - b.price);
+      setFilteredMenuItems(sortedItems);
+    };
+  
+    // Funktion för att visa endast vegetariska alternativ
+    const filterVegetarian = () => {
+      const vegetarianItems = menuItems.filter((item) => item.vegetarian);
+      setFilteredMenuItems(vegetarianItems);
+    };
+  
+    // Funktion för att visa alla alternativ igen
+    const resetFilters = () => {
+      setFilteredMenuItems(menuItems);
+    };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -56,6 +76,30 @@ const Menu: React.FC = () => {
       <CustomerHeader title="MENY" />
       <ul className="flex flex-col flex-wrap h-[500px] m-auto w-5/6">
         {menuItems.map((item) => (
+
+      <div className="mb-4">
+        <button
+          onClick={sortByPrice}
+          className="bg-teal-700 text-white px-4 py-2 rounded mr-2"
+        >
+          Sortera efter pris
+        </button>
+        <button
+          onClick={filterVegetarian}
+          className="bg-green-700 text-white px-4 py-2 rounded mr-2"
+        >
+          Visa vegetariska
+        </button>
+        <button
+          onClick={resetFilters}
+          className="bg-gray-700 text-white px-4 py-2 rounded"
+        >
+          Visa alla
+        </button>
+      </div>
+      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6">
+        {filteredMenuItems.map((item) => (
+
           <MenuItemComponent key={item._id} item={item} />
         ))}
       </ul>

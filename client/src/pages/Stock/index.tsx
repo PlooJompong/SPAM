@@ -11,9 +11,8 @@ const Stock = () => {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch(
-          "https://node-mongodb-api-ks7o.onrender.com/stock"
-        );
+        const response = await fetch('http://localhost:8000/stock');
+        // ('https://node-mongodb-api-ks7o.onrender.com/stock');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

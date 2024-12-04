@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const orderHistorySchema = new mongoose.Schema({
-  userId: { type: String, required: true }, // ID för användaren som la beställningen
+  name: { type: String, required: true }, // ID för användaren som la beställningen
   orders: [
     {
       name: { type: String, required: true },
@@ -14,9 +14,6 @@ const orderHistorySchema = new mongoose.Schema({
           ingredients: { type: [String], required: true },
         },
       ],
-      comment: { type: String, required: true },
-      locked: { type: Boolean, required: true },
-      done: { type: Boolean, required: true },
       totalPrice: { type: Number, required: true },
       orderDate: { type: Date, default: Date.now },
     },
@@ -24,4 +21,5 @@ const orderHistorySchema = new mongoose.Schema({
 });
 
 const OrderHistory = mongoose.model('OrderHistory', orderHistorySchema);
+
 export default OrderHistory;

@@ -70,9 +70,11 @@ const Menu: React.FC = () => {
   return (
     <Container>
       <CustomerHeader title="MENY" />
-      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6 ">
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
         {menuItems.map((item) => (
-          <MenuItemComponent key={item._id} item={item} />
+          <li key={item._id} className="sm:w-full md:w-1/2">
+            <MenuItemComponent key={item._id} item={item} />
+          </li>
         ))}
       </ul>
       <div className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">

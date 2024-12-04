@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Container from "../../components/Container";
-import EmployeeHeader from "../../components/EmployeeHeader";
-import UpdateItemComponent from "./UpdateItem";
+import React, { useEffect, useState } from 'react';
+import Container from '../../components/Container';
+import EmployeeHeader from '../../components/EmployeeHeader';
+import UpdateItemComponent from './UpdateItem';
 
-        
 export interface MenuItem {
   _id: string;
   name: string;
   price: number;
   vegetarian: boolean;
   ingredients: string[];
-  comment?: string;
-  locked?: boolean;
-  done?: boolean;
+  comment: string;
+  locked: boolean;
+  done: boolean;
 }
 
 const UpdateMenu: React.FC = () => {
@@ -158,7 +157,7 @@ const UpdateMenu: React.FC = () => {
     <Container bgColor="bg-orange-100">
       <EmployeeHeader title="Ändra meny" />
       <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
-        {menuItems.map((item) => (´´
+        {menuItems.map((item) => (
           <li key={item._id} className="sm:w-full md:w-1/2">
             <UpdateItemComponent item={item} handleEdit={handleEdit} />
           </li>
@@ -169,7 +168,7 @@ const UpdateMenu: React.FC = () => {
         {editingItem && (
           <form
             onSubmit={handleUpdate}
-            className="flex flex-col gap-2 lg:w-96 lg:w-80 md:w-80 sm:w-80 rounded-md border-2 border-teal-900 p-4"
+            className="flex flex-col gap-2 lg:w-96 md:w-80 sm:w-80 rounded-md border-2 border-teal-900 p-4"
           >
             <h2>Redigerar "{editingItem.name}"</h2>
             <label className="flex gap-1">
@@ -177,7 +176,7 @@ const UpdateMenu: React.FC = () => {
               <input
                 type="text"
                 name="name"
-                value={formData.name || ""}
+                value={formData.name || ''}
                 onChange={handleChange}
                 required
                 className="w-full focus:outline-teal-900 rounded-md focus:p-1"
@@ -200,11 +199,11 @@ const UpdateMenu: React.FC = () => {
               Vegetarisk
               <select
                 name="vegetarian"
-                value={formData.vegetarian ? "true" : "false"}
+                value={formData.vegetarian ? 'true' : 'false'}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    vegetarian: e.target.value === "true",
+                    vegetarian: e.target.value === 'true',
                   }))
                 }
                 className="focus:outline-teal-900 rounded-md"
@@ -218,12 +217,12 @@ const UpdateMenu: React.FC = () => {
               Ingredienser:
               <textarea
                 name="ingredients"
-                value={(formData.ingredients || []).join(", ")}
+                value={(formData.ingredients || []).join(', ')}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
                     ingredients: e.target.value
-                      .split(",")
+                      .split(',')
                       .map((ing) => ing.trim()),
                   }))
                 }

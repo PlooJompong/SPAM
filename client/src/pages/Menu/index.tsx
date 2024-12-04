@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
-import MenuItemComponent from "./MenuItem";
-import { useCart } from "../../context/CartContext"; // Importera Context-hooken
-import { useNavigate } from "react-router-dom";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { HiMinusSm } from "react-icons/hi";
-import { GoPlus } from "react-icons/go";
+import { useEffect, useState } from 'react';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
+import MenuItemComponent from './MenuItem';
+import { useCart } from '../../context/CartContext'; // Importera Context-hooken
+import { useNavigate } from 'react-router-dom';
+import { FaRegTrashCan } from 'react-icons/fa6';
+import { HiMinusSm } from 'react-icons/hi';
+import { GoPlus } from 'react-icons/go';
 
 export interface MenuItem {
   _id: string;
@@ -28,7 +28,6 @@ const Menu: React.FC = () => {
   const navigate = useNavigate();
   const [filteredMenuItems, setFilteredMenuItems] = useState<MenuItem[]>([]);
 
-
   useEffect(() => {
     const fetchMenu = async () => {
       try {
@@ -44,11 +43,11 @@ const Menu: React.FC = () => {
         }
 
         const data: MenuItem[] = await res.json();
-        console.log("Fetched data:", data);
+        console.log('Fetched data:', data);
         setMenuItems(data);
         setFilteredMenuItems(data); // Sätt initiala filtrerade alternativ till alla objekt
       } catch (err) {
-        console.error("Error fetching menu:", err);
+        console.error('Error fetching menu:', err);
       } finally {
         setLoading(false);
       }
@@ -57,29 +56,31 @@ const Menu: React.FC = () => {
     fetchMenu();
   }, []);
 
-    // Funktion för att sortera efter pris
-    const sortByPrice = () => {
-      const sortedItems = [...filteredMenuItems].sort((a, b) => a.price - b.price);
-      setFilteredMenuItems(sortedItems);
-    };
-  
-    // Funktion för att visa endast vegetariska alternativ
-    const filterVegetarian = () => {
-      const vegetarianItems = menuItems.filter((item) => item.vegetarian);
-      setFilteredMenuItems(vegetarianItems);
-    };
-  
-    // Funktion för att visa alla alternativ igen
-    const resetFilters = () => {
-      setFilteredMenuItems(menuItems);
-    };
+  // Funktion för att sortera efter pris
+  const sortByPrice = () => {
+    const sortedItems = [...filteredMenuItems].sort(
+      (a, b) => a.price - b.price
+    );
+    setFilteredMenuItems(sortedItems);
+  };
+
+  // Funktion för att visa endast vegetariska alternativ
+  const filterVegetarian = () => {
+    const vegetarianItems = menuItems.filter((item) => item.vegetarian);
+    setFilteredMenuItems(vegetarianItems);
+  };
+
+  // Funktion för att visa alla alternativ igen
+  const resetFilters = () => {
+    setFilteredMenuItems(menuItems);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   const cartClick = () => {
-    navigate("/cart");
+    navigate('/cart');
   };
 
   const handleQuantityChange = (itemId: string, change: number) => {
@@ -94,15 +95,6 @@ const Menu: React.FC = () => {
   return (
     <Container>
       <CustomerHeader title="MENY" />
-
-     /* <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
-        {menuItems.map((item) => (
-          <li key={item._id} className="sm:w-full md:w-1/2">
-            <MenuItemComponent key={item._id} item={item} />
-          </li>
-
-      <ul className="flex flex-col flex-wrap h-[500px] m-auto w-5/6">
-        {menuItems.map((item) => ( */
 
       <div className="mb-4">
         <button
@@ -124,13 +116,13 @@ const Menu: React.FC = () => {
           Visa alla
         </button>
       </div>
-      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6">
+
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
         {filteredMenuItems.map((item) => (
-
           <MenuItemComponent key={item._id} item={item} />
-
         ))}
       </ul>
+
       <div className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">
         <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
         <ul className="flex flex-col font-sans">

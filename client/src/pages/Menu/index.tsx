@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
-import MenuItemComponent from './MenuItem';
-import { useCart } from '../../context/CartContext'; // Importera Context-hooken
+import { useEffect, useState } from "react";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
+import MenuItemComponent from "./MenuItem";
+import { useCart } from "../../context/CartContext"; // Importera Context-hooken
 
 export interface MenuItem {
   _id: string;
@@ -11,6 +11,9 @@ export interface MenuItem {
   vegetarian: boolean;
   ingredients: string[];
   quantity: number;
+  comment?: string;
+  locked?: boolean;
+  done?: boolean;
 }
 
 const Menu: React.FC = () => {
@@ -21,19 +24,21 @@ const Menu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        console.log('Fetching menu...');
-        const res = await fetch('https://node-mongodb-api-ks7o.onrender.com/menu');
-        console.log('Response status:', res.status);
+        console.log("Fetching menu...");
+        const res = await fetch(
+          "https://node-mongodb-api-ks7o.onrender.com/menu"
+        );
+        console.log("Response status:", res.status);
 
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
 
         const data: MenuItem[] = await res.json();
-        console.log('Fetched data:', data);
+        console.log("Fetched data:", data);
         setMenuItems(data);
       } catch (err) {
-        console.error('Error fetching menu:', err);
+        console.error("Error fetching menu:", err);
       } finally {
         setLoading(false);
       }
@@ -49,7 +54,7 @@ const Menu: React.FC = () => {
   return (
     <Container>
       <CustomerHeader title="MENY" />
-      <ul className="flex flex-col flex-wrap h-80 m-auto w-5/6">
+      <ul className="flex flex-col flex-wrap h-[500px] m-auto w-5/6">
         {menuItems.map((item) => (
           <MenuItemComponent key={item._id} item={item} />
         ))}

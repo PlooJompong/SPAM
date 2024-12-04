@@ -44,19 +44,22 @@ const Cart: React.FC = () => {
     };
 
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createdOrder),
-        /*      body: JSON.stringify({
+      const response = await fetch(
+        "https://node-mongodb-api-ks7o.onrender.com/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(createdOrder),
+          /*      body: JSON.stringify({
           name: user.username, // Använd användarens namn från AuthContext
           items: cart, // Skickar varukorgens innehåll
           totalPrice: calculateTotalPrice(), // Skickar totalpriset
           orderDate: new Date().toISOString(), // Lägg till orderdatum
         }), */
-      });
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -98,11 +101,14 @@ const Cart: React.FC = () => {
     totalPrice: number;
   }) => {
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/orderhistory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(order),
-      });
+      const response = await fetch(
+        "https://node-mongodb-api-ks7o.onrender.com/orderhistory",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(order),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -160,7 +166,7 @@ const Cart: React.FC = () => {
             </button>
             <button
               onClick={clearCart}
-              className="bg-red-600 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer"
+              className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red8-00"
             >
               Rensa varukorg
             </button>

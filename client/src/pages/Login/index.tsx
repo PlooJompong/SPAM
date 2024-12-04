@@ -19,15 +19,18 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: createUsername,
-          password: createPassword,
-          admin: createAdmin,
-        }),
-      });
+      const response = await fetch(
+        "https://node-mongodb-api-ks7o.onrender.com/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: createUsername,
+            password: createPassword,
+            admin: createAdmin,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -54,14 +57,17 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://node-mongodb-api-ks7o.onrender.com/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: loginUsername,
-          password: loginPassword,
-        }),
-      });
+      const response = await fetch(
+        "https://node-mongodb-api-ks7o.onrender.com/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: loginUsername,
+            password: loginPassword,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -118,7 +124,7 @@ const Login: React.FC = () => {
             </fieldset>
             <button
               type="submit"
-              className="bg-teal-900 text-white py-2 px-4 rounded"
+              className="bg-teal-900 text-white py-2 px-4 rounded hover:bg-teal-800"
             >
               Skapa användare
             </button>
@@ -157,7 +163,7 @@ const Login: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-teal-900 text-white py-2 px-4 rounded"
+              className="bg-teal-900 hover:bg-teal-800 text-white py-2 px-4 rounded"
             >
               Logga in
             </button>

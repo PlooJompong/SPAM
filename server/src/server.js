@@ -10,6 +10,7 @@ import stockRouter from './routes/stockRouter.js';
 import orderHistoryRouter from './routes/orderHistoryRouter.js';
 import userRouter from './routes/userRouter.js';
 import loginRouter from './routes/loginRouter.js';
+import helmet from 'helmet';
 
 dotenv.config();
 
@@ -19,6 +20,27 @@ const MONGO_URI = process.env.MONGO_URI;
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"], // Tillåt endast resurser från samma origin
+        scriptSrc: ["'self'", "'unsafe-inline'"], // Skript från samma origin och inline-skript (använd med försiktighet)
+        connectSrc: ["'self'", "https://node-mongodb-api-ks7o.onrender.com"], 
+        imgSrc: ["'self'", "data:"], // Tillåt bilder från samma origin och data-URI
+        styleSrc: ["'self'", "'unsafe-inline'"], // CSS från samma origin och inline-CSS
+        fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"], // Tillåt typsnitt från en specifik domän
+        objectSrc: ["'none'"], // Blockera alla `<object>`-taggar
+        upgradeInsecureRequests: [], // Lägg till detta om du bara vill tillåta HTTPS
+      },
+    },
+    crossOriginEmbedderPolicy: false, // Om du hanterar vissa typer av inbäddade resurser
+  })
+);
+
 
 mongoose
   .connect(process.env.MONGO_URI, {})

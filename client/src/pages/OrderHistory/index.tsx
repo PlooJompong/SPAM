@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomerHeader from "../../components/CustomerHeader";
 import { useAuth } from "../../context/AuthContext";
 import Container from "../../components/Container";
@@ -30,6 +31,7 @@ const TestHistory: React.FC = () => {
   const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
@@ -66,6 +68,7 @@ const TestHistory: React.FC = () => {
     order.items.forEach((item) => {
       addToCart(item);
     });
+    navigate("/cart");
   };
 
   return (

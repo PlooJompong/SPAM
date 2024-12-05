@@ -33,8 +33,8 @@ const Confirmation = () => {
 
   return (
     <>
-      <CustomHeader title="Orderbekräftelse" />
-      <main className="flex h-screen flex-col items-center justify-center bg-orange-100">
+      <CustomHeader />
+      <main className="flex h-screen flex-col items-center pt-16">
         <section className="mb-4 flex items-center">
           <img
             src={orderCheck}
@@ -48,7 +48,7 @@ const Confirmation = () => {
         <h4 className="font-primary text-lg text-teal-900">
           Tack för din order, {order.name}!
         </h4>
-        <section className="flex w-1/2 flex-col space-y-6 pt-11">
+        <section className="flex w-1/2 flex-col space-y-6 pt-1">
           {order.items.map((item) => (
             <article
               key={item._id}

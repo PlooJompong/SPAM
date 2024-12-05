@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { HiMinusSm } from "react-icons/hi";
 import { GoPlus } from "react-icons/go";
+import { motion } from "framer-motion";
 
 export interface MenuItem {
   _id: string;
@@ -96,34 +97,37 @@ const Menu: React.FC = () => {
     <Container>
       <CustomerHeader title="MENY" />
 
-      <div className="mb-4">
-        <button
+      <section className=" flex justify-center mb-4 py-3 ">
+        <motion.button
           onClick={sortByPrice}
-          className="bg-teal-700 text-white px-4 py-2 rounded mr-2"
+          className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900"
+          whileTap={{ scale: 0.9 }}
         >
           Sortera efter pris
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={filterVegetarian}
-          className="bg-green-700 text-white px-4 py-2 rounded mr-2"
+          className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800"
+          whileTap={{ scale: 0.9 }}
         >
           Visa vegetariska
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={resetFilters}
-          className="bg-gray-700 text-white px-4 py-2 rounded"
+          className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700"
+          whileTap={{ scale: 0.9 }}
         >
           Visa alla
-        </button>
-      </div>
+        </motion.button>
+      </section>
 
-      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
         {filteredMenuItems.map((item) => (
           <MenuItemComponent key={item._id} item={item} />
         ))}
       </ul>
 
-      <div className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">
+      <article className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">
         <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
         <ul className="flex flex-col font-sans">
           {cart.map((cartItem, index) => (
@@ -152,13 +156,14 @@ const Menu: React.FC = () => {
           <p className=" px-1 py-4 font-bold">Totalsumma</p>
           <p className="">{calculateTotalPrice()} kr</p>
         </div>
-        <button
-          className="bg-teal-900 text-white p-2 text-sm rounded-full mx-auto block mt-4 font-sans"
+        <motion.button
+          className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans"
           onClick={cartClick}
+          whileTap={{ scale: 0.9 }}
         >
           Visa varukorg
-        </button>
-      </div>
+        </motion.button>
+      </article>
     </Container>
   );
 };

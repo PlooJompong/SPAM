@@ -4,6 +4,7 @@ import { GoPlus } from "react-icons/go";
 import { HiMinusSm } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import CustomerHeader from "../../components/CustomerHeader";
 import Container from "../../components/Container";
 
@@ -223,18 +224,21 @@ const Cart: React.FC = () => {
               )}
 
               <article className="flex justify-between gap-4">
-                <button
-                  onClick={handleOrder}
-                  className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
-                >
-                  Betala och beställ
-                </button>
-                <button
-                  onClick={clearCart}
-                  className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
-                >
-                  Rensa varukorg
-                </button>
+             <motion.button
+              onClick={handleOrder}
+              className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
+              whileTap={{ scale: 0.9 }}
+            >
+              Beställ
+            </motion.button>
+            <motion.button
+              onClick={clearCart}
+              className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
+              whileTap={{ scale: 0.9 }}
+            >
+              Rensa varukorg
+            </motion.button>
+                
               </article>
             </section>
           )}

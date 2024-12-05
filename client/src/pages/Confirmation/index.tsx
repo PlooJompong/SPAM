@@ -34,8 +34,8 @@ const Confirmation = () => {
   return (
     <>
       <CustomHeader title="Orderbekräftelse" />
-      <div className="flex h-screen flex-col items-center justify-center bg-orange-100">
-        <div className="mb-4 flex items-center">
+      <main className="flex h-screen flex-col items-center justify-center bg-orange-100">
+        <section className="mb-4 flex items-center">
           <img
             src={orderCheck}
             alt="Ordercheck Icon"
@@ -44,37 +44,37 @@ const Confirmation = () => {
           <h1 className="font-primary text-4xl font-bold text-teal-900">
             Orderbekräftelse
           </h1>
-        </div>
+        </section>
         <h4 className="font-primary text-lg text-teal-900">
           Tack för din order, {order.name}!
         </h4>
-        <div className="flex w-1/2 flex-col space-y-6 pt-11">
+        <section className="flex w-1/2 flex-col space-y-6 pt-11">
           {order.items.map((item) => (
-            <div
+            <article
               key={item._id}
               className="flex items-start justify-between pb-2"
             >
-              <div>
+              <article>
                 <p className="text-lg font-medium text-teal-900">{item.name}</p>
                 <p className="text-sm text-teal-900">{item.quantity} st</p>
                 {/*    {item.comment && (
                   <p className="text-sm italic text-gray-500">Kommentar: {item.comment}</p>
                 )} */}
-              </div>
+              </article>
               <p className="text-lg font-medium text-teal-900">
                 {item.price * item.quantity} kr
               </p>
-            </div>
+            </article>
           ))}
 
-          <div className="flex items-center justify-between border-t pt-4">
+          <article className="flex items-center justify-between border-t pt-4">
             <p className="text-lg font-bold text-teal-900">Totalt</p>
             <p className="text-lg font-bold text-teal-900">
               {order.totalPrice} kr
             </p>
-          </div>
-        </div>
-      </div>
+          </article>
+        </section>
+      </main>
     </>
   );
 };

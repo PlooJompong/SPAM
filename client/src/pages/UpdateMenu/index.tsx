@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Container from '../../components/Container';
-import EmployeeHeader from '../../components/EmployeeHeader';
-import UpdateItemComponent from './UpdateItem';
+import React, { useEffect, useState } from "react";
+import Container from "../../components/Container";
+import EmployeeHeader from "../../components/EmployeeHeader";
+import UpdateItemComponent from "./UpdateItem";
 
 export interface MenuItem {
   _id: string;
@@ -18,7 +18,7 @@ const UpdateMenu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState<Partial<MenuItem>>({
-    name: '',
+    name: "",
     price: 0,
     vegetarian: false,
     ingredients: [],
@@ -26,7 +26,7 @@ const UpdateMenu: React.FC = () => {
 
   // Ny state för att lägga till nya artiklar
   const [newItem, setNewItem] = useState<Partial<MenuItem>>({
-    name: '',
+    name: "",
     price: 0,
     vegetarian: false,
     ingredients: [],
@@ -36,12 +36,12 @@ const UpdateMenu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await fetch('http://localhost:8000/menu');
+        const response = await fetch("http://localhost:8000/menu");
         // ("https://node-mongodb-api-ks7o.onrender.com/menu");
         const data = await response.json();
         setMenuItems(data);
       } catch (error) {
-        console.error('Fel vid hämtning av menyn:', error);
+        console.error("Fel vid hämtning av menyn:", error);
       }
     };
 
@@ -61,7 +61,7 @@ const UpdateMenu: React.FC = () => {
   ) => {
     const { name, value, type } = e.target;
 
-    if (type === 'checkbox') {
+    if (type === "checkbox") {
       setFormData((prev) => ({
         ...prev,
         [name]: (e.target as HTMLInputElement).checked,
@@ -78,7 +78,7 @@ const UpdateMenu: React.FC = () => {
     e.preventDefault();
 
     if (!editingItem || !formData.name || formData.price === undefined) {
-      alert('Fyll i alla obligatoriska fält.');
+      alert("Fyll i alla obligatoriska fält.");
       return;
     }
 
@@ -87,9 +87,9 @@ const UpdateMenu: React.FC = () => {
         `https://localhost:8000/menu/${editingItem._id}`,
         // `https://node-mongodb-api-ks7o.onrender.com/menu/${editingItem._id}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
         }
@@ -98,7 +98,7 @@ const UpdateMenu: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Menyartikel uppdaterad!');
+        alert("Menyartikel uppdaterad!");
         setMenuItems((prev) =>
           prev.map((item) => (item._id === editingItem._id ? data.menu : item))
         );
@@ -107,8 +107,8 @@ const UpdateMenu: React.FC = () => {
         alert(`Fel vid uppdatering: ${data.message}`);
       }
     } catch (error) {
-      console.error('Kunde inte uppdatera artikeln:', error);
-      alert('Något gick fel. Försök igen.');
+      console.error("Kunde inte uppdatera artikeln:", error);
+      alert("Något gick fel. Försök igen.");
     }
   };
 
@@ -121,18 +121,18 @@ const UpdateMenu: React.FC = () => {
       newItem.price === undefined ||
       !newItem.ingredients?.length
     ) {
-      alert('Fyll i alla obligatoriska fält för att lägga till en ny artikel.');
+      alert("Fyll i alla obligatoriska fält för att lägga till en ny artikel.");
       return;
     }
 
     try {
       const response = await fetch(
-        'http://localhost:8000/menu',
+        "http://localhost:8000/menu",
         // 'https://node-mongodb-api-ks7o.onrender.com/menu',
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(newItem),
         }
@@ -141,22 +141,22 @@ const UpdateMenu: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Ny menyartikel tillagd!');
+        alert("Ny menyartikel tillagd!");
         setMenuItems((prev) => [...prev, data.menu]); // Lägg till den nya artikeln i listan
-        setNewItem({ name: '', price: 0, vegetarian: false, ingredients: [] }); // Rensa formuläret
+        setNewItem({ name: "", price: 0, vegetarian: false, ingredients: [] }); // Rensa formuläret
       } else {
         alert(`Fel vid skapandet: ${data.message}`);
       }
     } catch (error) {
-      console.error('Kunde inte skapa ny artikel:', error);
-      alert('Något gick fel. Försök igen.');
+      console.error("Kunde inte skapa ny artikel:", error);
+      alert("Något gick fel. Försök igen.");
     }
   };
 
   return (
     <Container bgColor="bg-orange-100">
       <EmployeeHeader title="Ändra meny" />
-      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:h-[500px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
         {menuItems.map((item) => (
           <li key={item._id} className="sm:w-full md:w-1/2">
             <UpdateItemComponent item={item} handleEdit={handleEdit} />
@@ -171,23 +171,25 @@ const UpdateMenu: React.FC = () => {
             className="flex flex-col gap-2 lg:w-96 md:w-80 sm:w-80 rounded-md border-2 border-teal-900 p-4"
           >
             <h2>Redigerar "{editingItem.name}"</h2>
-            <label className="flex gap-1">
+            <label htmlFor="edit-name" className="flex gap-1">
               Namn
               <input
                 type="text"
                 name="name"
-                value={formData.name || ''}
+                id="edit-name"
+                value={formData.name || ""}
                 onChange={handleChange}
                 required
                 className="w-full focus:outline-teal-900 rounded-md focus:p-1"
               />
             </label>
 
-            <label className="flex gap-1">
+            <label htmlFor="edit-price" className="flex gap-1">
               Pris
               <input
                 type="number"
                 name="price"
+                id="edit-price"
                 value={formData.price || 0}
                 onChange={handleChange}
                 required
@@ -195,15 +197,16 @@ const UpdateMenu: React.FC = () => {
               />
             </label>
 
-            <label className="flex gap-1">
+            <label htmlFor="edit-vegetarian" className="flex gap-1">
               Vegetarisk
               <select
                 name="vegetarian"
-                value={formData.vegetarian ? 'true' : 'false'}
+                id="edit-vegetarian"
+                value={formData.vegetarian ? "true" : "false"}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    vegetarian: e.target.value === 'true',
+                    vegetarian: e.target.value === "true",
                   }))
                 }
                 className="focus:outline-teal-900 rounded-md"
@@ -213,16 +216,17 @@ const UpdateMenu: React.FC = () => {
               </select>
             </label>
 
-            <label>
+            <label htmlFor="edit-ingredients">
               Ingredienser:
               <textarea
                 name="ingredients"
-                value={(formData.ingredients || []).join(', ')}
+                id="edit-ingredients"
+                value={(formData.ingredients || []).join(", ")}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
                     ingredients: e.target.value
-                      .split(',')
+                      .split(",")
                       .map((ing) => ing.trim()),
                   }))
                 }
@@ -253,12 +257,13 @@ const UpdateMenu: React.FC = () => {
           className="flex flex-col gap-2 w-96 rounded-md border-2 border-teal-900 p-4"
         >
           <h2 className="text-xl">Lägg till ny pizza</h2>
-          <label className="flex gap-1">
+          <label htmlFor="name" className="flex gap-1">
             Namn
             <input
               type="text"
               name="name"
-              value={newItem.name || ''}
+              id="name"
+              value={newItem.name || ""}
               onChange={(e) =>
                 setNewItem((prev) => ({ ...prev, name: e.target.value }))
               }
@@ -266,11 +271,12 @@ const UpdateMenu: React.FC = () => {
               className="w-full focus:outline-teal-900 rounded-md focus:p-1"
             />
           </label>
-          <label className="flex gap-1">
+          <label htmlFor="price" className="flex gap-1">
             Pris
             <input
               type="number"
               name="price"
+              id="price"
               value={newItem.price || 0}
               onChange={(e) =>
                 setNewItem((prev) => ({
@@ -283,15 +289,16 @@ const UpdateMenu: React.FC = () => {
             />
           </label>
 
-          <label className="flex gap-1">
+          <label htmlFor="vegetarian" className="flex gap-1">
             Vegetarisk
             <select
               name="vegetarian"
-              value={newItem.vegetarian ? 'true' : 'false'}
+              id="vegetarian"
+              value={newItem.vegetarian ? "true" : "false"}
               onChange={(e) =>
                 setNewItem((prev) => ({
                   ...prev,
-                  vegetarian: e.target.value === 'true',
+                  vegetarian: e.target.value === "true",
                 }))
               }
               className="focus:outline-teal-900 rounded-md"
@@ -301,16 +308,17 @@ const UpdateMenu: React.FC = () => {
             </select>
           </label>
 
-          <label className="flex flex-col gap-1">
+          <label htmlFor="ingredients" className="flex flex-col gap-1">
             Ingredienser (kommaseparerade):
             <textarea
               name="ingredients"
-              value={(newItem.ingredients || []).join(', ')}
+              id="ingredients"
+              value={(newItem.ingredients || []).join(", ")}
               onChange={(e) =>
                 setNewItem((prev) => ({
                   ...prev,
                   ingredients: e.target.value
-                    .split(',')
+                    .split(",")
                     .map((ing) => ing.trim()),
                 }))
               }

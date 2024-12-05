@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import CustomerHeader from '../../components/CustomerHeader';
-import { useAuth } from '../../context/AuthContext';
-import Container from '../../components/Container';
-import { useCart } from '../../context/CartContext';
+import React, { useEffect, useState } from "react";
+import CustomerHeader from "../../components/CustomerHeader";
+import { useAuth } from "../../context/AuthContext";
+import Container from "../../components/Container";
+import { useCart } from "../../context/CartContext";
 
 interface OrderItem {
   _id: string;
@@ -29,12 +29,12 @@ const TestHistory: React.FC = () => {
   const { addToCart } = useCart();
   const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
       if (!user) {
-        setError('Du måste vara inloggad för att se din orderhistorik.');
+        setError("Du måste vara inloggad för att se din orderhistorik.");
         setLoading(false);
         return;
       }
@@ -52,8 +52,8 @@ const TestHistory: React.FC = () => {
         const data = await response.json();
         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
       } catch (err) {
-        console.error('Fel vid hämtning av orderhistorik:', err);
-        setError('Kunde inte hämta orderhistoriken. Försök igen senare.');
+        console.error("Fel vid hämtning av orderhistorik:", err);
+        setError("Kunde inte hämta orderhistoriken. Försök igen senare.");
       } finally {
         setLoading(false);
       }
@@ -80,7 +80,7 @@ const TestHistory: React.FC = () => {
           ) : orderHistory.length === 0 ? (
             <p>Du har ännu inga beställningar i din orderhistorik.</p>
           ) : (
-            <div className="w-3/4 bg-white p-4 rounded shadow h-[500px] flex flex-col">
+            <section className="w-3/4 bg-white p-4 rounded shadow h-[500px] flex flex-col">
               <ul className="space-y-4 w-full flex flex-wrap">
                 {orderHistory.map((order, index) => (
                   <li
@@ -102,7 +102,7 @@ const TestHistory: React.FC = () => {
                         >
                           <span className="lg:text-lg md:text-lg sm:text-xs">
                             {item.name}
-                          </span>{' '}
+                          </span>{" "}
                           <span className="lg:text-lg md:text-lg sm:text-xs">
                             {item.price} kr
                           </span>
@@ -112,7 +112,7 @@ const TestHistory: React.FC = () => {
                     <p className="flex justify-between w-full mt-8">
                       <span className="lg:text-lg md:text-lg sm:text-xs">
                         Totalpris:
-                      </span>{' '}
+                      </span>{" "}
                       <span className="lg:text-lg md:text-lg sm:text-xs">
                         {order.totalPrice} kr
                       </span>
@@ -126,7 +126,7 @@ const TestHistory: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </section>
           )}
         </main>
       </Container>

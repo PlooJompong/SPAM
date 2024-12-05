@@ -1,9 +1,10 @@
-import React from 'react';
-import { useCart } from '../../context/CartContext';
-import { GoPlus } from 'react-icons/go';
-import { HiMinusSm } from 'react-icons/hi';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useCart } from "../../context/CartContext";
+import { GoPlus } from "react-icons/go";
+import { HiMinusSm } from "react-icons/hi";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
@@ -16,12 +17,12 @@ const Cart: React.FC = () => {
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert('Varukorgen är tom. Lägg till något innan du beställer!');
+      alert("Varukorgen är tom. Lägg till något innan du beställer!");
       return;
     }
 
     if (!user) {
-      alert('Du måste vara inloggad för att lägga en beställning.');
+      alert("Du måste vara inloggad för att lägga en beställning.");
       return;
     }
 
@@ -40,17 +41,17 @@ const Cart: React.FC = () => {
       orderDate: new Date().toISOString(),
       locked: false,
       done: false,
-      comment: '',
+      comment: "",
     };
 
     try {
       const response = await fetch(
-        'http://localhost:8000/orders',
+        "http://localhost:8000/orders",
         // 'https://node-mongodb-api-ks7o.onrender.com/orders',
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(createdOrder),
         }
@@ -62,8 +63,8 @@ const Cart: React.FC = () => {
 
       const data = await response.json();
       /* alert("Din beställning har skickats!"); */
-      console.log('Beställning skickad:', data);
-      navigate('/confirmation', {
+      console.log("Beställning skickad:", data);
+      navigate("/confirmation", {
         state: { order: createdOrder },
       });
 
@@ -78,8 +79,8 @@ const Cart: React.FC = () => {
       // Rensa varukorgen efter beställning
       clearCart();
     } catch (error) {
-      console.error('Kunde inte skicka beställningen:', error);
-      alert('Något gick fel. Försök igen.');
+      console.error("Kunde inte skicka beställningen:", error);
+      alert("Något gick fel. Försök igen.");
     }
   };
 
@@ -154,18 +155,20 @@ const Cart: React.FC = () => {
             <span>{calculateTotalPrice()} kr</span>
           </h2>
           <div className="flex gap-4">
-            <button
+            <motion.button
               onClick={handleOrder}
               className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer"
+              whileTap={{ scale: 0.9 }}
             >
               Beställ
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={clearCart}
               className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red8-00"
+              whileTap={{ scale: 0.9 }}
             >
               Rensa varukorg
-            </button>
+            </motion.button>
           </div>
         </div>
       )}

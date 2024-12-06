@@ -100,21 +100,21 @@ const Menu: React.FC = () => {
       <section className=" flex justify-center mb-4 py-3 ">
         <motion.button
           onClick={sortByPrice}
-          className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900"
+          className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900 shadow-md"
           whileTap={{ scale: 0.9 }}
         >
           Sortera efter pris
         </motion.button>
         <motion.button
           onClick={filterVegetarian}
-          className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800"
+          className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800 shadow-md"
           whileTap={{ scale: 0.9 }}
         >
           Visa vegetariska
         </motion.button>
         <motion.button
           onClick={resetFilters}
-          className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700"
+          className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700 shadow-md"
           whileTap={{ scale: 0.9 }}
         >
           Visa alla
@@ -157,7 +157,7 @@ const Menu: React.FC = () => {
           <p className="">{calculateTotalPrice()} kr</p>
         </div>
         <motion.button
-          className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans"
+          className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans shadow-md"
           onClick={cartClick}
           whileTap={{ scale: 0.9 }}
         >

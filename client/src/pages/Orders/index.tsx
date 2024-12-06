@@ -1,12 +1,12 @@
 //import { Link } from "react-router-dom";
 //import pizzaLogo from "../../assets/pizzaLogo.png";
-import editLogo from '../../assets/editLogo.svg';
-import lockedLogo from '../../assets/lockedLogo.svg';
-import margherita from '../../assets/margherita.png';
+import editLogo from "../../assets/editLogo.svg";
+import lockedLogo from "../../assets/lockedLogo.svg";
+import margherita from "../../assets/margherita.png";
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState, useEffect } from 'react';
-import Container from '../../components/Container';
-import EmployeeHeader from '../../components/EmployeeHeader';
+import { useState, useEffect } from "react";
+import Container from "../../components/Container";
+import EmployeeHeader from "../../components/EmployeeHeader";
 
 interface OrderItem {
   _id: string;
@@ -35,14 +35,14 @@ const Orders = () => {
   // Formattering av datum och tid
   const formatOrderDate = (isoDate: string) => {
     const date = new Date(isoDate);
-    const datePart = new Intl.DateTimeFormat('sv-SE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
+    const datePart = new Intl.DateTimeFormat("sv-SE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     }).format(date);
-    const timePart = new Intl.DateTimeFormat('sv-SE', {
-      hour: '2-digit',
-      minute: '2-digit',
+    const timePart = new Intl.DateTimeFormat("sv-SE", {
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
     return `${datePart}, ${timePart}`;
   };
@@ -58,7 +58,7 @@ const Orders = () => {
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
       }
     };
 
@@ -98,7 +98,7 @@ const Orders = () => {
                   {/* Order-rad */}
                   <div
                     className={`flex justify-between items-center border p-4 rounded-lg cursor-pointer ${
-                      selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
+                      selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
                     }`}
                     onClick={() =>
                       setSelectedOrder(
@@ -148,6 +148,14 @@ const Orders = () => {
                           <div className="text-teal-900">{item.price} kr</div>
                         </div>
                       ))}
+                      <article className="flex gap-2 pt-3">
+                        <p className="font-semibold text-sm">
+                          Kommentar från kund:
+                        </p>
+                        <p className="italic text-sm">
+                          {order.comment || "Ingen kommentar lämnad"}
+                        </p>
+                      </article>
                       <div className="flex justify-between text-lg font-semibold mt-4">
                         <span className="text-teal-900">Totalbelopp</span>
                         <span className="text-teal-900">
@@ -203,6 +211,12 @@ const Orders = () => {
                             </div>
                           </div>
                         ))}
+                        <article className="flex gap-2 pt-3">
+                          <p className="font-semibold">Kommentar från kund: </p>
+                          <p className="italic">
+                            {order.comment || "Ingen kommentar lämnad"}
+                          </p>
+                        </article>
                         {/* Totalen */}
                         <div className="mt-4 flex justify-between text-lg font-semibold">
                           <span className="text-teal-900">Totalbelopp</span>

@@ -205,7 +205,7 @@ const UpdateMenu: React.FC = () => {
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    vegetarian: e.target.value === 'false',
+                    vegetarian: e.target.value === 'true',
                   }))
                 }
                 className="focus:outline-teal-900 rounded-md"

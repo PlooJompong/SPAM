@@ -1,12 +1,12 @@
 //import { Link } from "react-router-dom";
 //import pizzaLogo from "../../assets/pizzaLogo.png";
-import editLogo from '../../assets/editLogo.svg';
-import lockedLogo from '../../assets/lockedLogo.svg';
-import margherita from '../../assets/margherita.png';
+import editLogo from "../../assets/editLogo.svg";
+import lockedLogo from "../../assets/lockedLogo.svg";
+import margherita from "../../assets/margherita.png";
 // import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState, useEffect } from 'react';
-import Container from '../../components/Container';
-import EmployeeHeader from '../../components/EmployeeHeader';
+import { useState, useEffect } from "react";
+import Container from "../../components/Container";
+import EmployeeHeader from "../../components/EmployeeHeader";
 
 interface OrderItem {
   _id: string;
@@ -35,14 +35,14 @@ const Orders = () => {
   // Formattering av datum och tid
   const formatOrderDate = (isoDate: string) => {
     const date = new Date(isoDate);
-    const datePart = new Intl.DateTimeFormat('sv-SE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
+    const datePart = new Intl.DateTimeFormat("sv-SE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     }).format(date);
-    const timePart = new Intl.DateTimeFormat('sv-SE', {
-      hour: '2-digit',
-      minute: '2-digit',
+    const timePart = new Intl.DateTimeFormat("sv-SE", {
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
     return `${datePart}, ${timePart}`;
   };
@@ -58,7 +58,7 @@ const Orders = () => {
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
       }
     };
 
@@ -79,11 +79,11 @@ const Orders = () => {
           </h2>
         </header> */}
 
-        <main className="flex h-full w-full justify-center bg-orange-100 p-4 font-sans">
+        <main className="flex h-full w-full justify-center bg-orange-100 p-1 md:p-4 font-sans">
           {/* Container för båda kolumner */}
-          <div className="flex flex-col sm:flex-row w-full">
+          <section className="flex flex-col sm:flex-row w-full">
             {/* Vänster kolumn */}
-            <div className="w-full sm:w-2/5 space-y-4">
+            <article className="w-full sm:w-full md:w-4/5 space-y-4">
               <div className="flex items-center justify-center">
                 <button className="bg-teal-900 px-4 py-2 text-white rounded-l-lg">
                   SAMTLIGA
@@ -94,11 +94,11 @@ const Orders = () => {
               </div>
 
               {orders.map((order) => (
-                <div key={order._id} className="space-y-2">
+                <section key={order._id} className="space-y-2 ">
                   {/* Order-rad */}
-                  <div
-                    className={`flex justify-between items-center border p-4 rounded-lg cursor-pointer ${
-                      selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
+                  <article
+                    className={`flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer ${
+                      selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
                     }`}
                     onClick={() =>
                       setSelectedOrder(
@@ -106,46 +106,52 @@ const Orders = () => {
                       )
                     }
                   >
-                    <div>
-                      <div className="font-semibold">
-                        Beställning {order._id}
-                      </div>
-                      <div className="text-sm text-gray-600">
+                    <article className="flex-1 pr-4">
+                      <h2 className="font-semibold">Beställning {order._id}</h2>
+                      <p className="text-sm text-gray-600">
                         {formatOrderDate(order.orderDate)}
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-5">
+                      </p>
+                    </article>
+                    <div className="flex items-center space-x-2 md:space-x-5 flex-shrink-0">
                       <input
                         type="checkbox"
-                        className="form-checkbox h-6 w-6"
+                        className="form-checkbox h-5 w-5 md:h-6 md:w-6"
                       />
-                      <img src={editLogo} alt="Edit" className="h-6 w-6" />
-                      <img src={lockedLogo} alt="Locked" className="h-6 w-6" />
+                      <img
+                        src={editLogo}
+                        alt="Edit"
+                        className="h-5 w-5 md:h-6 md:w-6"
+                      />
+                      <img
+                        src={lockedLogo}
+                        alt="Locked"
+                        className="h-5 w-5 md:h-6 md:w-6"
+                      />
                     </div>
-                  </div>
+                  </article>
 
                   {/* Detaljer för vald order på mindre skärmar */}
                   {selectedOrder === order._id && (
-                    <div className="sm:hidden p-4 bg-white rounded-lg shadow-md">
+                    <article className="sm:hidden p-2 md:p-4 bg-white rounded-lg shadow-md">
                       {order.items.map((item) => (
                         <div
                           key={item._id}
                           className="flex justify-between py-3 border-b"
                         >
-                          <div className="flex items-center space-x-4">
+                          <span className="flex items-center space-x-4">
                             <img
                               src={margherita}
                               alt="Pizza"
                               className="h-16 w-16 rounded-md"
                             />
                             <div>
-                              <div className="text-teal-900">{item.name}</div>
-                              <div className="text-sm text-gray-500">
+                              <h3 className="text-teal-900">{item.name}</h3>
+                              <p className="text-sm text-gray-500">
                                 Antal: {item.quantity}
-                              </div>
+                              </p>
                             </div>
-                          </div>
-                          <div className="text-teal-900">{item.price} kr</div>
+                          </span>
+                          <h2 className="text-teal-900">{item.price} kr</h2>
                         </div>
                       ))}
                       <div className="flex justify-between text-lg font-semibold mt-4">
@@ -154,11 +160,11 @@ const Orders = () => {
                           {order.totalPrice} kr
                         </span>
                       </div>
-                    </div>
+                    </article>
                   )}
-                </div>
+                </section>
               ))}
-            </div>
+            </article>
 
             {/* Höger kolumn */}
             <div className="hidden sm:block w-full sm:w-3/5 sm:pl-6">
@@ -219,7 +225,7 @@ const Orders = () => {
                 </div>
               )}
             </div>
-          </div>
+          </section>
         </main>
       </Container>
     </>

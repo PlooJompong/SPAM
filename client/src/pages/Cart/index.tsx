@@ -200,9 +200,26 @@ const Cart: React.FC = () => {
                       <input
                         type="text"
                         pattern="\d*"
-                        maxLength={4}
+                        maxLength={5}
                         className="border border-zinc-300 rounded p-2 w-full mt-1 focus:outline-teal-900"
                         placeholder="MM/ÅÅ"
+                        onInput={(e) => {
+                          const target = e.target as HTMLInputElement;
+                          let value = target.value.replace(/\D/g, "");
+
+                          if (value.length > 2) {
+                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                          }
+
+                          if (value.length > 0 && value.length <= 2) {
+                            const month = parseInt(value.slice(0, 2), 10);
+                            if (month > 12) {
+                              value = "12";
+                            }
+                          }
+
+                          target.value = value;
+                        }}
                       />
                     </label>
                     <label className="text-teal-900 mb-2">
@@ -224,21 +241,20 @@ const Cart: React.FC = () => {
               )}
 
               <article className="flex justify-between gap-4">
-             <motion.button
-              onClick={handleOrder}
-              className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
-              whileTap={{ scale: 0.9 }}
-            >
-              Beställ
-            </motion.button>
-            <motion.button
-              onClick={clearCart}
-              className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
-              whileTap={{ scale: 0.9 }}
-            >
-              Rensa varukorg
-            </motion.button>
-                
+                <motion.button
+                  onClick={handleOrder}
+                  className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Beställ
+                </motion.button>
+                <motion.button
+                  onClick={clearCart}
+                  className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Rensa varukorg
+                </motion.button>
               </article>
             </section>
           )}

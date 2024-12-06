@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import EmployeeHeader from '../../components/EmployeeHeader';
+import { useEffect, useState } from "react";
+import EmployeeHeader from "../../components/EmployeeHeader";
 
 const Stock = () => {
   const [stockData, setStockData] = useState([]);
@@ -9,7 +9,7 @@ const Stock = () => {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/stock');
+        const response = await fetch("http://localhost:8000/stock");
         // ('https://node-mongodb-api-ks7o.onrender.com/stock');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -18,7 +18,7 @@ const Stock = () => {
         setStockData(data);
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || 'An error occurred');
+        setError(err.message || "An error occurred");
         setLoading(false);
       }
     };
@@ -35,13 +35,13 @@ const Stock = () => {
         ) : error ? (
           <p className="text-center text-red-500">Fel: {error}</p>
         ) : (
-          <table className="w-4/6 border-collapse border border-teal-900">
+          <table className="w-full md:w-4/6 border-collapse border border-teal-900">
             <thead>
               <tr className="bg-teal-900 text-white">
                 <th className="border border-teal-900 p-2 text-start">
                   Artikel
                 </th>
-                <th className="w-44 border border-teal-900 p-2 text-center lg:table-cell md:table-cell sm:hidden">
+                <th className="w-44 border border-teal-900 p-2 text-center">
                   Status
                 </th>
                 <th className="w-44 border border-teal-900 p-2 text-center">
@@ -55,7 +55,7 @@ const Stock = () => {
                   <td className="border border-teal-900 p-2 text-teal-900">
                     {item.name}
                   </td>
-                  <td className="w-40 border border-teal-900 p-2 text-center text-teal-900 sm:hidden md:table-cell lg:table-cell">
+                  <td className="w-40 border border-teal-900 p-2 text-center text-teal-900">
                     {item.quantity === 0 ? (
                       <span className="inline-block rounded-xl bg-zinc-200 px-2 py-1 font-bold text-zinc-400">
                         Slut i lager

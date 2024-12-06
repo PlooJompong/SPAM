@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const orderHistorySchema = new mongoose.Schema({
   name: { type: String, required: true }, // ID för användaren som la beställningen
@@ -16,10 +16,11 @@ const orderHistorySchema = new mongoose.Schema({
       ],
       totalPrice: { type: Number, required: true },
       orderDate: { type: Date, default: Date.now },
+      comment: { type: String },
     },
   ],
 });
 
-const OrderHistory = mongoose.model('OrderHistory', orderHistorySchema);
+const OrderHistory = mongoose.model("OrderHistory", orderHistorySchema);
 
 export default OrderHistory;

@@ -57,15 +57,19 @@ const Confirmation = () => {
               <article>
                 <p className="text-lg font-medium text-teal-900">{item.name}</p>
                 <p className="text-sm text-teal-900">{item.quantity} st</p>
-                {/*    {item.comment && (
-                  <p className="text-sm italic text-gray-500">Kommentar: {item.comment}</p>
-                )} */}
               </article>
               <p className="text-lg font-medium text-teal-900">
                 {item.price * item.quantity} kr
               </p>
             </article>
           ))}
+
+          <article className="flex gap-2">
+            <p className="font-semibold text-gray-600">Din kommentar: </p>
+            <p className="italic text-gray-600">
+              {order.comment || "Ingen kommentar lämnad"}
+            </p>
+          </article>
 
           <article className="flex items-center justify-between border-t pt-4">
             <p className="text-lg font-bold text-teal-900">Totalt</p>

@@ -154,6 +154,14 @@ const Orders = () => {
                           <h2 className="text-teal-900">{item.price} kr</h2>
                         </div>
                       ))}
+                      <article className="flex gap-2 pt-3">
+                        <p className="font-semibold text-sm">
+                          Kommentar från kund:
+                        </p>
+                        <p className="italic text-sm">
+                          {order.comment || "Ingen kommentar lämnad"}
+                        </p>
+                      </article>
                       <div className="flex justify-between text-lg font-semibold mt-4">
                         <span className="text-teal-900">Totalbelopp</span>
                         <span className="text-teal-900">
@@ -209,6 +217,12 @@ const Orders = () => {
                             </div>
                           </div>
                         ))}
+                        <article className="flex gap-2 pt-3">
+                          <p className="font-semibold">Kommentar från kund: </p>
+                          <p className="italic">
+                            {order.comment || "Ingen kommentar lämnad"}
+                          </p>
+                        </article>
                         {/* Totalen */}
                         <div className="mt-4 flex justify-between text-lg font-semibold">
                           <span className="text-teal-900">Totalbelopp</span>

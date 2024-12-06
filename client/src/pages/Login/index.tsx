@@ -124,9 +124,9 @@ const Login: React.FC = () => {
       <CustomerHeader />
       <Container>
         <main className="flex items-center md:justify-center md:gap-20 md:mt-8 mt-2 justify-around">
-          <section className="flex flex-col items-center justify-center gap-6">
+          <section className="flex flex-col items-center justify-center gap-8 md:gap-12">
             {/* Knapp till inloggning */}
-            <button
+            {/* <button
               onClick={() => {
                 setShowLoginForm((prev) => !prev);
                 setShowCreateForm(false);
@@ -134,57 +134,53 @@ const Login: React.FC = () => {
               className="rounded-full w-full hover:bg-teal-800 bg-teal-900 px-8 py-2 font-primary text-white"
             >
               Logga in
-            </button>
+            </button> */}
 
             {/* Formulär för inloggning */}
-            <AnimatePresence>
-              {showLoginForm && (
-                <motion.form
-                  // initial={{ opacity: 0, scale: 0.8 }}
-                  // animate={{ opacity: 1, scale: 1 }}
-                  // exit={{ opacity: 0, scale: 0.8 }}
-                  // transition={{ duration: 0.5, ease: "easeInOut" }}
-                  initial={{ opacity: 0, scale: 0.8, x: 0 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, x: 0 }}
-                  transition={{ duration: 0.5, ease: 'easeInOut' }}
-                  className="flex flex-col w-full font-primary text-teal-900"
-                  onSubmit={handleLogin}
-                >
-                  {/* <h2 className="text-xl mb-2">Logga in</h2> */}
-                  <fieldset>
-                    <label htmlFor="login-username">Användarnamn</label>
-                    <input
-                      type="text"
-                      id="login-username"
-                      value={loginUsername}
-                      onChange={(e) => setLoginUsername(e.target.value)}
-                      required
-                      className="mb-4 w-full border rounded-md border-gray-300 p-2 focus:outline-teal-900"
-                    />
-                  </fieldset>
-                  <fieldset>
-                    <label htmlFor="login-password">Lösenord</label>
-                    <input
-                      type="password"
-                      id="login-password"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      required
-                      className="mb-4 w-full border rounded-md border-gray-300 p-2 focus:outline-teal-900"
-                    />
-                  </fieldset>
-                  <button
-                    type="submit"
-                    className="bg-teal-900  hover:bg-teal-800 text-white py-2 px-4 rounded"
-                  >
-                    Logga in
-                  </button>
+            <form
+              // initial={{ opacity: 0, scale: 0.8 }}
+              // animate={{ opacity: 1, scale: 1 }}
+              // exit={{ opacity: 0, scale: 0.8 }}
+              // transition={{ duration: 0.5, ease: "easeInOut" }}
+              // initial={{ opacity: 0, scale: 0.8, x: 0 }}
+              // animate={{ opacity: 1, scale: 1, x: 0 }}
+              // exit={{ opacity: 0, scale: 0.8, x: 0 }}
+              // transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="flex flex-col w-5/6 md:w-full font-primary text-teal-900"
+              onSubmit={handleLogin}
+            >
+              <h2 className="text-xl text-center mb-2">Logga in</h2>
+              <fieldset>
+                <label htmlFor="login-username">Användarnamn</label>
+                <input
+                  type="text"
+                  id="login-username"
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
+                  required
+                  className="mb-4 w-full border rounded-md border-gray-300 p-1 md:p-2 focus:outline-teal-900"
+                />
+              </fieldset>
+              <fieldset>
+                <label htmlFor="login-password">Lösenord</label>
+                <input
+                  type="password"
+                  id="login-password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  required
+                  className="mb-4 w-full border rounded-md border-gray-300 p-1 md:p-2 focus:outline-teal-900"
+                />
+              </fieldset>
+              <button
+                type="submit"
+                className="bg-teal-900 hover:bg-teal-800 hover:bg-teal-800 text-white text-sm py-1 px-2 md:text-base md:py-2 md:px-4 rounded"
+              >
+                Logga in
+              </button>
 
-                  {loginMessage && <p>{loginMessage}</p>}
-                </motion.form>
-              )}
-            </AnimatePresence>
+              {loginMessage && <p>{loginMessage}</p>}
+            </form>
 
             {/* Knapp till skapande av nytt konto */}
             <button
@@ -192,7 +188,7 @@ const Login: React.FC = () => {
                 setShowCreateForm((prev) => !prev);
                 setShowLoginForm(false);
               }}
-              className="rounded-full w-full bg-teal-900 px-8 py-2 font-primary text-white"
+              className="rounded-full w-5/6 md:w-full text-xs py-1 px-2 md:text-base md:py-2 md:px-4 bg-orange-500 px-8 py-2 font-primary text-white"
             >
               Skapa användare
             </button>
@@ -205,8 +201,8 @@ const Login: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5, ease: 'easeInOut' }}
-                  className="flex flex-col w-full font-primary text-teal-900"
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="flex flex-col w-5/6 md:w-full font-primary text-teal-900"
                   onSubmit={handleCreateUser}
                 >
                   <fieldset>
@@ -217,7 +213,7 @@ const Login: React.FC = () => {
                       value={createUsername}
                       onChange={(e) => setCreateUsername(e.target.value)}
                       required
-                      className="mb-4 w-full border rounded-md border-gray-300 p-2 focus:outline-teal-900"
+                      className="mb-4 w-full border rounded-md border-gray-300 p-1 md:p-2 focus:outline-teal-900"
                     />
                   </fieldset>
                   <fieldset>
@@ -228,7 +224,7 @@ const Login: React.FC = () => {
                       value={createPassword}
                       onChange={(e) => setCreatePassword(e.target.value)}
                       required
-                      className="mb-4 w-full border rounded-md border-gray-300 p-2 focus:outline-teal-900"
+                      className="mb-4 w-full border rounded-md border-gray-300 p-1 md:p-2 focus:outline-teal-900"
                     />
                   </fieldset>
                   <fieldset>
@@ -243,7 +239,7 @@ const Login: React.FC = () => {
                   </fieldset>
                   <button
                     type="submit"
-                    className="bg-teal-900 text-white py-2 px-4 rounded hover:bg-teal-800"
+                    className="bg-teal-900 text-white text-sm py-1 px-2 md:text-base md:py-2 md:px-4 rounded hover:bg-teal-800"
                   >
                     Skapa användare
                   </button>

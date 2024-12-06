@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
-import MenuItemComponent from './MenuItem';
-import { useCart } from '../../context/CartContext'; // Importera Context-hooken
-import { useNavigate } from 'react-router-dom';
-import { FaRegTrashCan } from 'react-icons/fa6';
-import { HiMinusSm } from 'react-icons/hi';
-import { GoPlus } from 'react-icons/go';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
+import MenuItemComponent from "./MenuItem";
+import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { HiMinusSm } from "react-icons/hi";
+import { GoPlus } from "react-icons/go";
+import { motion } from "framer-motion";
 
 export interface MenuItem {
   _id: string;
@@ -100,34 +100,35 @@ const Menu: React.FC = () => {
       <section className=" flex justify-center mb-4 py-3 ">
         <motion.button
           onClick={sortByPrice}
-          className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900"
+          className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900 shadow-md"
           whileTap={{ scale: 0.9 }}
         >
           Sortera efter pris
         </motion.button>
         <motion.button
           onClick={filterVegetarian}
-          className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800"
+          className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800 shadow-md"
           whileTap={{ scale: 0.9 }}
         >
           Visa vegetariska
         </motion.button>
         <motion.button
           onClick={resetFilters}
-          className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700"
+          className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700 shadow-md"
           whileTap={{ scale: 0.9 }}
         >
           Visa alla
         </motion.button>
       </section>
 
-      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap lg:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
         {filteredMenuItems.map((item) => (
           <MenuItemComponent key={item._id} item={item} />
         ))}
       </ul>
 
-      <article className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">
+      {/* VARUKORG */}
+      <article className="fixed w-80 left-0 right-0 mx-auto bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 lg:left-[864px] rounded">
         <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
         <ul className="flex flex-col font-sans">
           {cart.map((cartItem, index) => (
@@ -157,7 +158,7 @@ const Menu: React.FC = () => {
           <p className="">{calculateTotalPrice()} kr</p>
         </div>
         <motion.button
-          className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans"
+          className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans shadow-md"
           onClick={cartClick}
           whileTap={{ scale: 0.9 }}
         >

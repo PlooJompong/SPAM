@@ -12,8 +12,8 @@ const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  const [paymentMethod, setPaymentMethod] = useState<string>('');
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -166,6 +166,12 @@ const Cart: React.FC = () => {
                 <span>Totalpris:</span>
                 <span>{calculateTotalPrice()} kr</span>
               </h2>
+              <textarea
+                className="border border-zinc-300 rounded p-2 w-full mt-4 text-sm"
+                placeholder="Lägg till en kommentar för din order..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              ></textarea>
               <article className="flex w-80 justify-between text-teal-900 mt-4">
                 <p>Betalningsmetod</p>
                 <select
@@ -205,9 +211,26 @@ const Cart: React.FC = () => {
                       <input
                         type="text"
                         pattern="\d*"
-                        maxLength={4}
+                        maxLength={5}
                         className="border border-zinc-300 rounded p-2 w-full mt-1 focus:outline-teal-900"
                         placeholder="MM/ÅÅ"
+                        onInput={(e) => {
+                          const target = e.target as HTMLInputElement;
+                          let value = target.value.replace(/\D/g, "");
+
+                          if (value.length > 2) {
+                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                          }
+
+                          if (value.length > 0 && value.length <= 2) {
+                            const month = parseInt(value.slice(0, 2), 10);
+                            if (month > 12) {
+                              value = "12";
+                            }
+                          }
+
+                          target.value = value;
+                        }}
                       />
                     </label>
                     <label className="text-teal-900 mb-2">

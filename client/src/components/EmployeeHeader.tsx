@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import pizzaLogo from "../assets/pizzaLogo.png";
 
 interface EmployeeHeaderProps {
@@ -7,6 +8,16 @@ interface EmployeeHeaderProps {
 const EmployeeHeader: React.FC<EmployeeHeaderProps> = ({
   title,
 }: EmployeeHeaderProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigation = () => {
+    if (location.pathname !== "/") {
+      // Kontrollera om vi inte redan är på landing
+      navigate("/"); // Navigera till landing-sidan
+    }
+  };
+
   return (
     <header className="flex w-full flex-col items-center justify-center bg-orange-100 font-primary text-teal-900">
       <section className="mx-auto flex w-full max-w-screen-2xl flex-col items-center justify-start">
@@ -14,9 +25,15 @@ const EmployeeHeader: React.FC<EmployeeHeaderProps> = ({
           <img
             src={pizzaLogo}
             alt="pizza-logo"
-            className="aspect-square w-[130px] sm:w-[160px]"
+            className="aspect-square w-[130px] sm:w-[160px] cursor-pointer"
+            onClick={handleNavigation}
           />
-          <h1 className="text-[1.75rem] sm:text-[2.25rem]">SPAM PIZZA</h1>
+          <h1
+            className="text-[1.75rem] sm:text-[2.25rem] cursor-pointer"
+            onClick={handleNavigation}
+          >
+            SPAM PIZZA
+          </h1>
         </article>
 
         <h2 className="text-center text-[1.5rem] sm:text-[2rem]">{title}</h2>

@@ -9,6 +9,7 @@ export interface MenuItem {
   price: number;
   vegetarian: boolean;
   ingredients: string[];
+  quantity: number;
   comment: string;
   locked: boolean;
   done: boolean;

@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
+import { FaBasketShopping } from "react-icons/fa6";
+import { IoReceiptOutline } from "react-icons/io5";
 import "./index.css";
 
 const Navbar = () => {
   return (
     <>
       <nav className="bg-orange-100 text-teal-900">
-        <ul>
+        <ul className="max-w-screen-2xl flex flex-wrap">
           <li>
             <Link to="/">Landing</Link>
           </li>
@@ -13,7 +16,9 @@ const Navbar = () => {
             <Link to="/about">About</Link>
           </li>
           <li>
-            <Link to="/cart">Cart</Link>
+            <Link to="/cart">
+              <FaBasketShopping className="text-teal-900" />
+            </Link>
           </li>
           <li>
             <Link to="/confirmation">Confirmation</Link>
@@ -22,13 +27,17 @@ const Navbar = () => {
             <Link to="/home">Home</Link>
           </li>
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/login">
+              <FiLogIn className="text-teal-900" />
+            </Link>
           </li>
           <li>
             <Link to="/menu">Menu</Link>
           </li>
           <li>
-            <Link to="/orderhistory">Orderhistory</Link>
+            <Link to="/orderhistory">
+              <IoReceiptOutline className="text-teal-900" />
+            </Link>
           </li>
           <li>
             <Link to="/orders">Orders</Link>

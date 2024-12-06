@@ -69,7 +69,10 @@ const TestHistory: React.FC = () => {
 
   const handleReorder = (order: Order) => {
     order.items.forEach((item) => {
-      addToCart(item);
+      addToCart({
+        ...item,
+        quantity: item.quantity,
+      });
     });
     navigate("/cart");
   };
@@ -77,8 +80,8 @@ const TestHistory: React.FC = () => {
   return (
     <>
       <CustomerHeader title="Orderhistorik" />
-      <Container bgColor="bg-orange-100">
-        <main className="primary-font flex h-screen w-full items-center justify-center bg-orange-100 text-teal-900">
+      <Container>
+        <main className="primary-font flex min-h-screen w-full justify-center text-teal-900">
           {loading ? (
             <p>Laddar din orderhistorik...</p>
           ) : error ? (
@@ -86,8 +89,8 @@ const TestHistory: React.FC = () => {
           ) : orderHistory.length === 0 ? (
             <p>Du har ännu inga beställningar i din orderhistorik.</p>
           ) : (
-            <section className="w-3/4 bg-white p-4 rounded shadow h-[500px] flex flex-col">
-              <ul className="space-y-4 w-full flex flex-wrap">
+            <section className="w-full md:w-2/4 flex flex-col">
+              <ul className="space-y-4 w-full flex flex-wrap bg-orange-100 p-4 shadow rounded">
                 {orderHistory.map((order, index) => (
                   <li
                     key={index}

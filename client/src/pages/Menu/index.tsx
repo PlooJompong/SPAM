@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CustomerHeader from "../../components/CustomerHeader";
 import Container from "../../components/Container";
 import MenuItemComponent from "./MenuItem";
-import { useCart } from "../../context/CartContext"; // Importera Context-hooken
+import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { HiMinusSm } from "react-icons/hi";
@@ -121,13 +121,14 @@ const Menu: React.FC = () => {
         </motion.button>
       </section>
 
-      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
+      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap lg:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
         {filteredMenuItems.map((item) => (
           <MenuItemComponent key={item._id} item={item} />
         ))}
       </ul>
 
-      <article className="fixed bottom-0 w-80 bg-gray-100 p-2 border-t  border-gray-300 right-0 rounded">
+      {/* VARUKORG */}
+      <article className="fixed w-80 left-0 right-0 mx-auto bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 lg:left-[864px] rounded">
         <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
         <ul className="flex flex-col font-sans">
           {cart.map((cartItem, index) => (

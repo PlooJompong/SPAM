@@ -41,14 +41,14 @@ const Confirmation = () => {
             alt="Ordercheck Icon"
             className="mr-4 h-9 w-9 pb-2"
           />
-          <h1 className="font-primary text-4xl font-bold text-teal-900">
+          <h1 className="font-primary text-2xl md:text-4xl font-bold text-teal-900">
             Orderbekräftelse
           </h1>
         </section>
         <h4 className="font-primary text-lg text-teal-900">
           Tack för din order, {order.name}!
         </h4>
-        <section className="flex w-1/2 flex-col space-y-6 pt-1">
+        <section className="flex w-full px-4 md:w-1/2 flex-col space-y-6 pt-1">
           {order.items.map((item) => (
             <article
               key={item._id}

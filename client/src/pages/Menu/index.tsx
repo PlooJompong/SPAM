@@ -32,23 +32,23 @@ const Menu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        console.log("Fetching menu...");
+        console.log('Fetching menu...');
         const res = await fetch(
-          "http://localhost:8000/menu"
+          'http://localhost:8000/menu'
           // 'https://node-mongodb-api-ks7o.onrender.com/menu'
         );
-        console.log("Response status:", res.status);
+        console.log('Response status:', res.status);
 
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
 
         const data: MenuItem[] = await res.json();
-        console.log("Fetched data:", data);
+        console.log('Fetched data:', data);
         setMenuItems(data);
         setFilteredMenuItems(data); // Sätt initiala filtrerade alternativ till alla objekt
       } catch (err) {
-        console.error("Error fetching menu:", err);
+        console.error('Error fetching menu:', err);
       } finally {
         setLoading(false);
       }
@@ -81,7 +81,7 @@ const Menu: React.FC = () => {
   }
 
   const cartClick = () => {
-    navigate("/cart");
+    navigate('/cart');
   };
 
   const handleQuantityChange = (itemId: string, change: number) => {

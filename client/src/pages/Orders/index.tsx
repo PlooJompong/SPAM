@@ -1,5 +1,3 @@
-//import { Link } from "react-router-dom";
-//import pizzaLogo from "../../assets/pizzaLogo.png";
 import editLogo from "../../assets/editLogo.svg";
 import lockedLogo from "../../assets/lockedLogo.svg";
 import margherita from "../../assets/margherita.png";
@@ -69,15 +67,6 @@ const Orders = () => {
     <>
       <Container bgColor="bg-orange-100">
         <EmployeeHeader title="Beställningar" />
-        {/* <header className="flex h-40 w-full bg-orange-100 px-2">
-          <Link to="/" className="flex items-center space-x-2 w-1/2">
-            <img src={pizzaLogo} alt="logo" className="h-32 w-32" />
-            <h1 className="text-3xl text-teal-900">SPAM PIZZA</h1>
-          </Link>
-          <h2 className="text-2xl text-teal-900 w-1/2 flex items-center">
-            Beställningar
-          </h2>
-        </header> */}
 
         <main className="flex h-full w-full justify-center bg-orange-100 p-1 md:p-4 font-sans">
           {/* Container för båda kolumner */}

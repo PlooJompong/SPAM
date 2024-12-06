@@ -32,13 +32,13 @@ const TestHistory: React.FC = () => {
   const { addToCart } = useCart();
   const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
       if (!user) {
-        setError("Du måste vara inloggad för att se din orderhistorik.");
+        setError('Du måste vara inloggad för att se din orderhistorik.');
         setLoading(false);
         return;
       }
@@ -57,8 +57,8 @@ const TestHistory: React.FC = () => {
         console.log("Data from API:", data);
         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
       } catch (err) {
-        console.error("Fel vid hämtning av orderhistorik:", err);
-        setError("Kunde inte hämta orderhistoriken. Försök igen senare.");
+        console.error('Fel vid hämtning av orderhistorik:', err);
+        setError('Kunde inte hämta orderhistoriken. Försök igen senare.');
       } finally {
         setLoading(false);
       }
@@ -71,11 +71,18 @@ const TestHistory: React.FC = () => {
     order.items.forEach((item) => {
       addToCart({
         ...item,
-        quantity: item.quantity,
+        quantity: item.quantity, // Ensure the correct quantity is passed
       });
     });
-    navigate("/cart");
+    navigate('/cart');
   };
+
+  // const handleReorder = (order: Order) => {
+  //   order.items.forEach((item) => {
+  //     addToCart(item);
+  //   });
+  //   navigate('/cart');
+  // };
 
   return (
     <>
@@ -111,17 +118,22 @@ const TestHistory: React.FC = () => {
                         >
                           <span className="lg:text-lg md:text-lg sm:text-xs">
                             {item.name}
-                          </span>{" "}
-                          <span className="lg:text-lg md:text-lg sm:text-xs">
-                            {item.price} kr
                           </span>
+                          <div>
+                            <span className="lg:text-lg md:text-lg sm:text-xs mr-3">
+                              {item.quantity} st x
+                            </span>
+                            <span className="lg:text-lg md:text-lg sm:text-xs">
+                              {item.price} kr
+                            </span>
+                          </div>
                         </li>
                       ))}
                     </ul>
                     <p className="flex justify-between w-full mt-8">
                       <span className="lg:text-lg md:text-lg sm:text-xs">
                         Totalpris:
-                      </span>{" "}
+                      </span>
                       <span className="lg:text-lg md:text-lg sm:text-xs">
                         {order.totalPrice} kr
                       </span>

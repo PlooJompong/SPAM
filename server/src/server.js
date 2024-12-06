@@ -3,13 +3,14 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import validateApiKey from './middlewares/validateApiKey.js';
+// import verifyToken from './middlewares/verifyToken.js';
 
 import menuRouter from './routes/menuRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import stockRouter from './routes/stockRouter.js';
 import orderHistoryRouter from './routes/orderHistoryRouter.js';
 import userRouter from './routes/userRouter.js';
-import loginRouter from './routes/loginRouter.js';
+// import loginRouter from './routes/loginRouter.js';
 import helmet from 'helmet';
 
 dotenv.config();
@@ -29,7 +30,7 @@ app.use(
       directives: {
         defaultSrc: ["'self'"], // Tillåt endast resurser från samma origin
         scriptSrc: ["'self'", "'unsafe-inline'"], // Skript från samma origin och inline-skript (använd med försiktighet)
-        connectSrc: ["'self'", "https://node-mongodb-api-ks7o.onrender.com"], 
+        connectSrc: ["'self'", "https://node-mongodb-api-ks7o.onrender.com"],
         imgSrc: ["'self'", "data:"], // Tillåt bilder från samma origin och data-URI
         styleSrc: ["'self'", "'unsafe-inline'"], // CSS från samma origin och inline-CSS
         fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"], // Tillåt typsnitt från en specifik domän
@@ -51,19 +52,20 @@ mongoose
 app.use((req, res, next) => {
   if (!req.header("x-api-key")) {
     req.headers["x-api-key"] = process.env.API_KEY; // Sätter API-nyckeln automatiskt
-    console.log("API-nyckel automatiskt tillagd:", process.env.API_KEY);
+    // console.log("API-nyckel automatiskt tillagd:", process.env.API_KEY);
   }
   next();
 });
 
 app.use(validateApiKey);
+// app.use(verifyToken);
 
 app.use("/menu", menuRouter)
 app.use("/orders", orderRouter)
 app.use("/stock", stockRouter)
 app.use("/orderhistory", orderHistoryRouter)
 app.use("/users", userRouter)
-app.use("/login", loginRouter)
+// app.use("/login", loginRouter)
 
 //Middleware
 app.use((req, res) => {

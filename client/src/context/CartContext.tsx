@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import React, { createContext, useState, ReactNode, useContext } from 'react';
 
 interface MenuItem {
   _id: string;
@@ -28,19 +28,42 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [cart, setCart] = useState<MenuItem[]>([]);
 
+  // const addToCart = (item: MenuItem) => {
+  //   const existingItem = cart.find((cartItem) => cartItem._id === item._id);
+  //   if (existingItem) {
+  //     setCart((prevCart) =>
+  //       prevCart.map((cartItem) =>
+  //         cartItem._id === item._id
+  //           ? { ...cartItem, quantity: cartItem.quantity + 1 }
+  //           : cartItem
+  //       )
+  //     );
+  //   } else {
+  //     setCart((prevCart) => [...prevCart, { ...item, quantity: 1 }]);
+  //   }
+  // };
+
   const addToCart = (item: MenuItem) => {
-    const existingItem = cart.find((cartItem) => cartItem._id === item._id);
-    if (existingItem) {
-      setCart((prevCart) =>
-        prevCart.map((cartItem) =>
-          cartItem._id === item._id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        )
+    setCart((prevCart) => {
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem._id === item._id
       );
-    } else {
-      setCart((prevCart) => [...prevCart, { ...item, quantity: 1 }]);
-    }
+
+      if (existingItem) {
+        // Update the quantity for an existing item
+        return prevCart.map((cartItem) =>
+          cartItem._id === item._id
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + (item.quantity || 1),
+              }
+            : cartItem
+        );
+      } else {
+        // Add a new item with a default quantity of 1 if not provided
+        return [...prevCart, { ...item, quantity: item.quantity || 1 }];
+      }
+    });
   };
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -87,7 +110,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
+    throw new Error('useCart must be used within a CartProvider');
   }
   return context;
 };

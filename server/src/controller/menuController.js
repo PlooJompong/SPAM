@@ -16,15 +16,17 @@ const addNewMenuItem = async (req, res) => {
     const { name, price, vegetarian, ingredients } = req.body; // Hämta data från request-body
 
     // Kontrollera att alla nödvändiga fält finns
-    if (!name || !price || !vegetarian || !Array.isArray(ingredients)) {
+    if (!name || !price || !Array.isArray(ingredients)) {
       return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
     }
+
+    const isVegetarian = vegetarian !== undefined ? vegetarian : false;
 
     // Skapa en ny menyartikel
     const newMenuItem = new Menu({
       name,
       price,
-      vegetarian,
+      vegetarian: isVegetarian,
       ingredients,
     });
 
@@ -41,65 +43,33 @@ const addNewMenuItem = async (req, res) => {
 
 // New
 // PUT update menu item
-// const updateMenuItem = async (req, res) => {
-//   try {
-//     const { id } = req.params; // Extract the ID from the URL
-//     const updateFields = req.body; // Extract the fields to update from the request body
-
-//     // Ensure the request body is not empty
-//     if (!Object.keys(updateFields).length) {
-//       return res.status(400).json({ message: "Inga fält att uppdatera." });
-//     }
-
-//     // Update the menu item in the database
-//     const updatedMenuItem = await Menu.findByIdAndUpdate(
-//       id,
-//       { $set: updateFields }, // Use $set to update only the provided fields
-//       { new: true } // Return the updated object
-//     );
-
-//     if (!updatedMenuItem) {
-//       return res.status(404).json({ message: "Menyartikel hittades inte." });
-//     }
-
-//     // Return the updated menu item
-//     res.status(200).json({ message: "Menyartikel uppdaterad!", menu: updatedMenuItem });
-//   } catch (err) {
-//     console.error("Fel vid uppdatering av menyartikel:", err);
-//     res.status(500).json({ message: "Ett fel inträffade vid uppdatering av menyartikel." });
-//   }
-// };
-
-
-// OLD
-// PUT update menu item
 const updateMenuItem = async (req, res) => {
   try {
-    const { id } = req.params; // Hämta ID från URL:en
-    const { name, price, vegetarian, ingredients } = req.body; // Hämta uppdaterade värden från request-body
+    const { id } = req.params; // Extract the ID from the URL
+    const updateFields = req.body; // Extract the fields to update from the request body
 
-    // Kontrollera att alla nödvändiga fält finns
-    if (!name || !price || !Array.isArray(ingredients)) {
-      return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+    // Ensure the request body is not empty
+    if (!Object.keys(updateFields).length) {
+      return res.status(400).json({ message: "Inga fält att uppdatera." });
     }
 
-    // Hitta och uppdatera menyalternativet i databasen
+    // Update the menu item in the database
     const updatedMenuItem = await Menu.findByIdAndUpdate(
       id,
-      { name, price, vegetarian, ingredients },
-      { new: true } // Returnera det uppdaterade objektet
+      { $set: updateFields }, // Use $set to update only the provided fields
+      { new: true } // Return the updated object
     );
 
     if (!updatedMenuItem) {
       return res.status(404).json({ message: "Menyartikel hittades inte." });
     }
 
-    // Returnera den uppdaterade menyalternativet
+    // Return the updated menu item
     res.status(200).json({ message: "Menyartikel uppdaterad!", menu: updatedMenuItem });
   } catch (err) {
     console.error("Fel vid uppdatering av menyartikel:", err);
     res.status(500).json({ message: "Ett fel inträffade vid uppdatering av menyartikel." });
   }
-}
+};
 
 export { getMenu, addNewMenuItem, updateMenuItem }

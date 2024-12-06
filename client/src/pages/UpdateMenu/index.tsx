@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Container from "../../components/Container";
-import EmployeeHeader from "../../components/EmployeeHeader";
-import UpdateItemComponent from "./UpdateItem";
+import React, { useEffect, useState } from 'react';
+import Container from '../../components/Container';
+import EmployeeHeader from '../../components/EmployeeHeader';
+import UpdateItemComponent from './UpdateItem';
 
 export interface MenuItem {
   _id: string;
@@ -19,7 +19,7 @@ const UpdateMenu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState<Partial<MenuItem>>({
-    name: "",
+    name: '',
     price: 0,
     vegetarian: false,
     ingredients: [],
@@ -27,7 +27,7 @@ const UpdateMenu: React.FC = () => {
 
   // Ny state för att lägga till nya artiklar
   const [newItem, setNewItem] = useState<Partial<MenuItem>>({
-    name: "",
+    name: '',
     price: 0,
     vegetarian: false,
     ingredients: [],
@@ -37,12 +37,12 @@ const UpdateMenu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await fetch("http://localhost:8000/menu");
+        const response = await fetch('http://localhost:8000/menu');
         // ("https://node-mongodb-api-ks7o.onrender.com/menu");
         const data = await response.json();
         setMenuItems(data);
       } catch (error) {
-        console.error("Fel vid hämtning av menyn:", error);
+        console.error('Fel vid hämtning av menyn:', error);
       }
     };
 
@@ -62,7 +62,7 @@ const UpdateMenu: React.FC = () => {
   ) => {
     const { name, value, type } = e.target;
 
-    if (type === "checkbox") {
+    if (type === 'checkbox') {
       setFormData((prev) => ({
         ...prev,
         [name]: (e.target as HTMLInputElement).checked,
@@ -79,18 +79,18 @@ const UpdateMenu: React.FC = () => {
     e.preventDefault();
 
     if (!editingItem || !formData.name || formData.price === undefined) {
-      alert("Fyll i alla obligatoriska fält.");
+      alert('Fyll i alla obligatoriska fält.');
       return;
     }
 
     try {
       const response = await fetch(
-        `https://localhost:8000/menu/${editingItem._id}`,
+        `http://localhost:8000/menu/${editingItem._id}`,
         // `https://node-mongodb-api-ks7o.onrender.com/menu/${editingItem._id}`,
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
         }
@@ -99,7 +99,7 @@ const UpdateMenu: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Menyartikel uppdaterad!");
+        alert('Menyartikel uppdaterad!');
         setMenuItems((prev) =>
           prev.map((item) => (item._id === editingItem._id ? data.menu : item))
         );
@@ -108,8 +108,8 @@ const UpdateMenu: React.FC = () => {
         alert(`Fel vid uppdatering: ${data.message}`);
       }
     } catch (error) {
-      console.error("Kunde inte uppdatera artikeln:", error);
-      alert("Något gick fel. Försök igen.");
+      console.error('Kunde inte uppdatera artikeln:', error);
+      alert('Något gick fel. Försök igen.');
     }
   };
 
@@ -120,20 +120,20 @@ const UpdateMenu: React.FC = () => {
     if (
       !newItem.name ||
       newItem.price === undefined ||
-      !newItem.ingredients?.length
+      newItem.ingredients?.length === 0
     ) {
-      alert("Fyll i alla obligatoriska fält för att lägga till en ny artikel.");
+      alert('Fyll i alla obligatoriska fält för att lägga till en ny artikel.');
       return;
     }
 
     try {
       const response = await fetch(
-        "http://localhost:8000/menu",
+        'http://localhost:8000/menu',
         // 'https://node-mongodb-api-ks7o.onrender.com/menu',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(newItem),
         }
@@ -142,15 +142,13 @@ const UpdateMenu: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Ny menyartikel tillagd!");
+        alert('Ny menyartikel tillagd!');
         setMenuItems((prev) => [...prev, data.menu]); // Lägg till den nya artikeln i listan
-        setNewItem({ name: "", price: 0, vegetarian: false, ingredients: [] }); // Rensa formuläret
-      } else {
-        alert(`Fel vid skapandet: ${data.message}`);
+        setNewItem({ name: '', price: 0, vegetarian: false, ingredients: [] }); // Rensa formuläret
       }
     } catch (error) {
-      console.error("Kunde inte skapa ny artikel:", error);
-      alert("Något gick fel. Försök igen.");
+      console.error('Kunde inte skapa ny artikel:', error);
+      alert('Något gick fel. Försök igen.');
     }
   };
 
@@ -178,7 +176,7 @@ const UpdateMenu: React.FC = () => {
                 type="text"
                 name="name"
                 id="edit-name"
-                value={formData.name || ""}
+                value={formData.name || ''}
                 onChange={handleChange}
                 required
                 className="w-full focus:outline-teal-900 rounded-md focus:p-1"
@@ -203,11 +201,11 @@ const UpdateMenu: React.FC = () => {
               <select
                 name="vegetarian"
                 id="edit-vegetarian"
-                value={formData.vegetarian ? "true" : "false"}
+                value={formData.vegetarian ? 'true' : 'false'}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    vegetarian: e.target.value === "true",
+                    vegetarian: e.target.value === 'false',
                   }))
                 }
                 className="focus:outline-teal-900 rounded-md"
@@ -222,12 +220,12 @@ const UpdateMenu: React.FC = () => {
               <textarea
                 name="ingredients"
                 id="edit-ingredients"
-                value={(formData.ingredients || []).join(", ")}
+                value={(formData.ingredients || []).join(', ')}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
                     ingredients: e.target.value
-                      .split(",")
+                      .split(',')
                       .map((ing) => ing.trim()),
                   }))
                 }
@@ -264,7 +262,7 @@ const UpdateMenu: React.FC = () => {
               type="text"
               name="name"
               id="name"
-              value={newItem.name || ""}
+              value={newItem.name || ''}
               onChange={(e) =>
                 setNewItem((prev) => ({ ...prev, name: e.target.value }))
               }
@@ -295,11 +293,11 @@ const UpdateMenu: React.FC = () => {
             <select
               name="vegetarian"
               id="vegetarian"
-              value={newItem.vegetarian ? "true" : "false"}
+              value={newItem.vegetarian ? 'true' : 'false'}
               onChange={(e) =>
                 setNewItem((prev) => ({
                   ...prev,
-                  vegetarian: e.target.value === "true",
+                  vegetarian: e.target.value === 'true',
                 }))
               }
               className="focus:outline-teal-900 rounded-md"
@@ -314,12 +312,12 @@ const UpdateMenu: React.FC = () => {
             <textarea
               name="ingredients"
               id="ingredients"
-              value={(newItem.ingredients || []).join(", ")}
+              value={(newItem.ingredients || []).join(', ')}
               onChange={(e) =>
                 setNewItem((prev) => ({
                   ...prev,
                   ingredients: e.target.value
-                    .split(",")
+                    .split(',')
                     .map((ing) => ing.trim()),
                 }))
               }

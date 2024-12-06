@@ -12,6 +12,7 @@ const orderHistorySchema = new mongoose.Schema({
           price: { type: Number, required: true },
           vegetarian: { type: Boolean, required: true },
           ingredients: { type: [String], required: true },
+          quantity: { type: Number, required: true },
         },
       ],
       totalPrice: { type: Number, required: true },

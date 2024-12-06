@@ -7,8 +7,8 @@ const validateApiKey = (req, res, next) => {
   const validApiKey = process.env.API_KEY;
 
   // Debug-loggar
-  console.log("Inkommande API-nyckel:", apiKey || "Saknas");
-  console.log("Förväntad API-nyckel:", validApiKey || "Ej definierad");
+  // console.log("Inkommande API-nyckel:", apiKey || "Saknas");
+  // console.log("Förväntad API-nyckel:", validApiKey || "Ej definierad");
 
   if (!apiKey) {
     return res.status(403).json({ message: "Saknad API-nyckel." });

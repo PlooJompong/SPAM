@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useCart } from "../../context/CartContext";
-import { GoPlus } from "react-icons/go";
-import { HiMinusSm } from "react-icons/hi";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
+import React, { useState } from 'react';
+import { useCart } from '../../context/CartContext';
+import { GoPlus } from 'react-icons/go';
+import { HiMinusSm } from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>('');
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -21,12 +21,12 @@ const Cart: React.FC = () => {
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert("Varukorgen är tom. Lägg till något innan du beställer!");
+      alert('Varukorgen är tom. Lägg till något innan du beställer!');
       return;
     }
 
     if (!user) {
-      alert("Du måste vara inloggad för att lägga en beställning.");
+      alert('Du måste vara inloggad för att lägga en beställning.');
       return;
     }
 
@@ -45,17 +45,17 @@ const Cart: React.FC = () => {
       orderDate: new Date().toISOString(),
       locked: false,
       done: false,
-      comment: "",
+      comment: '',
     };
 
     try {
       const response = await fetch(
-        "http://localhost:8000/orders",
+        'http://localhost:8000/orders',
         // 'https://node-mongodb-api-ks7o.onrender.com/orders',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(createdOrder),
         }
@@ -67,8 +67,8 @@ const Cart: React.FC = () => {
 
       const data = await response.json();
       /* alert("Din beställning har skickats!"); */
-      console.log("Beställning skickad:", data);
-      navigate("/confirmation", {
+      console.log('Beställning skickad:', data);
+      navigate('/confirmation', {
         state: { order: createdOrder },
       });
 
@@ -83,8 +83,8 @@ const Cart: React.FC = () => {
       // Rensa varukorgen efter beställning
       clearCart();
     } catch (error) {
-      console.error("Kunde inte skicka beställningen:", error);
-      alert("Något gick fel. Försök igen.");
+      console.error('Kunde inte skicka beställningen:', error);
+      alert('Något gick fel. Försök igen.');
     }
   };
 
@@ -138,17 +138,22 @@ const Cart: React.FC = () => {
                   <span>{item.name} </span>
                   <span> {item.price} kr</span>
                 </article>
-                <span className="flex items-center gap-2 justify-center w-16 border rounded-2xl mt-1 border-zinc-200 p-1 text-teal-900">
-                  <HiMinusSm
-                    className="text-teal-900 cursor-pointer"
-                    onClick={() => handleQuantityChange(item._id, -1)}
-                  />
-                  <p>{item.quantity}</p>
-                  <GoPlus
-                    className="text-teal-900 cursor-pointer"
-                    onClick={() => handleQuantityChange(item._id, 1)}
-                  />
-                </span>
+                <article className="flex justify-between w-full">
+                  <span className="flex items-center gap-2 justify-center w-16 border rounded-2xl mt-1 border-zinc-200 p-1 text-teal-900">
+                    <HiMinusSm
+                      className="text-teal-900 cursor-pointer"
+                      onClick={() => handleQuantityChange(item._id, -1)}
+                    />
+                    <p>{item.quantity}</p>
+                    <GoPlus
+                      className="text-teal-900 cursor-pointer"
+                      onClick={() => handleQuantityChange(item._id, 1)}
+                    />
+                  </span>
+                  <span className="text-gray-400">
+                    {item.quantity * item.price} kr
+                  </span>
+                </article>
               </li>
             ))}
           </ul>
@@ -178,7 +183,7 @@ const Cart: React.FC = () => {
                 </select>
               </article>
 
-              {paymentMethod === "Betalkort" && (
+              {paymentMethod === 'Betalkort' && (
                 <form className="mt-4">
                   <article className="flex flex-col">
                     <label className="text-teal-900 mb-2">
@@ -191,7 +196,7 @@ const Cart: React.FC = () => {
                         placeholder="1234 5678 9012 3456"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, "");
+                          target.value = target.value.replace(/\D/g, '');
                         }}
                       />
                     </label>
@@ -215,7 +220,7 @@ const Cart: React.FC = () => {
                         placeholder="123"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, "");
+                          target.value = target.value.replace(/\D/g, '');
                         }}
                       />
                     </label>
@@ -224,21 +229,20 @@ const Cart: React.FC = () => {
               )}
 
               <article className="flex justify-between gap-4">
-             <motion.button
-              onClick={handleOrder}
-              className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
-              whileTap={{ scale: 0.9 }}
-            >
-              Beställ
-            </motion.button>
-            <motion.button
-              onClick={clearCart}
-              className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
-              whileTap={{ scale: 0.9 }}
-            >
-              Rensa varukorg
-            </motion.button>
-                
+                <motion.button
+                  onClick={handleOrder}
+                  className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Beställ
+                </motion.button>
+                <motion.button
+                  onClick={clearCart}
+                  className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Rensa varukorg
+                </motion.button>
               </article>
             </section>
           )}

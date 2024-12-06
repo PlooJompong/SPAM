@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getMenu, addNewMenuItem, updateMenuItem } from "../controller/menuController.js";
+import verifyToken from "../middlewares/verifyToken.js";
 
 const router = Router();
 
@@ -10,6 +11,6 @@ router.get("/", getMenu)
 router.post("/", addNewMenuItem)
 
 // PUT update menu item
-router.put("/:id", updateMenuItem)
+router.put("/:id", verifyToken, updateMenuItem)
 
 export default router;

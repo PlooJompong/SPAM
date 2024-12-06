@@ -12,8 +12,8 @@ const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const [comment, setComment] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>('');
+  const [comment, setComment] = useState<string>('');
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -45,7 +45,7 @@ const Cart: React.FC = () => {
       orderDate: new Date().toISOString(),
       locked: false,
       done: false,
-      comment: '',
+      comment,
     };
 
     try {
@@ -216,16 +216,16 @@ const Cart: React.FC = () => {
                         placeholder="MM/ÅÅ"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          let value = target.value.replace(/\D/g, "");
+                          let value = target.value.replace(/\D/g, '');
 
                           if (value.length > 2) {
-                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                            value = value.slice(0, 2) + '/' + value.slice(2, 4);
                           }
 
                           if (value.length > 0 && value.length <= 2) {
                             const month = parseInt(value.slice(0, 2), 10);
                             if (month > 12) {
-                              value = "12";
+                              value = '12';
                             }
                           }
 

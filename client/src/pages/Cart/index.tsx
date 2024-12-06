@@ -68,9 +68,16 @@ const Cart: React.FC = () => {
       const data = await response.json();
       /* alert("Din beställning har skickats!"); */
       console.log('Beställning skickad:', data);
+      // navigate('/confirmation',  {
+      //   state: { order: createdOrder },
+      // });
+
       navigate('/confirmation', {
-        state: { order: createdOrder },
+        state: { order: data.order || createdOrder }, // Använd backend-data om möjligt
       });
+
+
+
 
       // Skicka till orderhistorik
       // await addToOrderHistory({

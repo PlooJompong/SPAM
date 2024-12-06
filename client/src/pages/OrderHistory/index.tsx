@@ -4,6 +4,7 @@ import CustomerHeader from "../../components/CustomerHeader";
 import { useAuth } from "../../context/AuthContext";
 import Container from "../../components/Container";
 import { useCart } from "../../context/CartContext";
+import { motion } from "framer-motion";
 
 interface OrderItem {
   _id: string;
@@ -23,6 +24,7 @@ interface Order {
   items: OrderItem[];
   totalPrice: number;
   orderDate: string;
+  comment: string;
 }
 
 const TestHistory: React.FC = () => {
@@ -52,6 +54,7 @@ const TestHistory: React.FC = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        console.log("Data from API:", data);
         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
       } catch (err) {
         console.error("Fel vid hämtning av orderhistorik:", err);
@@ -120,12 +123,19 @@ const TestHistory: React.FC = () => {
                         {order.totalPrice} kr
                       </span>
                     </p>
-                    <button
+                    <article className="flex gap-2 font-sans">
+                      <p className="">Din kommentar:</p>
+                      <p className="italic">
+                        {order.comment || "Ingen kommentar lämnad"}
+                      </p>
+                    </article>
+                    <motion.button
                       onClick={() => handleReorder(order)}
                       className="bg-teal-900 text-white rounded-lg px-4 py-2 mt-4 hover:bg-teal-800 self-end"
+                      whileTap={{ scale: 0.9 }}
                     >
                       Beställ igen
-                    </button>
+                    </motion.button>
                   </li>
                 ))}
               </ul>

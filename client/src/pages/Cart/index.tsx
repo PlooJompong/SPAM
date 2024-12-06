@@ -14,6 +14,7 @@ const Cart: React.FC = () => {
   const navigate = useNavigate();
 
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -45,7 +46,7 @@ const Cart: React.FC = () => {
       orderDate: new Date().toISOString(),
       locked: false,
       done: false,
-      comment: "",
+      comment,
     };
 
     try {
@@ -161,6 +162,12 @@ const Cart: React.FC = () => {
                 <span>Totalpris:</span>
                 <span>{calculateTotalPrice()} kr</span>
               </h2>
+              <textarea
+                className="border border-zinc-300 rounded p-2 w-full mt-4 text-sm"
+                placeholder="Lägg till en kommentar för din order..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              ></textarea>
               <article className="flex w-80 justify-between text-teal-900 mt-4">
                 <p>Betalningsmetod</p>
                 <select
@@ -224,21 +231,20 @@ const Cart: React.FC = () => {
               )}
 
               <article className="flex justify-between gap-4">
-             <motion.button
-              onClick={handleOrder}
-              className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
-              whileTap={{ scale: 0.9 }}
-            >
-              Beställ
-            </motion.button>
-            <motion.button
-              onClick={clearCart}
-              className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
-              whileTap={{ scale: 0.9 }}
-            >
-              Rensa varukorg
-            </motion.button>
-                
+                <motion.button
+                  onClick={handleOrder}
+                  className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Beställ
+                </motion.button>
+                <motion.button
+                  onClick={clearCart}
+                  className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Rensa varukorg
+                </motion.button>
               </article>
             </section>
           )}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOrders, getOrder, createOrder, updateOrder, deleteOrder } from "../controller/orderController.js";
+import { getOrders, getOrder, createOrder, updateOrder, deleteOrder, toggleLockOrder, toggleDoneOrder } from "../controller/orderController.js";
 
 const router = Router();
 
@@ -14,6 +14,12 @@ router.post("/", createOrder)
 
 // UPDATE order by id
 router.put("/:id", updateOrder)
+
+//PUST lock order by id
+router.put("/:id/toggle-lock", toggleLockOrder); 
+
+//PUT done order by id
+router.put("/:id/toggle-done", toggleDoneOrder);
 
 // DELETE order by id
 router.delete("/:id", deleteOrder)

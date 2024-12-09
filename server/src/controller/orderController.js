@@ -146,6 +146,66 @@ const updateOrder = async (req, res) => {
   }
 };
 
+// Ändra locked status
+const toggleLockOrder = async (req, res) => {
+  try {
+    const { id } = req.params; 
+
+    // Hitta ordern
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Ordern hittades inte." });
+    }
+
+    // Alternera värdet för `locked`
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { locked: !order.locked },
+      { new: true } 
+    );
+
+    res.status(200).json({ 
+      message: `Order ${updatedOrder.locked ? "låst" : "upplåst"}!`, 
+      order: updatedOrder 
+    });
+  } catch (err) {
+    console.error("Fel vid alternering av order lock-status:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
+  }
+};
+
+// Ändra done status
+const toggleDoneOrder = async (req, res) => {
+  try {
+    const { id } = req.params; 
+
+    // Hitta ordern
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Ordern hittades inte." });
+    }
+
+    // Alternera värdet för `locked`
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { done: !order.done },
+      { new: true } 
+    );
+
+    res.status(200).json({ 
+      message: `Order ${updatedOrder.done ? "inteKlar" : "Klar"}!`, 
+      order: updatedOrder 
+    });
+  } catch (err) {
+    console.error("Fel vid alternering av order done-status:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order." });
+  }
+};
+
+
+
 // DELETE order by id
 const deleteOrder = async (req, res) => {
   try {
@@ -176,4 +236,4 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-export { getOrders, getOrder, createOrder, updateOrder, deleteOrder };
+export { getOrders, getOrder, createOrder, updateOrder, deleteOrder, toggleLockOrder, toggleDoneOrder };

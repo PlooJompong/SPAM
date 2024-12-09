@@ -72,6 +72,56 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  const toggleLockStatus = async (orderId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/orders/${orderId}/toggle-lock`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedOrder = await response.json();
+
+      // Uppdatera listan av ordrar med den ändrade ordern
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, locked: updatedOrder.locked } : order
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling lock status:", error);
+      alert("Kunde inte ändra låsstatus. Försök igen.");
+    }
+  };
+
+  const toggleDoneStatus = async (orderId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/orders/${orderId}/toggle-done`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedOrder = await response.json();
+
+      // Uppdatera listan av ordrar med den ändrade ordern
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, done: updatedOrder.done } : order
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling done status:", error);
+      alert("Kunde inte ändra klarstatus. Försök igen.");
+    }
+  };
+
   return (
     <>
       <Container bgColor="bg-orange-100">
@@ -107,16 +157,16 @@ const Orders = () => {
                 <section key={order._id} className="space-y-2 ">
                   {/* Order-rad */}
                   <article
-                    className={`flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer ${
+                    className={`flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer `}
+                  >
+                    <article className={`flex-1 pr-4 ${
                       selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
                     }`}
                     onClick={() =>
                       setSelectedOrder(
                         selectedOrder === order._id ? null : order._id
                       )
-                    }
-                  >
-                    <article className="flex-1 pr-4">
+                    }>
                       <h2 className="font-semibold">Beställning {order._id}</h2>
                       <p className="text-sm text-gray-600">
                         {formatOrderDate(order.orderDate)}
@@ -125,7 +175,9 @@ const Orders = () => {
                     <div className="flex items-center space-x-2 md:space-x-5 flex-shrink-0">
                       <input
                         type="checkbox"
+                        alt="Done"
                         className="form-checkbox h-5 w-5 md:h-6 md:w-6"
+                        onClick={() => toggleDoneStatus(order._id)}
                       />
                       <img
                         src={editLogo}
@@ -135,7 +187,8 @@ const Orders = () => {
                       <img
                         src={lockedLogo}
                         alt="Locked"
-                        className="h-5 w-5 md:h-6 md:w-6"
+                        className="h-5 w-5 md:h-6 md:w-6 cursor-pointer"
+                        onClick={() => toggleLockStatus(order._id)} 
                       />
                     </div>
                   </article>

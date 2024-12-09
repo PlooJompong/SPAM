@@ -86,8 +86,8 @@ const Orders = () => {
                 <button
                   className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
                     filter === "pending"
-                      ? "bg-teal-900  underline"
-                      : "bg-gray-500"
+                      ? "bg-orange-500  underline"
+                      : "bg-teal-900"
                   } rounded-l-lg`}
                   onClick={() => setFilter("pending")}
                 >
@@ -95,7 +95,7 @@ const Orders = () => {
                 </button>
                 <button
                   className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
-                    filter === "all" ? "bg-teal-900 underline" : "bg-gray-500"
+                    filter === "all" ? "bg-orange-500 underline" : "bg-teal-900"
                   } rounded-r-lg`}
                   onClick={() => setFilter("all")}
                 >

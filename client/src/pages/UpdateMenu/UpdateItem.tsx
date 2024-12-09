@@ -1,6 +1,6 @@
-import React from "react";
-import { FaPen } from "react-icons/fa";
-import { MenuItem } from "./index.tsx";
+import React from 'react';
+import { FaPen } from 'react-icons/fa';
+import { MenuItem } from './index.tsx';
 
 interface MenuItemProps {
   item: MenuItem;
@@ -21,10 +21,10 @@ const UpdateItemComponent: React.FC<MenuItemProps> = ({ item, handleEdit }) => {
         </article>
 
         <p className="font-primary md:text-lg sm:text-md text-teal-900 italic">
-          {item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}
+          {item.vegetarian ? 'Vegetarisk' : 'Ej vegetarisk'}
         </p>
         <p className="font-primary md:text-lg sm:text-md text-teal-900">
-          {item.ingredients.join(", ")}
+          {item.ingredients.join(', ')}
         </p>
       </section>
       <FaPen

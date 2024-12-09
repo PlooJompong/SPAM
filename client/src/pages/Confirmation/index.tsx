@@ -85,10 +85,10 @@
 
 // export default Confirmation;
 
-import React, { useEffect, useState } from "react";
-import CustomHeader from "../../components/CustomerHeader";
-import orderCheck from "../../assets/orderCheck.svg";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import CustomHeader from '../../components/CustomerHeader';
+import orderCheck from '../../assets/orderCheck.svg';
+import { useLocation } from 'react-router-dom';
 
 interface OrderItem {
   _id: string;
@@ -114,23 +114,21 @@ const Confirmation = () => {
   const location = useLocation();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const orderId = location.state?.order?._id;
 
   // Hämta orderstatus från backend med polling
   useEffect(() => {
     if (!orderId) {
-      setError("Ingen orderinformation tillgänglig");
+      setError('Ingen orderinformation tillgänglig');
       setLoading(false);
       return;
     }
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/orders/${orderId}`
-        );
+        const response = await fetch(`http://localhost:8000/orders/${orderId}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -140,8 +138,8 @@ const Confirmation = () => {
         setOrder(data);
         setLoading(false); // Sätt loading till false efter en lyckad hämtning
       } catch (err) {
-        console.error("Fel vid hämtning av order:", err);
-        setError("Kunde inte hämta ordern. Försök igen senare.");
+        console.error('Fel vid hämtning av order:', err);
+        setError('Kunde inte hämta ordern. Försök igen senare.');
         setLoading(false); // Sätt loading till false även vid ett fel
       }
     };
@@ -204,7 +202,7 @@ const Confirmation = () => {
           <article className="flex gap-2">
             <p className="font-semibold text-gray-600">Din kommentar: </p>
             <p className="italic text-gray-600">
-              {order.comment || "Ingen kommentar lämnad"}
+              {order.comment || 'Ingen kommentar lämnad'}
             </p>
           </article>
 
@@ -213,12 +211,12 @@ const Confirmation = () => {
             <p className="text-lg font-semibold text-teal-900">Orderstatus:</p>
             <div>
               <p>
-                <span className="font-bold">Låst:</span>{" "}
-                {order.locked ? "Ja" : "Nej"}
+                <span className="font-bold">Låst:</span>
+                {order.locked ? 'Ja' : 'Nej'}
               </p>
               <p>
-                <span className="font-bold">Färdig:</span>{" "}
-                {order.done ? "Ja" : "Nej"}
+                <span className="font-bold">Färdig:</span>
+                {order.done ? 'Ja' : 'Nej'}
               </p>
             </div>
           </article>

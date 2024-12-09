@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
-import MenuItemComponent from "./MenuItem";
-import { useCart } from "../../context/CartContext";
-import { useNavigate } from "react-router-dom";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { HiMinusSm } from "react-icons/hi";
-import { GoPlus } from "react-icons/go";
-import { motion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
+import MenuItemComponent from './MenuItem';
+import { useCart } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
+import { FaRegTrashCan } from 'react-icons/fa6';
+import { HiMinusSm } from 'react-icons/hi';
+import { GoPlus } from 'react-icons/go';
+import { motion } from 'framer-motion';
 
 export interface MenuItem {
   _id: string;
@@ -128,7 +128,7 @@ const Menu: React.FC = () => {
       </ul>
 
       {/* VARUKORG */}
-      <article className="fixed w-80 left-0 right-0 mx-auto bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 lg:left-[864px] rounded">
+      <article className="fixed left-0 right-0 mx-auto bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 lg:left-[864px] rounded">
         <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
         <ul className="flex flex-col font-sans">
           {cart.map((cartItem, index) => (

@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 import { FaBasketShopping } from "react-icons/fa6";
-import { IoReceiptOutline } from "react-icons/io5";
+import { IoReceiptOutline, IoLogOut } from "react-icons/io5";
+import { useAuth } from "../context/AuthContext";
 import "./index.css";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const isLoggedIn = !!user;
+
   return (
     <>
-      <nav className="bg-orange-100 text-teal-900">
+      <nav className="bg-white text-teal-900">
         <ul className="max-w-screen-2xl flex flex-wrap">
           <li>
             <Link to="/">Landing</Link>
@@ -27,9 +31,18 @@ const Navbar = () => {
             <Link to="/home">Home</Link>
           </li>
           <li>
-            <Link to="/login">
-              <FiLogIn className="text-teal-900" />
-            </Link>
+            {isLoggedIn ? (
+              <button
+                onClick={logout}
+                className="bg-transparent border-none cursor-pointer"
+              >
+                <IoLogOut className="text-teal-900" />
+              </button>
+            ) : (
+              <a href="/login">
+                <FiLogIn className="text-teal-900" />
+              </a>
+            )}
           </li>
           <li>
             <Link to="/menu">Menu</Link>

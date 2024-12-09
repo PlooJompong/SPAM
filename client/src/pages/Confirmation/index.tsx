@@ -138,9 +138,11 @@ const Confirmation = () => {
 
         const data: Order = await response.json();
         setOrder(data);
+        setLoading(false); // Sätt loading till false efter en lyckad hämtning
       } catch (err) {
         console.error("Fel vid hämtning av order:", err);
         setError("Kunde inte hämta ordern. Försök igen senare.");
+        setLoading(false); // Sätt loading till false även vid ett fel
       }
     };
 

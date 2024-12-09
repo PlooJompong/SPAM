@@ -1,169 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import CustomerHeader from "../../components/CustomerHeader";
-// import { useAuth } from "../../context/AuthContext";
-// import Container from "../../components/Container";
-// import { useCart } from "../../context/CartContext";
-// import { motion } from "framer-motion";
-
-// interface OrderItem {
-//   _id: string;
-//   name: string;
-//   price: number;
-//   vegetarian: boolean;
-//   ingredients: string[];
-//   quantity: number;
-//   done: boolean;
-//   locked: boolean;
-//   comment: string;
-// }
-
-// interface Order {
-//   _id: string;
-//   name: string;
-//   items: OrderItem[];
-//   totalPrice: number;
-//   orderDate: string;
-//   comment: string;
-// }
-
-// const TestHistory: React.FC = () => {
-//   const { user } = useAuth(); // Hämta inloggad användare från AuthContext
-//   const { addToCart } = useCart();
-//   const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState('');
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const fetchOrderHistory = async () => {
-//       if (!user) {
-//         setError('Du måste vara inloggad för att se din orderhistorik.');
-//         setLoading(false);
-//         return;
-//       }
-
-//       try {
-//         const response = await fetch(
-//           `http://localhost:8000/orderhistory/${user.username}`
-//         );
-//         // (
-//         //   `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`
-//         // );
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         console.log("Data from API:", data);
-//         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
-//       } catch (err) {
-//         console.error('Fel vid hämtning av orderhistorik:', err);
-//         setError('Kunde inte hämta orderhistoriken. Försök igen senare.');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchOrderHistory();
-//   }, [user]);
-
-//   const handleReorder = (order: Order) => {
-//     order.items.forEach((item) => {
-//       addToCart({
-//         ...item,
-//         quantity: item.quantity, // Ensure the correct quantity is passed
-//       });
-//     });
-//     navigate('/cart');
-//   };
-
-//   // const handleReorder = (order: Order) => {
-//   //   order.items.forEach((item) => {
-//   //     addToCart(item);
-//   //   });
-//   //   navigate('/cart');
-//   // };
-
-//   return (
-//     <>
-//       <CustomerHeader title="Orderhistorik" />
-//       <Container>
-//         <main className="primary-font flex min-h-screen w-full justify-center text-teal-900">
-//           {loading ? (
-//             <p>Laddar din orderhistorik...</p>
-//           ) : error ? (
-//             <p className="text-red-500">{error}</p>
-//           ) : orderHistory.length === 0 ? (
-//             <p>Du har ännu inga beställningar i din orderhistorik.</p>
-//           ) : (
-//             <section className="w-full md:w-2/4 flex flex-col">
-//               <ul className="space-y-4 w-full flex flex-wrap bg-orange-100 p-4 shadow rounded">
-//                 {orderHistory.map((order, index) => (
-//                   <li
-//                     key={index}
-//                     className="border-b pb-4 w-full flex flex-col"
-//                   >
-//                     <h3 className="lg:text-xl md:text-xl sm:text-sm font-semibold">
-//                       Order {order._id}
-//                     </h3>
-//                     <p className="lg:text-lg md:text-lg sm:text-sm font-sans">
-//                       Datum: {new Date(order.orderDate).toLocaleDateString()}
-//                     </p>
-
-//                     <ul className="list-disc flex flex-col">
-//                       {order.items.map((item, itemIndex) => (
-//                         <li
-//                           key={itemIndex}
-//                           className="list-none flex justify-between w-full"
-//                         >
-//                           <span className="lg:text-lg md:text-lg sm:text-xs">
-//                             {item.name}
-//                           </span>
-//                           <div>
-//                             <span className="lg:text-lg md:text-lg sm:text-xs mr-3">
-//                               {item.quantity} st x
-//                             </span>
-//                             <span className="lg:text-lg md:text-lg sm:text-xs">
-//                               {item.price} kr
-//                             </span>
-//                           </div>
-//                         </li>
-//                       ))}
-//                     </ul>
-//                     <p className="flex justify-between w-full mt-8">
-//                       <span className="lg:text-lg md:text-lg sm:text-xs">
-//                         Totalpris:
-//                       </span>
-//                       <span className="lg:text-lg md:text-lg sm:text-xs">
-//                         {order.totalPrice} kr
-//                       </span>
-//                     </p>
-//                     <article className="flex gap-2 font-sans">
-//                       <p className="">Din kommentar:</p>
-//                       <p className="italic">
-//                         {order.comment || "Ingen kommentar lämnad"}
-//                       </p>
-//                     </article>
-//                     <motion.button
-//                       onClick={() => handleReorder(order)}
-//                       className="bg-teal-900 text-white rounded-lg px-4 py-2 mt-4 hover:bg-teal-800 self-end"
-//                       whileTap={{ scale: 0.9 }}
-//                     >
-//                       Beställ igen
-//                     </motion.button>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </section>
-//           )}
-//         </main>
-//       </Container>
-//     </>
-//   );
-// };
-
-// export default TestHistory;
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomerHeader from "../../components/CustomerHeader";
@@ -179,9 +13,9 @@ interface OrderItem {
   vegetarian: boolean;
   ingredients: string[];
   quantity: number;
-  comment: string;
-  locked: boolean;
   done: boolean;
+  locked: boolean;
+  comment: string;
 }
 
 interface Order {
@@ -195,16 +29,16 @@ interface Order {
 
 const TestHistory: React.FC = () => {
   const { user } = useAuth(); // Hämta inloggad användare från AuthContext
-  const { addToCart } = useCart(); // Säkerställ att addToCart används korrekt
+  const { addToCart } = useCart();
   const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
       if (!user) {
-        setError("Du måste vara inloggad för att se din orderhistorik.");
+        setError('Du måste vara inloggad för att se din orderhistorik.');
         setLoading(false);
         return;
       }
@@ -213,7 +47,9 @@ const TestHistory: React.FC = () => {
         const response = await fetch(
           `http://localhost:8000/orderhistory/${user.username}`
         );
-
+        // (
+        //   `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`
+        // );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -221,8 +57,8 @@ const TestHistory: React.FC = () => {
         console.log("Data from API:", data);
         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
       } catch (err) {
-        console.error("Fel vid hämtning av orderhistorik:", err);
-        setError("Kunde inte hämta orderhistoriken. Försök igen senare.");
+        console.error('Fel vid hämtning av orderhistorik:', err);
+        setError('Kunde inte hämta orderhistoriken. Försök igen senare.');
       } finally {
         setLoading(false);
       }
@@ -233,23 +69,20 @@ const TestHistory: React.FC = () => {
 
   const handleReorder = (order: Order) => {
     order.items.forEach((item) => {
-      // Säkerställ rätt format för addToCart
       addToCart({
-        _id: item._id,
-        name: item.name,
-        price: item.price,
-        vegetarian: item.vegetarian,
-        ingredients: item.ingredients,
-        quantity: item.quantity,
-        comment: item.comment,
-        locked: item.locked,
-        done: item.done,
+        ...item,
+        quantity: item.quantity, // Ensure the correct quantity is passed
       });
     });
-
-    // Navigera till varukorg
-    navigate("/cart");
+    navigate('/cart');
   };
+
+  // const handleReorder = (order: Order) => {
+  //   order.items.forEach((item) => {
+  //     addToCart(item);
+  //   });
+  //   navigate('/cart');
+  // };
 
   return (
     <>
@@ -330,3 +163,4 @@ const TestHistory: React.FC = () => {
 };
 
 export default TestHistory;
+

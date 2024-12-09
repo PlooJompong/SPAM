@@ -37,7 +37,7 @@ const Home: React.FC = () => {
             <p>FRE-LÖR 12.00-01.00</p>
             <p>SÖN 10.00-18.00</p>
             <p>STORGATAN 17</p>
-            <p>081 000 07 00</p>
+            <p>08-100 07 00</p>
           </section>
         </Container>
       </div>
@@ -70,13 +70,16 @@ const Home: React.FC = () => {
               </div>
             </section>
 
-            <section className="flex w-1/4 flex-col gap-3 text-center">
+            <section className="flex w-1/4 flex-col gap-2 text-center">
               <h2 className="text-[1.75rem]">ÖPPETTIDER</h2>
               <p>TIS-TORS 12.00-23.00</p>
               <p>FRE-LÖR 12.00-01.00</p>
               <p>SÖN 10.00-18.00</p>
               <p>STORGATAN 17</p>
-              <p>081 000 07 00</p>
+              <p>08-100 07 00</p>
+              <Link to="/about">
+                <p className="underline">Vilka är SPAM?</p>
+              </Link>
             </section>
 
             <img src={pizzaBox} alt="pizzaBox" className="w-1/4" />

@@ -29,6 +29,15 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const [filter, setFilter] = useState<"all" | "pending">("all");
+
+  // Filtrering av ordrar
+  const filteredOrders = orders.filter((order) => {
+    if (filter === "pending") {
+      return !(order.locked && order.done);
+    }
+    return order.done && order.locked;
+  });
 
   // Formattering av datum och tid
   const formatOrderDate = (isoDate: string) => {
@@ -74,15 +83,27 @@ const Orders = () => {
             {/* Vänster kolumn */}
             <article className="w-full sm:w-full md:w-4/5 space-y-4">
               <div className="flex items-center justify-center">
-                <button className="bg-teal-900 px-4 py-2 text-white rounded-l-lg">
-                  SAMTLIGA
+                <button
+                  className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
+                    filter === "pending"
+                      ? "bg-orange-500  underline"
+                      : "bg-teal-900"
+                  } rounded-l-lg`}
+                  onClick={() => setFilter("pending")}
+                >
+                  PÅGÅENDE
                 </button>
-                <button className="bg-orange-500 px-4 py-2 text-white rounded-r-lg">
-                  OBEHANDLADE
+                <button
+                  className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
+                    filter === "all" ? "bg-orange-500 underline" : "bg-teal-900"
+                  } rounded-r-lg`}
+                  onClick={() => setFilter("all")}
+                >
+                  KLARA
                 </button>
               </div>
 
-              {orders.map((order) => (
+              {filteredOrders.map((order) => (
                 <section key={order._id} className="space-y-2 ">
                   {/* Order-rad */}
                   <article

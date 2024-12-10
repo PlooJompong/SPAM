@@ -1,28 +1,50 @@
-import { useEffect, useState } from "react";
-import EmployeeHeader from "../../components/EmployeeHeader";
-import Container from "../../components/Container";
+import { useEffect, useState } from 'react';
+import EmployeeHeader from '../../components/EmployeeHeader';
+import Container from '../../components/Container';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Stock = () => {
   const [stockData, setStockData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/stock");
-        // ('https://node-mongodb-api-ks7o.onrender.com/stock');
+        const response = await fetch(
+          'http://localhost:8000/stock',
+          // ('https://node-mongodb-api-ks7o.onrender.com/stock'),
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          if (response.status === 401) {
+            setError('Din session har gått ut. Logga in igen');
+            console.log('Din session har gått ut. Logga in igen');
+            sessionStorage.removeItem('token');
+            navigate('/login');
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return;
         }
+
         const data = await response.json();
+
         setStockData(data);
-        setLoading(false);
       } catch (err: any) {
-        setError(err.message || "An error occurred");
-        setLoading(false);
+        console.error('Error fetching stock data:', err);
       }
     };
+
     fetchStockData();
   }, []);
 
@@ -31,10 +53,8 @@ const Stock = () => {
       <Container bgColor="bg-orange-100">
         <EmployeeHeader title="Lagerstatus" />
         <main className="m-auto flex h-full w-full justify-center font-sans bg-orange-100 p-4">
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p className="text-center text-red-500">Fel: {error}</p>
+          {!isAdmin ? (
+            <p className="font-primary">Du har inte åtkomst till denna sida</p>
           ) : (
             <table className="w-full md:w-2/4 border-collapse border border-teal-900">
               <thead>

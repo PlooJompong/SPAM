@@ -88,7 +88,7 @@
 import React, { useEffect, useState } from 'react';
 import CustomHeader from '../../components/CustomerHeader';
 import orderCheck from '../../assets/orderCheck.svg';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface OrderItem {
   _id: string;
@@ -115,6 +115,7 @@ const Confirmation = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const orderId = location.state?.order?._id;
 
@@ -128,10 +129,27 @@ const Confirmation = () => {
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/orders/${orderId}`);
+        const response = await fetch(
+          `http://localhost:8000/orders/${orderId}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          if (response.status === 401) {
+            setError('Din session har gått ut. Logga in igen');
+            console.log('Din session har gått ut. Logga in igen');
+            sessionStorage.removeItem('token');
+            navigate('/login');
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return;
         }
 
         const data: Order = await response.json();

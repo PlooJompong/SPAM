@@ -11,9 +11,9 @@ import Orders from './pages/Orders';
 import Stock from './pages/Stock';
 import UpdateMenu from './pages/UpdateMenu';
 import { CartProvider } from './context/CartContext'; // Importera CartProvider
-import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
-import AdminPage from './pages/Admin';
+import Navbar from './components/Navbar';
+// import AdminPage from './pages/Admin';
 
 const App = () => {
   return (
@@ -23,13 +23,12 @@ const App = () => {
         <AuthProvider>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/landing" element={<Landing />} />
+            {/* <Route path="/admin" element={<AdminPage />} /> */}
             <Route path="/about" element={<About />} />
-
             <Route path="/cart" element={<Cart />} />
             <Route path="/confirmation" element={<Confirmation />} />
-            <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/orderhistory" element={<OrderHistory />} />

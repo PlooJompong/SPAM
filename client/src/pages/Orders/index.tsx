@@ -1,7 +1,7 @@
 import editLogo from "../../assets/editLogo.svg";
 import lockedLogo from "../../assets/lockedLogo.svg";
 import margherita from "../../assets/margherita.png";
-// import unlockedLogo from "../../assets/unlockedLogo.svg";
+import unlockedLogo from "../../assets/unlockedLogo.svg";
 import { useState, useEffect } from "react";
 import Container from "../../components/Container";
 import EmployeeHeader from "../../components/EmployeeHeader";
@@ -29,7 +29,11 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+
   const [filter, setFilter] = useState<"done" | "pending">("pending");
+  const [editingComment, setEditingComment] = useState<string | null>(null);
+  const [newComment, setNewComment] = useState<string>("");
+
 
   // Filtrering av ordrar
   const filteredOrders = orders.filter((order) => {
@@ -75,10 +79,13 @@ const Orders = () => {
 
   const toggleLockStatus = async (orderId: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/orders/${orderId}/toggle-lock`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `http://localhost:8000/orders/${orderId}/toggle-lock`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -89,7 +96,9 @@ const Orders = () => {
       // Uppdatera listan av ordrar med den ändrade ordern
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order._id === orderId ? { ...order, locked: updatedOrder.locked } : order
+          order._id === orderId
+            ? { ...order, locked: updatedOrder.locked }
+            : order
         )
       );
     } catch (error) {
@@ -113,7 +122,7 @@ const Orders = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -122,7 +131,54 @@ const Orders = () => {
       alert("Kunde inte ändra klarstatus. Försök igen.");
     }
   };
-  
+
+  const updateComment = async (orderId: string, newComment: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/orders/${orderId}/comment`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ comment: newComment }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedOrder = await response.json();
+
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId
+            ? { ...order, comment: updatedOrder.comment }
+            : order
+        )
+      );
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      alert("Kunde inte uppdatera kommentaren. Försök igen.");
+    }
+  };
+
+  const handleEditComment = (orderId: string, currentComment: string) => {
+    setEditingComment(orderId);
+    setNewComment(currentComment);
+  };
+
+  const handleSaveComment = (orderId: string) => {
+    if (newComment.trim() !== "") {
+      updateComment(orderId, newComment);
+      setEditingComment(null);
+      setNewComment("");
+    } else {
+      alert("Kommentaren kan inte vara tom.");
+    }
+  };
+
   return (
     <>
       <Container bgColor="bg-orange-100">
@@ -160,14 +216,16 @@ const Orders = () => {
                   <article
                     className={`flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer `}
                   >
-                    <article className={`flex-1 pr-4 ${
-                      selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
-                    }`}
-                    onClick={() =>
-                      setSelectedOrder(
-                        selectedOrder === order._id ? null : order._id
-                      )
-                    }>
+                    <article
+                      className={`flex-1 pr-4 ${
+                        selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
+                      }`}
+                      onClick={() =>
+                        setSelectedOrder(
+                          selectedOrder === order._id ? null : order._id
+                        )
+                      }
+                    >
                       <h2 className="font-semibold">Beställning {order._id}</h2>
                       <p className="text-sm text-gray-600">
                         {formatOrderDate(order.orderDate)}
@@ -183,15 +241,10 @@ const Orders = () => {
 />
 
                       <img
-                        src={editLogo}
-                        alt="Edit"
-                        className="h-5 w-5 md:h-6 md:w-6"
-                      />
-                      <img
-                        src={lockedLogo}
+                        src={order.locked ? lockedLogo : unlockedLogo}
                         alt="Locked"
                         className="h-5 w-5 md:h-6 md:w-6 cursor-pointer"
-                        onClick={() => toggleLockStatus(order._id)} 
+                        onClick={() => toggleLockStatus(order._id)}
                       />
                     </div>
                   </article>
@@ -248,7 +301,16 @@ const Orders = () => {
                     <h2 className="text-lg font-bold text-teal-900">
                       Beställning {selectedOrder}
                     </h2>
-                    <button>
+                    <button
+                      onClick={
+                        () =>
+                          handleEditComment(
+                            selectedOrder,
+                            orders.find((order) => order._id === selectedOrder)
+                              ?.comment || ""
+                          ) // Hitta den valda ordern och skicka med kommentaren
+                      }
+                    >
                       <img src={editLogo} alt="Edit" className="h-6 w-6" />
                     </button>
                   </div>
@@ -283,12 +345,32 @@ const Orders = () => {
                             </div>
                           </div>
                         ))}
-                        <article className="flex gap-2 pt-3">
+                        <article className="flex flex-col gap-2 pt-3">
                           <p className="font-semibold">Kommentar från kund: </p>
-                          <p className="italic">
-                            {order.comment || "Ingen kommentar lämnad"}
-                          </p>
+                          {editingComment === order._id ? (
+                            <input
+                              type="textarea"
+                              value={newComment}
+                              onChange={(e) => setNewComment(e.target.value)}
+                              className="italic w-full text-sm border p-2 rounded"
+                            />
+                          ) : (
+                            <p className="italic">
+                              {order.comment || "Ingen kommentar lämnad"}
+                            </p>
+                          )}
+
+                          {/* Spara kommentar-knapp när i redigeringsläge */}
+                          {editingComment === order._id && (
+                            <button
+                              onClick={() => handleSaveComment(order._id)}
+                              className="mt-2 px-4 py-2 bg-teal-900 text-white rounded flex-end"
+                            >
+                              Spara
+                            </button>
+                          )}
                         </article>
+
                         {/* Totalen */}
                         <div className="mt-4 flex justify-between text-lg font-semibold">
                           <span className="text-teal-900">Totalbelopp</span>

@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
 
     if (admin) {
-      navigate('/admin');
+      navigate('/landing');
     } else {
       navigate('/orderhistory');
     }

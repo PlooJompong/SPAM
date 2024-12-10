@@ -12,8 +12,9 @@ const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const [comment, setComment] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>('');
+  const [comment, setComment] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -55,14 +56,23 @@ const Cart: React.FC = () => {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(createdOrder),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 401) {
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return;
       }
 
       const data = await response.json();

@@ -1,3 +1,6 @@
+
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import editLogo from "../../assets/editLogo.svg";
 import lockedLogo from "../../assets/lockedLogo.svg";
 import margherita from "../../assets/margherita.png";
@@ -29,15 +32,16 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
-
+  const [error, setError] = useState<string | null>(null);
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<"done" | "pending">("pending");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [newComment, setNewComment] = useState<string>("");
 
-
   // Filtrering av ordrar
   const filteredOrders = orders.filter((order) => {
-    if (filter === "pending") {
+    if (filter === 'pending') {
       return !(order.locked && order.done);
     }
     return order.done && order.locked;
@@ -46,14 +50,14 @@ const Orders = () => {
   // Formattering av datum och tid
   const formatOrderDate = (isoDate: string) => {
     const date = new Date(isoDate);
-    const datePart = new Intl.DateTimeFormat("sv-SE", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+    const datePart = new Intl.DateTimeFormat('sv-SE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     }).format(date);
-    const timePart = new Intl.DateTimeFormat("sv-SE", {
-      hour: "2-digit",
-      minute: "2-digit",
+    const timePart = new Intl.DateTimeFormat('sv-SE', {
+      hour: '2-digit',
+      minute: '2-digit',
     }).format(date);
     return `${datePart}, ${timePart}`;
   };
@@ -62,11 +66,34 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/orders`);
+        const response = await fetch(
+          `http://localhost:8000/orders`,
+          // 'https://node-mongodb-api-ks7o.onrender.com/order',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError('Din session har gått ut. Logga in igen');
+            console.log('Din session har gått ut. Logga in igen');
+            sessionStorage.removeItem('token');
+            navigate('/login');
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return;
+        }
+
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.error('Error fetching orders:', error);
       }
     };
 
@@ -81,14 +108,26 @@ const Orders = () => {
     try {
       const response = await fetch(
         `http://localhost:8000/orders/${orderId}/toggle-lock`,
+        // 'https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-lock',
         {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 401) {
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return;
       }
 
       const updatedOrder = await response.json();
@@ -102,8 +141,8 @@ const Orders = () => {
         )
       );
     } catch (error) {
-      console.error("Error toggling lock status:", error);
-      alert("Kunde inte ändra låsstatus. Försök igen.");
+      console.error('Error toggling lock status:', error);
+      alert('Kunde inte ändra låsstatus. Försök igen.');
     }
   };
 
@@ -135,18 +174,27 @@ const Orders = () => {
   const updateComment = async (orderId: string, newComment: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/orders/${orderId}/comment`,
+        `http://localhost:8000/orders/${orderId}/toggle-done`,
+        // 'https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-done',
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ comment: newComment }),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 401) {
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return;
       }
 
       const updatedOrder = await response.json();
@@ -159,6 +207,7 @@ const Orders = () => {
         )
       );
     } catch (error) {
+
       console.error("Error updating comment:", error);
       alert("Kunde inte uppdatera kommentaren. Försök igen.");
     }
@@ -311,10 +360,11 @@ const Orders = () => {
                         )}
                       </article>
                     </article>
-                  )}
-                </section>
-              ))}
-            </article>
+
+
+                    {/* Detaljer för vald order på mindre skärmar */}
+                    {selectedOrder === order._id && (
+                      <article className="sm:hidden p-2 md:p-4 bg-white rounded-lg shadow-md">
 
             {/* Höger kolumn */}
             <div className="hidden sm:block w-full sm:w-3/5 sm:pl-6">
@@ -345,27 +395,26 @@ const Orders = () => {
                         {order.items.map((item) => (
                           <div
                             key={item._id}
-                            className="flex items-center justify-between py-3 border-b"
+                            className="flex justify-between py-3 border-b"
                           >
-                            <div className="flex items-center space-x-4 w-full">
+                            <span className="flex items-center space-x-4">
                               <img
                                 src={margherita}
                                 alt="Pizza"
-                                className="h-16 w-16 rounded-md object-cover"
+                                className="h-16 w-16 rounded-md"
                               />
-                              <div className="flex flex-col justify-center">
-                                <div className="text-teal-900">{item.name}</div>
-                                <div className="text-sm text-gray-500">
+                              
+                              <div>
+                                <h3 className="text-teal-900">{item.name}</h3>
+                                <p className="text-sm text-gray-500">
                                   Antal: {item.quantity}
-                                </div>
+                                </p>
                               </div>
-                            </div>
-                            <div className="text-right flex items-center space-x-1">
-                              <div className="text-teal-900">{item.price}</div>
-                              <div className="text-teal-900">kr</div>
-                            </div>
+                            </span>
+                            <h2 className="text-teal-900">{item.price} kr</h2>
                           </div>
                         ))}
+                      
                         <article className="flex flex-col gap-2 pt-3">
                           <p className="font-semibold">Kommentar från kund: </p>
                           {editingComment === order._id ? (
@@ -397,17 +446,86 @@ const Orders = () => {
                             {order.totalPrice} kr
                           </span>
                         </div>
-                      </div>
-                    ))}
-                </div>
-              ) : (
-                <div className="text-center text-gray-500">
-                  Välj en beställning för att se detaljer
-                </div>
-              )}
-            </div>
-          </section>
-        </main>
+                      </article>
+                    )}
+                  </section>
+                ))}
+              </article>
+
+              {/* Höger kolumn */}
+              <div className="hidden sm:block w-full sm:w-3/5 sm:pl-6">
+                {selectedOrder ? (
+                  <div className="p-6 bg-white rounded-lg shadow-md">
+                    <div className="flex items-center justify-between text-xl font-semibold text-teal-900 mb-4">
+                      <h2 className="text-lg font-bold text-teal-900">
+                        Beställning {selectedOrder}
+                      </h2>
+                      <button>
+                        <img src={editLogo} alt="Edit" className="h-6 w-6" />
+                      </button>
+                    </div>
+
+                    {/* Orderdetaljer */}
+                    {orders
+                      .filter((order) => order._id === selectedOrder)
+                      .map((order) => (
+                        <div key={order._id}>
+                          {order.items.map((item) => (
+                            <div
+                              key={item._id}
+                              className="flex items-center justify-between py-3 border-b"
+                            >
+                              <div className="flex items-center space-x-4 w-full">
+                                <img
+                                  src={margherita}
+                                  alt="Pizza"
+                                  className="h-16 w-16 rounded-md object-cover"
+                                />
+
+                                <div className="flex flex-col justify-center">
+                                  <div className="text-teal-900">
+                                    {item.name}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    Antal: {item.quantity}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right flex items-center space-x-1">
+                                <div className="text-teal-900">
+                                  {item.price}
+                                </div>
+                                <div className="text-teal-900">kr</div>
+                              </div>
+                            </div>
+                          ))}
+                          <article className="flex gap-2 pt-3">
+                            <p className="font-semibold">
+                              Kommentar från kund:{' '}
+                            </p>
+                            <p className="italic">
+                              {order.comment || 'Ingen kommentar lämnad'}
+                            </p>
+                          </article>
+                          {/* Totalen */}
+                          <div className="mt-4 flex justify-between text-lg font-semibold">
+                            <span className="text-teal-900">Totalbelopp</span>
+                            <span className="text-teal-900">
+                              {order.totalPrice} kr
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500">
+                    Välj en beställning för att se detaljer
+                  </div>
+                )}
+              </div>
+            </section>
+          </main>
+        )}
       </Container>
     </>
   );

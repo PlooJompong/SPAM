@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import pizzaLogo from "../../assets/pizzaLogo.png";
-import pizzaHand from "../../assets/pizzaHand.png";
-import pizzaBite from "../../assets/pizzaBite.png";
-import pizzaBox from "../../assets/pizzaBox.png";
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
+import { Link } from 'react-router-dom';
+import pizzaLogo from '../../assets/pizzaLogo.png';
+import pizzaHand from '../../assets/pizzaHand.png';
+import pizzaBite from '../../assets/pizzaBite.png';
+import pizzaBox from '../../assets/pizzaBox.png';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
 
 const Home: React.FC = () => {
   return (

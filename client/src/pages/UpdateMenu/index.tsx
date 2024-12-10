@@ -3,6 +3,7 @@ import Container from '../../components/Container';
 import EmployeeHeader from '../../components/EmployeeHeader';
 import UpdateItemComponent from './UpdateItem';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export interface MenuItem {
   _id: string;
@@ -20,6 +21,8 @@ const UpdateMenu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const { isAdmin } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<Partial<MenuItem>>({
     name: '',
     price: 0,
@@ -99,6 +102,18 @@ const UpdateMenu: React.FC = () => {
         }
       );
 
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return;
+      }
+
       const data = await response.json();
 
       if (response.ok) {
@@ -143,6 +158,18 @@ const UpdateMenu: React.FC = () => {
         }
       );
 
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return;
+      }
+
       const data = await response.json();
 
       if (response.ok) {
@@ -157,12 +184,12 @@ const UpdateMenu: React.FC = () => {
   };
 
   return (
-    <>
+    <Container bgColor="bg-orange-100">
+      <EmployeeHeader title="Ändra meny" />
       {!isAdmin ? (
-        <p>Du har inte åtkomst till denna sida.</p>
+        <p className="text-center">Du har inte åtkomst till denna sida.</p>
       ) : (
-        <Container bgColor="bg-orange-100">
-          <EmployeeHeader title="Ändra meny" />
+        <>
           <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap md:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
             {menuItems.map((item) => (
               <li key={item._id} className="sm:w-full md:w-1/2">
@@ -342,9 +369,9 @@ const UpdateMenu: React.FC = () => {
               </button>
             </form>
           </section>
-        </Container>
+        </>
       )}
-    </>
+    </Container>
   );
 };
 

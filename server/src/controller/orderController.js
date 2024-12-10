@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import Order from "../models/ordersModel.js";
 import Stock from "../models/stockStatusModel.js";
 import OrderHistory from "../models/orderHistoryModel.js";
@@ -110,43 +110,6 @@ const createOrder = async (req, res) => {
   }
 };
 
-// PUT update menu by id
-const updateMenu = async (req, res) => {
-  try {
-    const { id } = req.params; // Hämta ID från URL:en
-    const { name, price, vegetarian, ingredients, comment } = req.body; // Hämta uppdaterade värden från request-body
-
-    // Kontrollera att alla nödvändiga fält finns
-    if (!name || !price || !Array.isArray(ingredients)) {
-      return res
-        .status(400)
-        .json({ message: "Alla obligatoriska fält måste fyllas i." });
-    }
-
-    // Hitta och uppdatera menyalternativet i databasen
-    const updatedMenuItem = await Menu.findByIdAndUpdate(
-      id,
-      { name, price, vegetarian, ingredients },
-      { new: true } // Returnera det uppdaterade objektet
-    );
-
-    if (!updatedMenuItem) {
-      return res.status(404).json({ message: "Menyartikel hittades inte." });
-    }
-
-    // Returnera den uppdaterade menyalternativet
-    res
-      .status(200)
-      .json({ message: "Menyartikel uppdaterad!", menu: updatedMenuItem });
-  } catch (err) {
-    console.error("Fel vid uppdatering av menyartikel:", err);
-    res
-      .status(500)
-      .json({ message: "Ett fel inträffade vid uppdatering av menyartikel." });
-  }
-};
-
-
 const updateComment = async (req, res) => {
   try {
     const { id } = req.params;
@@ -246,4 +209,5 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-export { getOrders, getOrder, createOrder, updateMenu, updateComment, deleteOrder, toggleLockOrder, toggleDoneOrder };
+export { getOrders, getOrder, createOrder, updateComment, deleteOrder, toggleLockOrder, toggleDoneOrder };
+// export { getOrders, createOrder, updateComment, deleteOrder, toggleLockOrder, toggleDoneOrder };

@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { getStock } from "../controller/stockController.js"
+import verifyToken from "../middlewares/verifyToken.js";
 
 const router = Router();
 
 // GET stock
-router.get("/", getStock)
+router.get("/", verifyToken, getStock)
 
 export default router;

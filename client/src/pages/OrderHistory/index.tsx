@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import CustomerHeader from "../../components/CustomerHeader";
-import { useAuth } from "../../context/AuthContext";
-import Container from "../../components/Container";
-import { useCart } from "../../context/CartContext";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CustomerHeader from '../../components/CustomerHeader';
+import { useAuth } from '../../context/AuthContext';
+import Container from '../../components/Container';
+import { useCart } from '../../context/CartContext';
+import { motion } from 'framer-motion';
 
 interface OrderItem {
   _id: string;
@@ -45,16 +45,30 @@ const TestHistory: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/orderhistory/${user.username}`
+          `http://localhost:8000/orderhistory/${user.username}`,
+          // `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            },
+          }
         );
-        // (
-        //   `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`
-        // );
+
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          if (response.status === 401) {
+            setError('Din session har gått ut. Logga in igen');
+            console.log('Din session har gått ut. Logga in igen');
+            sessionStorage.removeItem('token');
+            navigate('/login');
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return;
         }
         const data = await response.json();
-        console.log("Data from API:", data);
+        // console.log('Data from API:', data);
         setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
       } catch (err) {
         console.error('Fel vid hämtning av orderhistorik:', err);
@@ -65,7 +79,7 @@ const TestHistory: React.FC = () => {
     };
 
     fetchOrderHistory();
-  }, [user]);
+  }, [user, navigate]);
 
   const handleReorder = (order: Order) => {
     order.items.forEach((item) => {
@@ -141,7 +155,7 @@ const TestHistory: React.FC = () => {
                     <article className="flex gap-2 font-sans">
                       <p className="">Din kommentar:</p>
                       <p className="italic">
-                        {order.comment || "Ingen kommentar lämnad"}
+                        {order.comment || 'Ingen kommentar lämnad'}
                       </p>
                     </article>
                     <motion.button

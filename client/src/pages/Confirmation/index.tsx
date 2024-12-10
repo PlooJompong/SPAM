@@ -89,6 +89,7 @@ import React, { useEffect, useState } from "react";
 import CustomHeader from "../../components/CustomerHeader";
 import orderCheck from "../../assets/orderCheck.svg";
 import { useLocation } from "react-router-dom";
+import Modal from "../../components/Modal";
 
 interface OrderItem {
   _id: string;
@@ -116,6 +117,13 @@ const Confirmation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [onConfirmAction, setOnConfirmAction] = useState<(() => void) | null>(
+    null
+  );
+
   const orderId = location.state?.order?._id;
 
   // Hämta orderstatus från backend med polling
@@ -128,9 +136,7 @@ const Confirmation = () => {
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/orders/${orderId}`
-        );
+        const response = await fetch(`http://localhost:8000/orders/${orderId}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -167,6 +173,61 @@ const Confirmation = () => {
   if (!order) {
     return <p>Ingen orderinformation tillgänglig</p>;
   }
+
+  const handleCancelOrder = async () => {
+    if (order?.locked || order?.done) {
+      // Om ordern är låst eller markerad som färdig
+      setModalTitle("Order kan inte avbrytas");
+      setModalMessage(
+        order?.done
+          ? "Din beställning är redan slutförd och kan inte avbrytas"
+          : "Köket har börjat med din beställning, du kan inte avbryta ordern"
+      );
+      setOnConfirmAction(null);
+      setIsModalOpen(true);
+
+      // Autostäng modalen efter 3 sekunder
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 3000);
+      return;
+    }
+
+    // Om ordern inte är låst eller klar
+    setModalTitle("Bekräfta avbokning");
+    setModalMessage(
+      "Din beställning avbryts, du får pengarna tillbaka. Vill du fortsätta?"
+    );
+    setOnConfirmAction(() => confirmCancelOrder);
+    setIsModalOpen(true);
+  };
+
+  const confirmCancelOrder = async () => {
+    if (!order) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/orders/${order._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setOrder(null);
+      setModalTitle("Order avbruten");
+      setModalMessage(
+        "Din beställning har avbrutits och pengarna är återbetalade"
+      );
+    } catch (err) {
+      console.error("Fel vid avbokning av order:", err);
+      setModalTitle("Fel");
+      setModalMessage("Något gick fel. Försök igen senare");
+    }
+  };
 
   return (
     <>
@@ -213,7 +274,7 @@ const Confirmation = () => {
             <p className="text-lg font-semibold text-teal-900">Orderstatus:</p>
             <div>
               <p>
-                <span className="font-bold">Låst:</span>{" "}
+                <span className="font-bold">Tillagas:</span>{" "}
                 {order.locked ? "Ja" : "Nej"}
               </p>
               <p>
@@ -222,6 +283,28 @@ const Confirmation = () => {
               </p>
             </div>
           </article>
+          <article>
+            <button
+              className="bg-red-900 text-white text-sm px-2 py-1 rounded hover:bg-red-800"
+              onClick={handleCancelOrder}
+            >
+              Avbryt order
+            </button>
+            {order.done && (
+              <article className="mt-4 p-4 text-center bg-green-100 text-teal-900 rounded">
+                Din order är klar! 🎉
+              </article>
+            )}
+          </article>
+
+          <Modal
+            isOpen={isModalOpen}
+            title={modalTitle}
+            message={modalMessage}
+            onConfirm={onConfirmAction ?? (() => setIsModalOpen(false))}
+            onCancel={() => setIsModalOpen(false)}
+            autoClose={modalTitle === "Order kan inte avbrytas" ? true : false}
+          />
 
           <article className="flex items-center justify-between border-t pt-4">
             <p className="text-lg font-bold text-teal-900">Totalt</p>

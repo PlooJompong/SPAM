@@ -29,9 +29,11 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "pending">("all");
+
+  const [filter, setFilter] = useState<"done" | "pending">("pending");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [newComment, setNewComment] = useState<string>("");
+
 
   // Filtrering av ordrar
   const filteredOrders = orders.filter((order) => {
@@ -61,9 +63,6 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(`http://localhost:8000/orders`);
-        //   (
-        //   "https://node-mongodb-api-ks7o.onrender.com/order"
-        // );
         const data = await response.json();
         setOrders(data);
       } catch (error) {
@@ -72,6 +71,10 @@ const Orders = () => {
     };
 
     fetchOrders();
+
+    const intervalId = setInterval(fetchOrders, 5000); // Poll varje 5:e sekund
+
+    return () => clearInterval(intervalId); // Rensa intervallet vid avmontering
   }, []);
 
   const toggleLockStatus = async (orderId: string) => {
@@ -105,6 +108,12 @@ const Orders = () => {
   };
 
   const toggleDoneStatus = async (orderId: string) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order._id === orderId ? { ...order, done: !order.done } : order
+      )
+    );
+  
     try {
       const response = await fetch(
         `http://localhost:8000/orders/${orderId}/toggle-done`,
@@ -117,15 +126,6 @@ const Orders = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      const updatedOrder = await response.json();
-
-      // Uppdatera listan av ordrar med den ändrade ordern
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, done: updatedOrder.done } : order
-        )
-      );
     } catch (error) {
       console.error("Error toggling done status:", error);
       alert("Kunde inte ändra klarstatus. Försök igen.");
@@ -202,9 +202,9 @@ const Orders = () => {
                 </button>
                 <button
                   className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
-                    filter === "all" ? "bg-orange-500 underline" : "bg-teal-900"
+                    filter === "done" ? "bg-orange-500 underline" : "bg-teal-900"
                   } rounded-r-lg`}
-                  onClick={() => setFilter("all")}
+                  onClick={() => setFilter("done")}
                 >
                   KLARA
                 </button>
@@ -232,12 +232,14 @@ const Orders = () => {
                       </p>
                     </article>
                     <div className="flex items-center space-x-2 md:space-x-5 flex-shrink-0">
-                      <input
-                        type="checkbox"
-                        alt="Done"
-                        className="form-checkbox h-5 w-5 md:h-6 md:w-6"
-                        onClick={() => toggleDoneStatus(order._id)}
-                      />
+                    <input
+  type="checkbox"
+  alt="Done"
+  className="form-checkbox h-5 w-5 md:h-6 md:w-6"
+  checked={order.done} // För att spegla aktuell status
+  onChange={() => toggleDoneStatus(order._id)} // Uppdaterar done-status
+/>
+
                       <img
                         src={order.locked ? lockedLogo : unlockedLogo}
                         alt="Locked"

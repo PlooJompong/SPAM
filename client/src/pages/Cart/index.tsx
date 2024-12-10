@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useCart } from '../../context/CartContext';
-import { GoPlus } from 'react-icons/go';
-import { HiMinusSm } from 'react-icons/hi';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
+import React, { useState } from "react";
+import { useCart } from "../../context/CartContext";
+import { GoPlus } from "react-icons/go";
+import { HiMinusSm } from "react-icons/hi";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
@@ -22,12 +22,12 @@ const Cart: React.FC = () => {
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert('Varukorgen är tom. Lägg till något innan du beställer!');
+      alert("Varukorgen är tom. Lägg till något innan du beställer!");
       return;
     }
 
     if (!user) {
-      alert('Du måste vara inloggad för att lägga en beställning.');
+      alert("Du måste vara inloggad för att lägga en beställning.");
       return;
     }
 
@@ -51,10 +51,10 @@ const Cart: React.FC = () => {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/orders',
+        "http://localhost:8000/orders",
         // 'https://node-mongodb-api-ks7o.onrender.com/orders',
         {
-          method: 'POST',
+          method: "POST",
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             'Content-Type': 'application/json',
@@ -77,12 +77,12 @@ const Cart: React.FC = () => {
 
       const data = await response.json();
       /* alert("Din beställning har skickats!"); */
-      console.log('Beställning skickad:', data);
+      console.log("Beställning skickad:", data);
       // navigate('/confirmation',  {
       //   state: { order: createdOrder },
       // });
 
-      navigate('/confirmation', {
+      navigate("/confirmation", {
         state: { order: data.order || createdOrder }, // Använd backend-data om möjligt
       });
 
@@ -97,8 +97,8 @@ const Cart: React.FC = () => {
       // Rensa varukorgen efter beställning
       clearCart();
     } catch (error) {
-      console.error('Kunde inte skicka beställningen:', error);
-      alert('Något gick fel. Försök igen.');
+      console.error("Kunde inte skicka beställningen:", error);
+      alert("Något gick fel. Försök igen.");
     }
   };
 
@@ -203,7 +203,7 @@ const Cart: React.FC = () => {
                 </select>
               </article>
 
-              {paymentMethod === 'Betalkort' && (
+              {paymentMethod === "Betalkort" && (
                 <form className="mt-4">
                   <article className="flex flex-col">
                     <label className="text-teal-900 mb-2">
@@ -216,7 +216,7 @@ const Cart: React.FC = () => {
                         placeholder="1234 5678 9012 3456"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, '');
+                          target.value = target.value.replace(/\D/g, "");
                         }}
                       />
                     </label>
@@ -230,16 +230,16 @@ const Cart: React.FC = () => {
                         placeholder="MM/ÅÅ"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          let value = target.value.replace(/\D/g, '');
+                          let value = target.value.replace(/\D/g, "");
 
                           if (value.length > 2) {
-                            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
                           }
 
                           if (value.length > 0 && value.length <= 2) {
                             const month = parseInt(value.slice(0, 2), 10);
                             if (month > 12) {
-                              value = '12';
+                              value = "12";
                             }
                           }
 
@@ -257,7 +257,7 @@ const Cart: React.FC = () => {
                         placeholder="123"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, '');
+                          target.value = target.value.replace(/\D/g, "");
                         }}
                       />
                     </label>
@@ -266,7 +266,7 @@ const Cart: React.FC = () => {
               )}
 
               <article className="flex justify-between gap-4">
-                <motion.button
+                {/*                 <motion.button
                   onClick={handleOrder}
                   className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
                   whileTap={{ scale: 0.9 }}
@@ -279,6 +279,21 @@ const Cart: React.FC = () => {
                   whileTap={{ scale: 0.9 }}
                 >
                   Rensa varukorg
+                </motion.button> */}
+
+                <motion.button
+                  onClick={clearCart}
+                  className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Rensa varukorg
+                </motion.button>
+                <motion.button
+                  onClick={handleOrder}
+                  className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  Beställ
                 </motion.button>
               </article>
             </section>

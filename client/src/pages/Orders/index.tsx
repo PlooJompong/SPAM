@@ -72,7 +72,7 @@ const Orders = () => {
 
     fetchOrders();
 
-    const intervalId = setInterval(fetchOrders, 5000); // Poll varje 5:e sekund
+    const intervalId = setInterval(fetchOrders, 1000); // Poll varje 5:e sekund
 
     return () => clearInterval(intervalId); // Rensa intervallet vid avmontering
   }, []);
@@ -182,7 +182,7 @@ const Orders = () => {
   return (
     <>
       <Container bgColor="bg-orange-100">
-        <EmployeeHeader title="Beställningar" />
+        <EmployeeHeader title="Beställningar" />
 
         <main className="flex h-full w-full justify-center bg-orange-100 p-1 md:p-4 font-sans">
           {/* Container för båda kolumner */}
@@ -193,7 +193,7 @@ const Orders = () => {
                 <button
                   className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
                     filter === "pending"
-                      ? "bg-orange-500  underline"
+                      ? "bg-orange-500 underline"
                       : "bg-teal-900"
                   } rounded-l-lg`}
                   onClick={() => setFilter("pending")}
@@ -211,11 +211,9 @@ const Orders = () => {
               </div>
 
               {filteredOrders.map((order) => (
-                <section key={order._id} className="space-y-2 ">
+                <section key={order._id} className="space-y-2">
                   {/* Order-rad */}
-                  <article
-                    className={`flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer `}
-                  >
+                  <article className="flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer">
                     <article
                       className={`flex-1 pr-4 ${
                         selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
@@ -232,14 +230,13 @@ const Orders = () => {
                       </p>
                     </article>
                     <div className="flex items-center space-x-2 md:space-x-5 flex-shrink-0">
-                    <input
-  type="checkbox"
-  alt="Done"
-  className="form-checkbox h-5 w-5 md:h-6 md:w-6"
-  checked={order.done} // För att spegla aktuell status
-  onChange={() => toggleDoneStatus(order._id)} // Uppdaterar done-status
-/>
-
+                      <input
+                        type="checkbox"
+                        alt="Done"
+                        className="form-checkbox h-5 w-5 md:h-6 md:w-6"
+                        checked={order.done}
+                        onChange={() => toggleDoneStatus(order._id)}
+                      />
                       <img
                         src={order.locked ? lockedLogo : unlockedLogo}
                         alt="Locked"
@@ -255,7 +252,7 @@ const Orders = () => {
                       {order.items.map((item) => (
                         <div
                           key={item._id}
-                          className="flex justify-between py-3 border-b"
+                          className="flex justify-between items-start py-3 border-b"
                         >
                           <span className="flex items-center space-x-4">
                             <img
@@ -271,22 +268,48 @@ const Orders = () => {
                             </div>
                           </span>
                           <h2 className="text-teal-900">{item.price} kr</h2>
+                          <button
+                            onClick={() =>
+                              handleEditComment(
+                                selectedOrder,
+                                orders.find(
+                                  (order) => order._id === selectedOrder
+                                )?.comment || ""
+                              )
+                            }
+                          >
+                            <img
+                              src={editLogo}
+                              alt="Edit"
+                              className="h-6 w-6"
+                            />
+                          </button>
                         </div>
                       ))}
-                      <article className="flex gap-2 pt-3">
-                        <p className="font-semibold text-sm">
-                          Kommentar från kund:
-                        </p>
-                        <p className="italic text-sm">
-                          {order.comment || "Ingen kommentar lämnad"}
-                        </p>
+                      <article className="flex flex-col gap-2 pt-3">
+                        <p className="font-semibold">Kommentar från kund: </p>
+                        {editingComment === order._id ? (
+                          <input
+                            type="textarea"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            className="italic w-full text-sm border p-2 rounded"
+                          />
+                        ) : (
+                          <p className="italic">
+                            {order.comment || "Ingen kommentar lämnad"}
+                          </p>
+                        )}
+
+                        {editingComment === order._id && (
+                          <button
+                            onClick={() => handleSaveComment(order._id)}
+                            className="mt-2 px-4 py-2 bg-teal-900 text-white rounded flex-end"
+                          >
+                            Spara
+                          </button>
+                        )}
                       </article>
-                      <div className="flex justify-between text-lg font-semibold mt-4">
-                        <span className="text-teal-900">Totalbelopp</span>
-                        <span className="text-teal-900">
-                          {order.totalPrice} kr
-                        </span>
-                      </div>
                     </article>
                   )}
                 </section>
@@ -302,20 +325,19 @@ const Orders = () => {
                       Beställning {selectedOrder}
                     </h2>
                     <button
-                      onClick={
-                        () =>
-                          handleEditComment(
-                            selectedOrder,
-                            orders.find((order) => order._id === selectedOrder)
-                              ?.comment || ""
-                          ) // Hitta den valda ordern och skicka med kommentaren
+                      onClick={() =>
+                        handleEditComment(
+                          selectedOrder,
+                          orders.find(
+                            (order) => order._id === selectedOrder
+                          )?.comment || ""
+                        )
                       }
                     >
                       <img src={editLogo} alt="Edit" className="h-6 w-6" />
                     </button>
                   </div>
 
-                  {/* Orderdetaljer */}
                   {orders
                     .filter((order) => order._id === selectedOrder)
                     .map((order) => (
@@ -331,7 +353,6 @@ const Orders = () => {
                                 alt="Pizza"
                                 className="h-16 w-16 rounded-md object-cover"
                               />
-
                               <div className="flex flex-col justify-center">
                                 <div className="text-teal-900">{item.name}</div>
                                 <div className="text-sm text-gray-500">
@@ -360,7 +381,6 @@ const Orders = () => {
                             </p>
                           )}
 
-                          {/* Spara kommentar-knapp när i redigeringsläge */}
                           {editingComment === order._id && (
                             <button
                               onClick={() => handleSaveComment(order._id)}
@@ -371,7 +391,6 @@ const Orders = () => {
                           )}
                         </article>
 
-                        {/* Totalen */}
                         <div className="mt-4 flex justify-between text-lg font-semibold">
                           <span className="text-teal-900">Totalbelopp</span>
                           <span className="text-teal-900">

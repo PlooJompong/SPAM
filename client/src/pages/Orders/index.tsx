@@ -1,13 +1,11 @@
-
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import editLogo from "../../assets/editLogo.svg";
-import lockedLogo from "../../assets/lockedLogo.svg";
-import margherita from "../../assets/margherita.png";
-import unlockedLogo from "../../assets/unlockedLogo.svg";
-import { useState, useEffect } from "react";
-import Container from "../../components/Container";
-import EmployeeHeader from "../../components/EmployeeHeader";
+import editLogo from '../../assets/editLogo.svg';
+import lockedLogo from '../../assets/lockedLogo.svg';
+import margherita from '../../assets/margherita.png';
+import unlockedLogo from '../../assets/unlockedLogo.svg';
+import { useState, useEffect } from 'react';
+import Container from '../../components/Container';
+import EmployeeHeader from '../../components/EmployeeHeader';
 
 interface OrderItem {
   _id: string;
@@ -33,11 +31,11 @@ const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { isAdmin } = useAuth();
+  // const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<"done" | "pending">("pending");
+  const [filter, setFilter] = useState<'done' | 'pending'>('pending');
   const [editingComment, setEditingComment] = useState<string | null>(null);
-  const [newComment, setNewComment] = useState<string>("");
+  const [newComment, setNewComment] = useState<string>('');
 
   // Filtrering av ordrar
   const filteredOrders = orders.filter((order) => {
@@ -152,22 +150,33 @@ const Orders = () => {
         order._id === orderId ? { ...order, done: !order.done } : order
       )
     );
-  
+
     try {
       const response = await fetch(
         `http://localhost:8000/orders/${orderId}/toggle-done`,
         {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 401) {
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return;
       }
     } catch (error) {
-      console.error("Error toggling done status:", error);
-      alert("Kunde inte ändra klarstatus. Försök igen.");
+      console.error('Error toggling done status:', error);
+      alert('Kunde inte ändra klarstatus. Försök igen.');
     }
   };
 
@@ -207,9 +216,8 @@ const Orders = () => {
         )
       );
     } catch (error) {
-
-      console.error("Error updating comment:", error);
-      alert("Kunde inte uppdatera kommentaren. Försök igen.");
+      console.error('Error updating comment:', error);
+      alert('Kunde inte uppdatera kommentaren. Försök igen.');
     }
   };
 
@@ -219,12 +227,12 @@ const Orders = () => {
   };
 
   const handleSaveComment = (orderId: string) => {
-    if (newComment.trim() !== "") {
+    if (newComment.trim() !== '') {
       updateComment(orderId, newComment);
       setEditingComment(null);
-      setNewComment("");
+      setNewComment('');
     } else {
-      alert("Kommentaren kan inte vara tom.");
+      alert('Kommentaren kan inte vara tom.');
     }
   };
 
@@ -241,19 +249,21 @@ const Orders = () => {
               <div className="flex items-center justify-center">
                 <button
                   className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
-                    filter === "pending"
-                      ? "bg-orange-500 underline"
-                      : "bg-teal-900"
+                    filter === 'pending'
+                      ? 'bg-orange-500 underline'
+                      : 'bg-teal-900'
                   } rounded-l-lg`}
-                  onClick={() => setFilter("pending")}
+                  onClick={() => setFilter('pending')}
                 >
                   PÅGÅENDE
                 </button>
                 <button
                   className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
-                    filter === "done" ? "bg-orange-500 underline" : "bg-teal-900"
+                    filter === 'done'
+                      ? 'bg-orange-500 underline'
+                      : 'bg-teal-900'
                   } rounded-r-lg`}
-                  onClick={() => setFilter("done")}
+                  onClick={() => setFilter('done')}
                 >
                   KLARA
                 </button>
@@ -265,7 +275,7 @@ const Orders = () => {
                   <article className="flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer">
                     <article
                       className={`flex-1 pr-4 ${
-                        selectedOrder === order._id ? "bg-[#e9dfcf]" : ""
+                        selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
                       }`}
                       onClick={() =>
                         setSelectedOrder(
@@ -323,7 +333,7 @@ const Orders = () => {
                                 selectedOrder,
                                 orders.find(
                                   (order) => order._id === selectedOrder
-                                )?.comment || ""
+                                )?.comment || ''
                               )
                             }
                           >
@@ -346,7 +356,7 @@ const Orders = () => {
                           />
                         ) : (
                           <p className="italic">
-                            {order.comment || "Ingen kommentar lämnad"}
+                            {order.comment || 'Ingen kommentar lämnad'}
                           </p>
                         )}
 
@@ -360,11 +370,10 @@ const Orders = () => {
                         )}
                       </article>
                     </article>
-
-
-                    {/* Detaljer för vald order på mindre skärmar */}
-                    {selectedOrder === order._id && (
-                      <article className="sm:hidden p-2 md:p-4 bg-white rounded-lg shadow-md">
+                  )}
+                </section>
+              ))}
+            </article>
 
             {/* Höger kolumn */}
             <div className="hidden sm:block w-full sm:w-3/5 sm:pl-6">
@@ -378,9 +387,8 @@ const Orders = () => {
                       onClick={() =>
                         handleEditComment(
                           selectedOrder,
-                          orders.find(
-                            (order) => order._id === selectedOrder
-                          )?.comment || ""
+                          orders.find((order) => order._id === selectedOrder)
+                            ?.comment || ''
                         )
                       }
                     >
@@ -395,26 +403,27 @@ const Orders = () => {
                         {order.items.map((item) => (
                           <div
                             key={item._id}
-                            className="flex justify-between py-3 border-b"
+                            className="flex items-center justify-between py-3 border-b"
                           >
-                            <span className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-4 w-full">
                               <img
                                 src={margherita}
                                 alt="Pizza"
-                                className="h-16 w-16 rounded-md"
+                                className="h-16 w-16 rounded-md object-cover"
                               />
-                              
-                              <div>
-                                <h3 className="text-teal-900">{item.name}</h3>
-                                <p className="text-sm text-gray-500">
+                              <div className="flex flex-col justify-center">
+                                <div className="text-teal-900">{item.name}</div>
+                                <div className="text-sm text-gray-500">
                                   Antal: {item.quantity}
-                                </p>
+                                </div>
                               </div>
-                            </span>
-                            <h2 className="text-teal-900">{item.price} kr</h2>
+                            </div>
+                            <div className="text-right flex items-center space-x-1">
+                              <div className="text-teal-900">{item.price}</div>
+                              <div className="text-teal-900">kr</div>
+                            </div>
                           </div>
                         ))}
-                      
                         <article className="flex flex-col gap-2 pt-3">
                           <p className="font-semibold">Kommentar från kund: </p>
                           {editingComment === order._id ? (
@@ -426,7 +435,7 @@ const Orders = () => {
                             />
                           ) : (
                             <p className="italic">
-                              {order.comment || "Ingen kommentar lämnad"}
+                              {order.comment || 'Ingen kommentar lämnad'}
                             </p>
                           )}
 
@@ -446,86 +455,17 @@ const Orders = () => {
                             {order.totalPrice} kr
                           </span>
                         </div>
-                      </article>
-                    )}
-                  </section>
-                ))}
-              </article>
-
-              {/* Höger kolumn */}
-              <div className="hidden sm:block w-full sm:w-3/5 sm:pl-6">
-                {selectedOrder ? (
-                  <div className="p-6 bg-white rounded-lg shadow-md">
-                    <div className="flex items-center justify-between text-xl font-semibold text-teal-900 mb-4">
-                      <h2 className="text-lg font-bold text-teal-900">
-                        Beställning {selectedOrder}
-                      </h2>
-                      <button>
-                        <img src={editLogo} alt="Edit" className="h-6 w-6" />
-                      </button>
-                    </div>
-
-                    {/* Orderdetaljer */}
-                    {orders
-                      .filter((order) => order._id === selectedOrder)
-                      .map((order) => (
-                        <div key={order._id}>
-                          {order.items.map((item) => (
-                            <div
-                              key={item._id}
-                              className="flex items-center justify-between py-3 border-b"
-                            >
-                              <div className="flex items-center space-x-4 w-full">
-                                <img
-                                  src={margherita}
-                                  alt="Pizza"
-                                  className="h-16 w-16 rounded-md object-cover"
-                                />
-
-                                <div className="flex flex-col justify-center">
-                                  <div className="text-teal-900">
-                                    {item.name}
-                                  </div>
-                                  <div className="text-sm text-gray-500">
-                                    Antal: {item.quantity}
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="text-right flex items-center space-x-1">
-                                <div className="text-teal-900">
-                                  {item.price}
-                                </div>
-                                <div className="text-teal-900">kr</div>
-                              </div>
-                            </div>
-                          ))}
-                          <article className="flex gap-2 pt-3">
-                            <p className="font-semibold">
-                              Kommentar från kund:{' '}
-                            </p>
-                            <p className="italic">
-                              {order.comment || 'Ingen kommentar lämnad'}
-                            </p>
-                          </article>
-                          {/* Totalen */}
-                          <div className="mt-4 flex justify-between text-lg font-semibold">
-                            <span className="text-teal-900">Totalbelopp</span>
-                            <span className="text-teal-900">
-                              {order.totalPrice} kr
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-500">
-                    Välj en beställning för att se detaljer
-                  </div>
-                )}
-              </div>
-            </section>
-          </main>
-        )}
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-500">
+                  Välj en beställning för att se detaljer
+                </div>
+              )}
+            </div>
+          </section>
+        </main>
       </Container>
     </>
   );

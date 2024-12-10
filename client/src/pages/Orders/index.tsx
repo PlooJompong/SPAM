@@ -246,7 +246,7 @@ const Orders = () => {
       <Container bgColor="bg-orange-100">
         <EmployeeHeader title="Beställningar" />
         {!isAdmin ? (
-          <p className="text-cente">Du har inteåtkomst till denna sida.</p>
+          <p className="text-center">Du har inte åtkomst till denna sida.</p>
         ) : (
           <main className="flex h-full w-full justify-center bg-orange-100 p-1 md:p-4 font-sans">
             {/* Container för båda kolumner */}

@@ -185,14 +185,6 @@ const Confirmation = () => {
     return <p>Laddar orderinformation...</p>;
   }
 
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
-
-  if (!order) {
-    return <p>Ingen orderinformation tillgänglig</p>;
-  }
-
   const handleCancelOrder = async () => {
     if (order?.locked || order?.done) {
       // Om ordern är låst eller markerad som färdig
@@ -275,76 +267,90 @@ const Confirmation = () => {
             Orderbekräftelse
           </h1>
         </section>
-        <h4 className="font-primary text-lg text-teal-900">
-          Tack för din order, {order.name}!
-        </h4>
-        <section className="flex w-full px-4 md:w-1/2 flex-col space-y-6 pt-1">
-          {order.items.map((item) => (
-            <article
-              key={item._id}
-              className="flex items-start justify-between pb-2"
-            >
+        {!order ? (
+          <p className="text-center font-primary text-teal-900">
+            Ingen orderinformation tillgänglig
+          </p>
+        ) : (
+          <>
+            <h4 className="font-primary text-lg text-teal-900">
+              Tack för din order, {order.name}!
+            </h4>
+            <section className="flex w-full px-4 md:w-1/2 flex-col space-y-6 pt-1">
+              {order.items.map((item) => (
+                <article
+                  key={item._id}
+                  className="flex items-start justify-between pb-2"
+                >
+                  <article>
+                    <p className="text-lg font-medium text-teal-900">
+                      {item.name}
+                    </p>
+                    <p className="text-sm text-teal-900">{item.quantity} st</p>
+                  </article>
+                  <p className="text-lg font-medium text-teal-900">
+                    {item.price * item.quantity} kr
+                  </p>
+                </article>
+              ))}
+
+              <article className="flex gap-2">
+                <p className="font-semibold text-gray-600">Din kommentar: </p>
+                <p className="italic text-gray-600">
+                  {order.comment || 'Ingen kommentar lämnad'}
+                </p>
+              </article>
+
+              {/* Nytt avsnitt för locked och done */}
+              <article className="flex gap-4">
+                <p className="text-lg font-semibold text-teal-900">
+                  Orderstatus:
+                </p>
+                <div>
+                  <p>
+                    <span className="font-bold">Tillagas:</span>
+                    {order.locked ? 'Ja' : 'Nej'}
+                  </p>
+                  <p>
+                    <span className="font-bold">Färdig:</span>
+                    {order.done ? 'Ja' : 'Nej'}
+                  </p>
+                </div>
+              </article>
               <article>
-                <p className="text-lg font-medium text-teal-900">{item.name}</p>
-                <p className="text-sm text-teal-900">{item.quantity} st</p>
+                <button
+                  className="bg-red-900 text-white text-sm px-2 py-1 rounded hover:bg-red-800"
+                  onClick={handleCancelOrder}
+                >
+                  Avbryt order
+                </button>
+                {order.done && (
+                  <article className="mt-4 p-4 text-center bg-green-100 text-teal-900 rounded">
+                    Din order är klar! 🎉
+                  </article>
+                )}
               </article>
-              <p className="text-lg font-medium text-teal-900">
-                {item.price * item.quantity} kr
-              </p>
-            </article>
-          ))}
 
-          <article className="flex gap-2">
-            <p className="font-semibold text-gray-600">Din kommentar: </p>
-            <p className="italic text-gray-600">
-              {order.comment || 'Ingen kommentar lämnad'}
-            </p>
-          </article>
+              <Modal
+                isOpen={isModalOpen}
+                title={modalTitle}
+                message={modalMessage}
+                onConfirm={onConfirmAction ?? (() => setIsModalOpen(false))}
+                onCancel={() => setIsModalOpen(false)}
+                autoClose={
+                  modalTitle === 'Order kan inte avbrytas' ? true : false
+                }
+              />
 
-          {/* Nytt avsnitt för locked och done */}
-          <article className="flex gap-4">
-            <p className="text-lg font-semibold text-teal-900">Orderstatus:</p>
-            <div>
-              <p>
-                <span className="font-bold">Tillagas:</span>{' '}
-                {order.locked ? 'Ja' : 'Nej'}
-              </p>
-              <p>
-                <span className="font-bold">Färdig:</span>
-                {order.done ? 'Ja' : 'Nej'}
-              </p>
-            </div>
-          </article>
-          <article>
-            <button
-              className="bg-red-900 text-white text-sm px-2 py-1 rounded hover:bg-red-800"
-              onClick={handleCancelOrder}
-            >
-              Avbryt order
-            </button>
-            {order.done && (
-              <article className="mt-4 p-4 text-center bg-green-100 text-teal-900 rounded">
-                Din order är klar! 🎉
+              <article className="flex items-center justify-between border-t pt-4">
+                <p className="text-lg font-bold text-teal-900">Totalt</p>
+                <p className="text-lg font-bold text-teal-900">
+                  {order.totalPrice} kr
+                </p>
               </article>
-            )}
-          </article>
-
-          <Modal
-            isOpen={isModalOpen}
-            title={modalTitle}
-            message={modalMessage}
-            onConfirm={onConfirmAction ?? (() => setIsModalOpen(false))}
-            onCancel={() => setIsModalOpen(false)}
-            autoClose={modalTitle === 'Order kan inte avbrytas' ? true : false}
-          />
-
-          <article className="flex items-center justify-between border-t pt-4">
-            <p className="text-lg font-bold text-teal-900">Totalt</p>
-            <p className="text-lg font-bold text-teal-900">
-              {order.totalPrice} kr
-            </p>
-          </article>
-        </section>
+            </section>
+          </>
+        )}
       </main>
     </>
   );

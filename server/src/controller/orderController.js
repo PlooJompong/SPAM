@@ -110,11 +110,11 @@ const createOrder = async (req, res) => {
   }
 };
 
-// PUT update order by id
-const updateOrder = async (req, res) => {
+// PUT update menu by id
+const updateMenu = async (req, res) => {
   try {
     const { id } = req.params; // Hämta ID från URL:en
-    const { name, price, vegetarian, ingredients } = req.body; // Hämta uppdaterade värden från request-body
+    const { name, price, vegetarian, ingredients, comment } = req.body; // Hämta uppdaterade värden från request-body
 
     // Kontrollera att alla nödvändiga fält finns
     if (!name || !price || !Array.isArray(ingredients)) {
@@ -146,10 +146,31 @@ const updateOrder = async (req, res) => {
   }
 };
 
+
+const updateComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Ordern hittades inte." });
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(id, { comment }, { new: true });
+
+    res.status(200).json({ message: "Order kommentar uppdaterad!", order: updatedOrder });
+  } catch (err) {
+    console.error("Fel vid uppdatering av order kommentar:", err);
+    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av order kommentar." });
+  }
+};
+
 // Ändra locked status
 const toggleLockOrder = async (req, res) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
 
     // Hitta ordern
     const order = await Order.findById(id);
@@ -162,12 +183,12 @@ const toggleLockOrder = async (req, res) => {
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
       { locked: !order.locked },
-      { new: true } 
+      { new: true }
     );
 
-    res.status(200).json({ 
-      message: `Order ${updatedOrder.locked ? "låst" : "upplåst"}!`, 
-      order: updatedOrder 
+    res.status(200).json({
+      message: `Order ${updatedOrder.locked ? "låst" : "upplåst"}!`,
+      order: updatedOrder
     });
   } catch (err) {
     console.error("Fel vid alternering av order lock-status:", err);
@@ -178,7 +199,7 @@ const toggleLockOrder = async (req, res) => {
 // Ändra done status
 const toggleDoneOrder = async (req, res) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
 
     // Hitta ordern
     const order = await Order.findById(id);
@@ -191,12 +212,12 @@ const toggleDoneOrder = async (req, res) => {
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
       { done: !order.done },
-      { new: true } 
+      { new: true }
     );
 
-    res.status(200).json({ 
-      message: `Order ${updatedOrder.done ? "inteKlar" : "Klar"}!`, 
-      order: updatedOrder 
+    res.status(200).json({
+      message: `Order ${updatedOrder.done ? "inteKlar" : "Klar"}!`,
+      order: updatedOrder
     });
   } catch (err) {
     console.error("Fel vid alternering av order done-status:", err);
@@ -204,20 +225,10 @@ const toggleDoneOrder = async (req, res) => {
   }
 };
 
-
-
 // DELETE order by id
 const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
-
-    console.log("Mottaget ID:", id);
-
-    // Kontrollera att ID är giltigt
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("Ogiltigt ID-format.");
-      return res.status(400).json({ message: "Ogiltigt ID-format." });
-    }
 
     const deletedOrder = await Order.findByIdAndDelete(id);
 
@@ -226,7 +237,6 @@ const deleteOrder = async (req, res) => {
       return res.status(404).json({ message: "Ordern hittades inte." });
     }
 
-    console.log("Order raderad:", deletedOrder);
     res.status(200).json({ message: "Order raderad!", order: deletedOrder });
   } catch (err) {
     console.error("Fel vid borttagning av order:", err);
@@ -236,4 +246,4 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-export { getOrders, getOrder, createOrder, updateOrder, deleteOrder, toggleLockOrder, toggleDoneOrder };
+export { getOrders, getOrder, createOrder, updateMenu, updateComment, deleteOrder, toggleLockOrder, toggleDoneOrder };

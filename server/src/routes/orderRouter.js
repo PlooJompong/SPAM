@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOrders, getOrder, createOrder, updateOrder, deleteOrder, toggleLockOrder, toggleDoneOrder } from "../controller/orderController.js";
+import { getOrders, getOrder, createOrder, updateMenu, updateComment, deleteOrder, toggleLockOrder, toggleDoneOrder } from "../controller/orderController.js";
 
 const router = Router();
 
@@ -12,13 +12,16 @@ router.get("/:id", getOrder)
 // POST new order
 router.post("/", createOrder)
 
-// UPDATE order by id
-router.put("/:id", updateOrder)
+// UPDATE menu by id
+router.put("/:id", updateMenu)
 
-//PUST lock order by id
-router.put("/:id/toggle-lock", toggleLockOrder); 
+// PUT update order comment by id 
+router.put("/:id/comment", updateComment)
 
-//PUT done order by id
+// PUT lock order by id
+router.put("/:id/toggle-lock", toggleLockOrder);
+
+// PUT done order by id
 router.put("/:id/toggle-done", toggleDoneOrder);
 
 // DELETE order by id

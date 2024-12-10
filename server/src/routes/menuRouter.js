@@ -8,7 +8,7 @@ const router = Router();
 router.get("/", getMenu)
 
 // POST new menu item
-router.post("/", addNewMenuItem)
+router.post("/", verifyToken, addNewMenuItem)
 
 // PUT update menu item
 router.put("/:id", verifyToken, updateMenuItem)

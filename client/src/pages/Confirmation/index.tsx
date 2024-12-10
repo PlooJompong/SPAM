@@ -85,6 +85,7 @@
 
 // export default Confirmation;
 
+
 import React, { useEffect, useState } from "react";
 import CustomHeader from "../../components/CustomerHeader";
 import orderCheck from "../../assets/orderCheck.svg";
@@ -115,7 +116,7 @@ const Confirmation = () => {
   const location = useLocation();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -129,7 +130,7 @@ const Confirmation = () => {
   // Hämta orderstatus från backend med polling
   useEffect(() => {
     if (!orderId) {
-      setError("Ingen orderinformation tillgänglig");
+      setError('Ingen orderinformation tillgänglig');
       setLoading(false);
       return;
     }
@@ -146,8 +147,8 @@ const Confirmation = () => {
         setOrder(data);
         setLoading(false); // Sätt loading till false efter en lyckad hämtning
       } catch (err) {
-        console.error("Fel vid hämtning av order:", err);
-        setError("Kunde inte hämta ordern. Försök igen senare.");
+        console.error('Fel vid hämtning av order:', err);
+        setError('Kunde inte hämta ordern. Försök igen senare.');
         setLoading(false); // Sätt loading till false även vid ett fel
       }
     };
@@ -265,7 +266,7 @@ const Confirmation = () => {
           <article className="flex gap-2">
             <p className="font-semibold text-gray-600">Din kommentar: </p>
             <p className="italic text-gray-600">
-              {order.comment || "Ingen kommentar lämnad"}
+              {order.comment || 'Ingen kommentar lämnad'}
             </p>
           </article>
 
@@ -278,8 +279,8 @@ const Confirmation = () => {
                 {order.locked ? "Ja" : "Nej"}
               </p>
               <p>
-                <span className="font-bold">Färdig:</span>{" "}
-                {order.done ? "Ja" : "Nej"}
+                <span className="font-bold">Färdig:</span>
+                {order.done ? 'Ja' : 'Nej'}
               </p>
             </div>
           </article>

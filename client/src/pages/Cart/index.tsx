@@ -12,9 +12,9 @@ const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<string>('');
-  const [comment, setComment] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -56,8 +56,8 @@ const Cart: React.FC = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(createdOrder),
         }
@@ -65,10 +65,10 @@ const Cart: React.FC = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError('Din session har gått ut. Logga in igen');
-          console.log('Din session har gått ut. Logga in igen');
-          sessionStorage.removeItem('token');
-          navigate('/login');
+          setError("Din session har gått ut. Logga in igen");
+          console.log("Din session har gått ut. Logga in igen");
+          sessionStorage.removeItem("token");
+          navigate("/login");
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -171,7 +171,14 @@ const Cart: React.FC = () => {
               </li>
             ))}
           </ul>
-          {cart.length === 0 && <p>Varukorgen är tom.</p>}
+          {cart.length === 0 && (
+            <>
+              <p className="text-center">Varukorgen är tom.</p>
+              <p className="text-center">
+                Logga in för att göra en beställning.
+              </p>
+            </>
+          )}
 
           {cart.length > 0 && (
             <section className="flex flex-col w-80">

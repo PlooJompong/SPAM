@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { useCart } from "../../context/CartContext";
-import { GoPlus } from "react-icons/go";
-import { HiMinusSm } from "react-icons/hi";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
+import React, { useState } from 'react';
+import { useCart } from '../../context/CartContext';
+import { GoPlus } from 'react-icons/go';
+import { HiMinusSm } from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const [comment, setComment] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>('');
+  const [comment, setComment] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -22,12 +22,12 @@ const Cart: React.FC = () => {
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert("Varukorgen är tom. Lägg till något innan du beställer!");
+      alert('Varukorgen är tom. Lägg till något innan du beställer!');
       return;
     }
 
     if (!user) {
-      alert("Du måste vara inloggad för att lägga en beställning.");
+      alert('Du måste vara inloggad för att lägga en beställning.');
       return;
     }
 
@@ -51,13 +51,13 @@ const Cart: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/orders",
+        'http://localhost:8000/orders',
         // 'https://node-mongodb-api-ks7o.onrender.com/orders',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(createdOrder),
         }
@@ -65,10 +65,10 @@ const Cart: React.FC = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError("Din session har gått ut. Logga in igen");
-          console.log("Din session har gått ut. Logga in igen");
-          sessionStorage.removeItem("token");
-          navigate("/login");
+          setError('Din session har gått ut. Logga in igen');
+          console.log('Din session har gått ut. Logga in igen');
+          sessionStorage.removeItem('token');
+          navigate('/login');
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -77,12 +77,12 @@ const Cart: React.FC = () => {
 
       const data = await response.json();
       /* alert("Din beställning har skickats!"); */
-      console.log("Beställning skickad:", data);
+      console.log('Beställning skickad:', data);
       // navigate('/confirmation',  {
       //   state: { order: createdOrder },
       // });
 
-      navigate("/confirmation", {
+      navigate('/confirmation', {
         state: { order: data.order || createdOrder }, // Använd backend-data om möjligt
       });
 
@@ -97,9 +97,9 @@ const Cart: React.FC = () => {
       // Rensa varukorgen efter beställning
       clearCart();
     } catch (error) {
-      console.error("Kunde inte skicka beställningen:", error);
+      console.error('Kunde inte skicka beställningen:', error);
       alert(
-        "Ingredienser för vald pizza är slut, vänligen kontakta restaurangen."
+        'Ingredienser för vald pizza är slut, vänligen kontakta restaurangen.'
       );
     }
   };
@@ -142,9 +142,9 @@ const Cart: React.FC = () => {
     <>
       <CustomerHeader />
       <Container>
-        <main className="flex flex-col justify-center sm:w-full md:w-96 mt-8 m-auto items-center rounded-lg shadow border border-zinc-200 bg-white p-4 font-sans">
+        <section className="flex flex-col justify-center sm:w-full md:w-96 mt-8 m-auto items-center rounded-lg shadow border border-zinc-200 bg-white p-4 font-sans">
           <h1 className="text-teal-900 text-lg font-bold">Varukorg</h1>
-          <ul className="text-teal-900 flex flex-col w-80">
+          <ul className="text-teal-900 flex flex-col max-w-[320px] w-full">
             {cart.map((item, index) => (
               <li
                 key={`${item._id}-${index}`}
@@ -183,9 +183,9 @@ const Cart: React.FC = () => {
           )}
 
           {cart.length > 0 && (
-            <section className="flex flex-col w-80">
+            <section className="flex flex-col max-w-[320px] w-full">
               <hr className="mt-6 mb-2"></hr>
-              <h2 className="text-teal-900 flex justify-between w-80">
+              <h2 className="text-teal-900 flex justify-between max-w-[320px] w-full">
                 <span>Totalpris:</span>
                 <span>{calculateTotalPrice()} kr</span>
               </h2>
@@ -195,7 +195,7 @@ const Cart: React.FC = () => {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               ></textarea>
-              <article className="flex w-80 justify-between text-teal-900 mt-4">
+              <article className="flex max-w-[320px] w-full justify-between text-teal-900 mt-4">
                 <p>Betalningsmetod</p>
                 <select
                   value={paymentMethod}
@@ -212,7 +212,7 @@ const Cart: React.FC = () => {
                 </select>
               </article>
 
-              {paymentMethod === "Betalkort" && (
+              {paymentMethod === 'Betalkort' && (
                 <form className="mt-4">
                   <article className="flex flex-col">
                     <label className="text-teal-900 mb-2">
@@ -242,7 +242,7 @@ const Cart: React.FC = () => {
                         placeholder="1234 5678 9012 3456"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, "");
+                          target.value = target.value.replace(/\D/g, '');
                         }}
                       />
                     </label>
@@ -256,16 +256,16 @@ const Cart: React.FC = () => {
                         placeholder="MM/ÅÅ"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          let value = target.value.replace(/\D/g, "");
+                          let value = target.value.replace(/\D/g, '');
 
                           if (value.length > 2) {
-                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                            value = value.slice(0, 2) + '/' + value.slice(2, 4);
                           }
 
                           if (value.length > 0 && value.length <= 2) {
                             const month = parseInt(value.slice(0, 2), 10);
                             if (month > 12) {
-                              value = "12";
+                              value = '12';
                             }
                           }
 
@@ -283,7 +283,7 @@ const Cart: React.FC = () => {
                         placeholder="123"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, "");
+                          target.value = target.value.replace(/\D/g, '');
                         }}
                       />
                     </label>
@@ -324,7 +324,7 @@ const Cart: React.FC = () => {
               </article>
             </section>
           )}
-        </main>
+        </section>
       </Container>
     </>
   );

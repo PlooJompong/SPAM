@@ -98,7 +98,9 @@ const Cart: React.FC = () => {
       clearCart();
     } catch (error) {
       console.error("Kunde inte skicka beställningen:", error);
-      alert("Något gick fel. Försök igen.");
+      alert(
+        "Ingredienser för vald pizza är slut, vänligen kontakta restaurangen."
+      );
     }
   };
 

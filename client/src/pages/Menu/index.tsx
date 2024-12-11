@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
-import MenuItemComponent from './MenuItem';
-import { useCart } from '../../context/CartContext';
-import { useNavigate } from 'react-router-dom';
-import { FaRegTrashCan } from 'react-icons/fa6';
-import { HiMinusSm } from 'react-icons/hi';
-import { GoPlus } from 'react-icons/go';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
+import MenuItemComponent from "./MenuItem";
+import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { HiMinusSm } from "react-icons/hi";
+import { GoPlus } from "react-icons/go";
+import { motion } from "framer-motion";
 
 export interface MenuItem {
   _id: string;
@@ -32,23 +32,23 @@ const Menu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        console.log('Fetching menu...');
+        console.log("Fetching menu...");
         const res = await fetch(
-          'http://localhost:8000/menu'
+          "http://localhost:8000/menu"
           // 'https://node-mongodb-api-ks7o.onrender.com/menu'
         );
-        console.log('Response status:', res.status);
+        console.log("Response status:", res.status);
 
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
 
         const data: MenuItem[] = await res.json();
-        console.log('Fetched data:', data);
+        console.log("Fetched data:", data);
         setMenuItems(data);
         setFilteredMenuItems(data); // Sätt initiala filtrerade alternativ till alla objekt
       } catch (err) {
-        console.error('Error fetching menu:', err);
+        console.error("Error fetching menu:", err);
       } finally {
         setLoading(false);
       }
@@ -81,7 +81,7 @@ const Menu: React.FC = () => {
   }
 
   const cartClick = () => {
-    navigate('/cart');
+    navigate("/cart");
   };
 
   const handleQuantityChange = (itemId: string, change: number) => {
@@ -94,78 +94,82 @@ const Menu: React.FC = () => {
   };
 
   return (
-    <Container>
+    <>
       <CustomerHeader title="MENY" />
-
-      <section className=" flex justify-center mb-4 py-3 ">
-        <motion.button
-          onClick={sortByPrice}
-          className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900 shadow-md"
-          whileTap={{ scale: 0.9 }}
-        >
-          Sortera efter pris
-        </motion.button>
-        <motion.button
-          onClick={filterVegetarian}
-          className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800 shadow-md"
-          whileTap={{ scale: 0.9 }}
-        >
-          Visa vegetariska
-        </motion.button>
-        <motion.button
-          onClick={resetFilters}
-          className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700 shadow-md"
-          whileTap={{ scale: 0.9 }}
-        >
-          Visa alla
-        </motion.button>
-      </section>
-
-      <ul className="flex flex-col sm:justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap md:flex-wrap lg:h-[625px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
-        {filteredMenuItems.map((item) => (
-          <MenuItemComponent key={item._id} item={item} />
-        ))}
-      </ul>
-
-      {/* VARUKORG */}
-      <article className="fixed left-0 right-0 mx-auto bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 lg:left-[864px] rounded">
-        <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
-        <ul className="flex flex-col font-sans">
-          {cart.map((cartItem, index) => (
-            <li
-              key={`${cartItem._id}-${index}`}
-              className=" grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-4 border-b border-gray-300 p-2 py-2.5"
-            >
-              <span>{cartItem.name}</span>
-              <HiMinusSm
-                className="cursor-pointer justify-self-center "
-                onClick={() => handleQuantityChange(cartItem._id, -1)}
-              />
-              <span className="text-center  ">{cartItem.quantity}</span>
-              <GoPlus
-                className="cursor-pointer justify-self-center  "
-                onClick={() => handleQuantityChange(cartItem._id, 1)}
-              />
-              <FaRegTrashCan
-                className="text-red-500 cursor-pointer hover:text-red-700 justify-self-end"
-                onClick={() => removeFromCart(cartItem._id)}
-              />
-            </li>
+      <Container>
+        <section className="flex justify-center mb-4 py-3 ">
+          <motion.button
+            onClick={sortByPrice}
+            className="bg-teal-800 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-900 shadow-md"
+            whileTap={{ scale: 0.9 }}
+          >
+            Sortera efter pris
+          </motion.button>
+          <motion.button
+            onClick={filterVegetarian}
+            className="bg-teal-600 text-white px-2 py-2 rounded-2xl mr-2 text-sm hover:bg-teal-800 shadow-md"
+            whileTap={{ scale: 0.9 }}
+          >
+            Visa vegetariska
+          </motion.button>
+          <motion.button
+            onClick={resetFilters}
+            className="bg-gray-600 text-white px-2 py-2 rounded-2xl text-sm hover:bg-gray-700 shadow-md"
+            whileTap={{ scale: 0.9 }}
+          >
+            Visa alla
+          </motion.button>
+        </section>
+        <p className="text-center text-orange-700 text-lg mb-4">
+          Du måste vara inloggad för att göra en beställning.
+        </p>
+        <ul className="flex flex-col justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap lg:h-[700px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6">
+          {filteredMenuItems.map((item) => (
+            <MenuItemComponent key={item._id} item={item} />
           ))}
         </ul>
-        <div className="flex justify-between items-center font-sans">
-          <p className=" px-1 py-4 font-bold">Totalsumma</p>
-          <p className="">{calculateTotalPrice()} kr</p>
-        </div>
-        <motion.button
-          className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans shadow-md"
-          onClick={cartClick}
-          whileTap={{ scale: 0.9 }}
-        >
-          Visa varukorg
-        </motion.button>
-      </article>
-    </Container>
+
+        {/* VARUKORG */}
+
+        <article className="fixed left-0 right-0 mx-auto bottom-0 w-80 bg-gray-100 p-2 border-t border-gray-300 lg:left-[864px] rounded">
+          <h3 className="py-3 p-2 font-sans font-bold">Din pizzakorg</h3>
+          <ul className="flex flex-col font-sans">
+            {cart.map((cartItem, index) => (
+              <li
+                key={`${cartItem._id}-${index}`}
+                className=" grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-4 border-b border-gray-300 p-2 py-2.5"
+              >
+                <span>{cartItem.name}</span>
+                <HiMinusSm
+                  className="cursor-pointer justify-self-center"
+                  onClick={() => handleQuantityChange(cartItem._id, -1)}
+                />
+                <span className="text-center">{cartItem.quantity}</span>
+                <GoPlus
+                  className="cursor-pointer justify-self-center"
+                  onClick={() => handleQuantityChange(cartItem._id, 1)}
+                />
+                <FaRegTrashCan
+                  className="text-red-500 cursor-pointer hover:text-red-700 justify-self-end"
+                  onClick={() => removeFromCart(cartItem._id)}
+                />
+              </li>
+            ))}
+          </ul>
+          <div className="flex justify-between items-center font-sans">
+            <p className=" px-1 py-4 font-bold">Totalsumma</p>
+            <p className="">{calculateTotalPrice()} kr</p>
+          </div>
+          <motion.button
+            className="bg-teal-900 text-white p-2 text-sm cursor-pointer rounded-full mx-auto block mt-4 font-sans shadow-md"
+            onClick={cartClick}
+            whileTap={{ scale: 0.9 }}
+          >
+            Visa varukorg
+          </motion.button>
+        </article>
+      </Container>
+    </>
   );
 };
 

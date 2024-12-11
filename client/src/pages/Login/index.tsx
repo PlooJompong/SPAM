@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import CustomerHeader from "../../components/CustomerHeader";
-import Container from "../../components/Container";
-import margheritaHands from "../../assets/margheritaHands.jpeg";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import CustomerHeader from '../../components/CustomerHeader';
+import Container from '../../components/Container';
+import margheritaHands from '../../assets/margheritaHands.jpeg';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Login: React.FC = () => {
   // Separata states för skapa användare och inloggning
-  const [createUsername, setCreateUsername] = useState("");
-  const [createPassword, setCreatePassword] = useState("");
+  const [createUsername, setCreateUsername] = useState('');
+  const [createPassword, setCreatePassword] = useState('');
   const [createAdmin, setCreateAdmin] = useState(false);
-  const [createMessage, setCreateMessage] = useState("");
+  const [createMessage, setCreateMessage] = useState('');
 
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [loginMessage, setLoginMessage] = useState("");
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
 
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -28,10 +28,10 @@ const Login: React.FC = () => {
     try {
       const response = await fetch(
         // "https://node-mongodb-api-ks7o.onrender.com/users"
-        "http://localhost:8000/users",
+        'http://localhost:8000/users',
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             username: createUsername,
             password: createPassword,
@@ -43,20 +43,20 @@ const Login: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setCreateMessage("Användare skapad!");
-        setCreateUsername("");
-        setCreatePassword("");
+        setCreateMessage('Användare skapad!');
+        setCreateUsername('');
+        setCreatePassword('');
         setCreateAdmin(false);
       } else if (response.status === 409) {
         setCreateMessage(
-          "Användarnamnet är redan taget. Vänligen välj ett annat."
+          'Användarnamnet är redan taget. Vänligen välj ett annat.'
         );
       } else {
         setCreateMessage(`Fel: ${data.message}`);
       }
     } catch (err) {
-      console.error("Fel vid kommunikation med servern:", err);
-      setCreateMessage("Kunde inte ansluta till servern.");
+      console.error('Fel vid kommunikation med servern:', err);
+      setCreateMessage('Kunde inte ansluta till servern.');
     }
   };
 
@@ -65,9 +65,9 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:8000/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: loginUsername,
           password: loginPassword,
@@ -83,8 +83,8 @@ const Login: React.FC = () => {
         setLoginMessage(`Fel: ${data.message}`);
       }
     } catch (err) {
-      console.error("Fel vid kommunikation med servern:", err);
-      setLoginMessage("Kunde inte ansluta till servern.");
+      console.error('Fel vid kommunikation med servern:', err);
+      setLoginMessage('Kunde inte ansluta till servern.');
     }
   };
 
@@ -174,7 +174,7 @@ const Login: React.FC = () => {
               </fieldset>
               <button
                 type="submit"
-                className="bg-teal-900 hover:bg-teal-800 hover:bg-teal-800 text-white text-sm py-1 px-2 md:text-base md:py-2 md:px-4 rounded"
+                className="bg-teal-900  hover:bg-teal-800 text-white text-sm py-1 px-2 md:text-base md:py-2 md:px-4 rounded"
               >
                 Logga in
               </button>
@@ -188,7 +188,7 @@ const Login: React.FC = () => {
                 setShowCreateForm((prev) => !prev);
                 setShowLoginForm(false);
               }}
-              className="rounded-full w-5/6 md:w-full text-xs py-1 px-2 md:text-base md:py-2 md:px-4 bg-orange-500 px-8 py-2 font-primary text-white"
+              className="rounded-full w-5/6 md:w-full text-xs md:text-base md:py-2 md:px-4 bg-orange-500 px-8 py-2 font-primary text-white"
             >
               Skapa användare
             </button>
@@ -201,7 +201,7 @@ const Login: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
                   className="flex flex-col w-5/6 md:w-full font-primary text-teal-900"
                   onSubmit={handleCreateUser}
                 >

@@ -106,16 +106,16 @@ const TestHistory: React.FC = () => {
           {loading ? (
             <p>Laddar din orderhistorik...</p>
           ) : error ? (
-            <p className="text-red-500">{error}</p>
+            <p className="text-red-500 text-center">{error}</p>
           ) : orderHistory.length === 0 ? (
             <p>Du har ännu inga beställningar i din orderhistorik.</p>
           ) : (
-            <section className="w-full md:w-2/4 flex flex-col">
-              <ul className="space-y-4 w-full flex flex-wrap bg-orange-100 p-4 shadow rounded">
+            <section className="w-full max-w-[768px] flex flex-col">
+              <ul className="space-y-4 w-full flex flex-wrap ">
                 {orderHistory.map((order, index) => (
                   <li
                     key={index}
-                    className="border-b pb-4 w-full flex flex-col"
+                    className="border-b pb-4 w-full flex flex-col p-4 bg-orange-100 shadow rounded"
                   >
                     <h3 className="lg:text-xl md:text-xl sm:text-sm font-semibold">
                       Order {order._id}

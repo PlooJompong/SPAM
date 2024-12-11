@@ -281,8 +281,10 @@ const Orders = () => {
                     {/* Order-rad */}
                     <article className="flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer">
                       <article
-                        className={`flex-1 pr-4 ${
-                          selectedOrder === order._id ? 'bg-[#e9dfcf]' : ''
+                        className={`flex-1 mr-6 ${
+                          selectedOrder === order._id
+                            ? "bg-orange-200 rounded p-2 w-auto"
+                            : ""
                         }`}
                         onClick={() =>
                           setSelectedOrder(
@@ -322,7 +324,7 @@ const Orders = () => {
                             key={item._id}
                             className="flex justify-between items-start py-3 border-b"
                           >
-                            <span className="flex items-center space-x-4">
+                            <span className="flex items-start space-x-4">
                               <img
                                 src={margherita}
                                 alt="Pizza"

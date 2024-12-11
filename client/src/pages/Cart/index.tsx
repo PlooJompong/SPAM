@@ -216,6 +216,23 @@ const Cart: React.FC = () => {
                 <form className="mt-4">
                   <article className="flex flex-col">
                     <label className="text-teal-900 mb-2">
+                      Kortinnehavare:
+                      <input
+                        type="text"
+                        pattern="[a-zA-ZåäöÅÄÖ\s]*"
+                        maxLength={50}
+                        className="border border-zinc-300 rounded p-2 w-full mt-1 focus:outline-teal-900"
+                        placeholder="Förnamn Efternamn"
+                        onInput={(e) => {
+                          const target = e.target as HTMLInputElement;
+                          target.value = target.value.replace(
+                            /[^a-zA-ZåäöÅÄÖ\s]/g,
+                            ""
+                          );
+                        }}
+                      />
+                    </label>
+                    <label className="text-teal-900 mb-2">
                       Kortnummer:
                       <input
                         type="text"

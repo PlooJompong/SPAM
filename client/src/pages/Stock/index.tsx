@@ -14,8 +14,8 @@ const Stock = () => {
     const fetchStockData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8000/stock",
-          // ('https://node-mongodb-api-ks7o.onrender.com/stock'),
+          // "http://localhost:8000/stock",
+          "https://node-mongodb-api-ks7o.onrender.com/stock",
           {
             method: "GET",
             headers: {

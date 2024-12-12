@@ -51,8 +51,8 @@ const Confirmation = () => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/orders/${orderId}`,
-          // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}`,
+          // `http://localhost:8000/orders/${orderId}`,
+          `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}`,
           {
             method: "GET",
             headers: {
@@ -125,8 +125,8 @@ const Confirmation = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/orders/${order._id}`,
-        // `https://node-mongodb-api-ks7o.onrender.com/orders/${order._id}`,
+        // `http://localhost:8000/orders/${order._id}`,
+        `https://node-mongodb-api-ks7o.onrender.com/orders/${order._id}`,
         {
           method: "DELETE",
           headers: {

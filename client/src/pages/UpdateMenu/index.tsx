@@ -40,8 +40,10 @@ const UpdateMenu: React.FC = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await fetch("http://localhost:8000/menu");
-        // ("https://node-mongodb-api-ks7o.onrender.com/menu");
+        const response = await fetch(
+          "https://node-mongodb-api-ks7o.onrender.com/menu"
+        );
+        // "http://localhost:8000/menu";
         const data = await response.json();
         setMenuItems(data);
       } catch (error) {
@@ -87,8 +89,8 @@ const UpdateMenu: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/menu/${editingItem._id}`,
-        // `https://node-mongodb-api-ks7o.onrender.com/menu/${editingItem._id}`,
+        // `http://localhost:8000/menu/${editingItem._id}`,
+        `https://node-mongodb-api-ks7o.onrender.com/menu/${editingItem._id}`,
         {
           method: "PUT",
           headers: {
@@ -142,8 +144,8 @@ const UpdateMenu: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/menu",
-        // 'https://node-mongodb-api-ks7o.onrender.com/menu',
+        // "http://localhost:8000/menu",
+        "https://node-mongodb-api-ks7o.onrender.com/menu",
         {
           method: "POST",
           headers: {

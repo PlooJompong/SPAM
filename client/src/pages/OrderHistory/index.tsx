@@ -45,8 +45,8 @@ const TestHistory: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/orderhistory/${user.username}`,
-          // `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`,
+          // `http://localhost:8000/orderhistory/${user.username}`,
+          `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`,
           {
             method: "GET",
             headers: {

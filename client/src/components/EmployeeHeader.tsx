@@ -1,5 +1,5 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import pizzaLogo from '../assets/pizzaLogo.png';
+import { useNavigate, useLocation } from "react-router-dom";
+import pizzaLogo from "../assets/pizzaLogo.png";
 
 interface EmployeeHeaderProps {
   title: string;
@@ -12,9 +12,8 @@ const EmployeeHeader: React.FC<EmployeeHeaderProps> = ({
   const location = useLocation();
 
   const handleNavigation = () => {
-    if (location.pathname !== '/landing') {
-      // Kontrollera om vi inte redan är på landing
-      navigate('/landing'); // Navigera till landing-sidan
+    if (location.pathname !== "/landing") {
+      navigate("/landing");
     }
   };
 

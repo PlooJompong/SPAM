@@ -1,4 +1,4 @@
-import Menu from "../models/menuModel.js"
+import Menu from "../models/menuModel.js";
 
 // GET Menu
 const getMenu = async (req, res) => {
@@ -8,21 +8,23 @@ const getMenu = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-}
+};
 
 // POST new menu item
 const addNewMenuItem = async (req, res) => {
   try {
-    const { name, price, vegetarian, ingredients } = req.body; // Hämta data från request-body
+    const { name, price, vegetarian, ingredients } = req.body;
 
-    // Kontrollera att alla nödvändiga fält finns
+    // Check required fileds
     if (!name || !price || !Array.isArray(ingredients)) {
-      return res.status(400).json({ message: "Alla obligatoriska fält måste fyllas i." });
+      return res
+        .status(400)
+        .json({ message: "Alla obligatoriska fält måste fyllas i." });
     }
 
     const isVegetarian = vegetarian !== undefined ? vegetarian : false;
 
-    // Skapa en ny menyartikel
+    // Create new menu item
     const newMenuItem = new Menu({
       name,
       price,
@@ -30,18 +32,19 @@ const addNewMenuItem = async (req, res) => {
       ingredients,
     });
 
-    // Spara den nya artikeln i databasen
     const savedMenuItem = await newMenuItem.save();
 
-    // Returnera det sparade objektet
-    res.status(201).json({ message: "Menyartikel skapad!", menu: savedMenuItem });
+    res
+      .status(201)
+      .json({ message: "Menyartikel skapad!", menu: savedMenuItem });
   } catch (err) {
     console.error("Fel vid skapandet av menyartikel:", err);
-    res.status(500).json({ message: "Ett fel inträffade vid skapandet av menyartikel." });
+    res
+      .status(500)
+      .json({ message: "Ett fel inträffade vid skapandet av menyartikel." });
   }
-}
+};
 
-// New
 // PUT update menu item
 const updateMenuItem = async (req, res) => {
   try {
@@ -65,11 +68,15 @@ const updateMenuItem = async (req, res) => {
     }
 
     // Return the updated menu item
-    res.status(200).json({ message: "Menyartikel uppdaterad!", menu: updatedMenuItem });
+    res
+      .status(200)
+      .json({ message: "Menyartikel uppdaterad!", menu: updatedMenuItem });
   } catch (err) {
     console.error("Fel vid uppdatering av menyartikel:", err);
-    res.status(500).json({ message: "Ett fel inträffade vid uppdatering av menyartikel." });
+    res
+      .status(500)
+      .json({ message: "Ett fel inträffade vid uppdatering av menyartikel." });
   }
 };
 
-export { getMenu, addNewMenuItem, updateMenuItem }
+export { getMenu, addNewMenuItem, updateMenuItem };

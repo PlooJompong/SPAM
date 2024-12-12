@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const orderHistorySchema = new mongoose.Schema({
-  name: { type: String, required: true }, // ID för användaren som la beställningen
+  name: { type: String, required: true },
   orders: [
     {
       name: { type: String, required: true },

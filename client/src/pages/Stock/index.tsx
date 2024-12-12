@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import EmployeeHeader from '../../components/EmployeeHeader';
-import Container from '../../components/Container';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from "react";
+import EmployeeHeader from "../../components/EmployeeHeader";
+import Container from "../../components/Container";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Stock = () => {
   const [stockData, setStockData] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>("");
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -14,23 +14,23 @@ const Stock = () => {
     const fetchStockData = async () => {
       try {
         const response = await fetch(
-          'http://localhost:8000/stock',
+          "http://localhost:8000/stock",
           // ('https://node-mongodb-api-ks7o.onrender.com/stock'),
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              "Content-Type": "application/json",
             },
           }
         );
 
         if (!response.ok) {
           if (response.status === 401) {
-            setError('Din session har gått ut. Logga in igen');
-            console.log('Din session har gått ut. Logga in igen');
-            sessionStorage.removeItem('token');
-            navigate('/login');
+            setError("Din session har gått ut. Logga in igen");
+            console.log("Din session har gått ut. Logga in igen");
+            sessionStorage.removeItem("token");
+            navigate("/login");
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -41,7 +41,7 @@ const Stock = () => {
 
         setStockData(data);
       } catch (err: any) {
-        console.error('Error fetching stock data:', err);
+        console.error("Error fetching stock data:", err);
       }
     };
 

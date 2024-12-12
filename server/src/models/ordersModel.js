@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Namn på kunden eller något annat
+  name: { type: String, required: true },
   items: [
     {
       _id: { type: String, required: true },
@@ -12,13 +12,13 @@ const orderSchema = new mongoose.Schema({
       quantity: { type: Number, required: true },
     },
   ],
-  comment: { type: String, default: '' },
+  comment: { type: String, default: "" },
   locked: { type: Boolean, default: false },
   done: { type: Boolean, default: false },
   totalPrice: { type: Number, required: true },
   orderDate: { type: Date, default: Date.now },
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 export default Order;

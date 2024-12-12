@@ -1,17 +1,14 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import validateApiKey from './middlewares/validateApiKey.js';
-// import verifyToken from './middlewares/verifyToken.js';
-
-import menuRouter from './routes/menuRouter.js';
-import orderRouter from './routes/orderRouter.js';
-import stockRouter from './routes/stockRouter.js';
-import orderHistoryRouter from './routes/orderHistoryRouter.js';
-import userRouter from './routes/userRouter.js';
-// import loginRouter from './routes/loginRouter.js';
-import helmet from 'helmet';
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import validateApiKey from "./middlewares/validateApiKey.js";
+import menuRouter from "./routes/menuRouter.js";
+import orderRouter from "./routes/orderRouter.js";
+import stockRouter from "./routes/stockRouter.js";
+import orderHistoryRouter from "./routes/orderHistoryRouter.js";
+import userRouter from "./routes/userRouter.js";
+import helmet from "helmet";
 
 dotenv.config();
 
@@ -22,8 +19,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -33,7 +28,11 @@ app.use(
         connectSrc: ["'self'", "https://node-mongodb-api-ks7o.onrender.com"],
         imgSrc: ["'self'", "data:"], // Tillåt bilder från samma origin och data-URI
         styleSrc: ["'self'", "'unsafe-inline'"], // CSS från samma origin och inline-CSS
-        fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"], // Tillåt typsnitt från en specifik domän
+        fontSrc: [
+          "'self'",
+          "https://fonts.googleapis.com",
+          "https://fonts.gstatic.com",
+        ], // Tillåt typsnitt från en specifik domän
         objectSrc: ["'none'"], // Blockera alla `<object>`-taggar
         upgradeInsecureRequests: [], // Lägg till detta om du bara vill tillåta HTTPS
       },
@@ -42,30 +41,25 @@ app.use(
   })
 );
 
-
 mongoose
   .connect(process.env.MONGO_URI, {})
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-
 app.use((req, res, next) => {
   if (!req.header("x-api-key")) {
-    req.headers["x-api-key"] = process.env.API_KEY; // Sätter API-nyckeln automatiskt
-    // console.log("API-nyckel automatiskt tillagd:", process.env.API_KEY);
+    req.headers["x-api-key"] = process.env.API_KEY;
   }
   next();
 });
 
 app.use(validateApiKey);
-// app.use(verifyToken);
 
-app.use("/menu", menuRouter)
-app.use("/orders", orderRouter)
-app.use("/stock", stockRouter)
-app.use("/orderhistory", orderHistoryRouter)
-app.use("/users", userRouter)
-// app.use("/login", loginRouter)
+app.use("/menu", menuRouter);
+app.use("/orders", orderRouter);
+app.use("/stock", stockRouter);
+app.use("/orderhistory", orderHistoryRouter);
+app.use("/users", userRouter);
 
 //Middleware
 app.use((req, res) => {

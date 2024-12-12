@@ -1,9 +1,9 @@
-import React from 'react';
-import { useCart } from '../../context/CartContext';
-import { FaCirclePlus } from 'react-icons/fa6';
-import { MenuItem } from './index.tsx';
-import { motion } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext.tsx';
+import React from "react";
+import { useCart } from "../../context/CartContext";
+import { FaCirclePlus } from "react-icons/fa6";
+import { MenuItem } from "./index.tsx";
+import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext.tsx";
 
 interface MenuItemProps {
   item: MenuItem;
@@ -26,16 +26,15 @@ const MenuItemComponent: React.FC<MenuItemProps> = ({ item }) => {
         </article>
 
         <p className="md:text-lg sm:text-md italic">
-          {item.vegetarian ? 'Vegetarisk' : 'Ej vegetarisk'}
+          {item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}
         </p>
-        <p className="md:text-lg sm:text-md">{item.ingredients.join(', ')}</p>
+        <p className="md:text-lg sm:text-md">{item.ingredients.join(", ")}</p>
       </div>
 
       {user && (
         <motion.div
           whileTap={{ scale: 0.9 }}
           className="cursor-pointer"
-          // onClick={() => addToCart(item)}
           onClick={handleAddToCart}
         >
           <FaCirclePlus className="text-teal-900  md:mr-4 mr-0" size={25} />

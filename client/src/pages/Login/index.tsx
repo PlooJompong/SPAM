@@ -25,8 +25,8 @@ const Login: React.FC = () => {
 
     try {
       const response = await fetch(
-        // "https://node-mongodb-api-ks7o.onrender.com/users"
-        "http://localhost:8000/users",
+        "https://node-mongodb-api-ks7o.onrender.com/users",
+        // 'http://localhost:8000/users',
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -63,8 +63,8 @@ const Login: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/users/login",
-        // "https://node-mongodb-api-ks7o.onrender.com/users/login",
+        // "http://localhost:8000/users/login",
+        "https://node-mongodb-api-ks7o.onrender.com/users/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

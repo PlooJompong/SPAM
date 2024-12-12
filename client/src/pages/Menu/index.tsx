@@ -37,8 +37,8 @@ const Menu: React.FC = () => {
       try {
         console.log("Fetching menu...");
         const res = await fetch(
-          "http://localhost:8000/menu"
-          // 'https://node-mongodb-api-ks7o.onrender.com/menu'
+          // "http://localhost:8000/menu"
+          "https://node-mongodb-api-ks7o.onrender.com/menu"
         );
         console.log("Response status:", res.status);
 

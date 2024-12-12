@@ -65,8 +65,8 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/orders`,
-          // 'https://node-mongodb-api-ks7o.onrender.com/orders',
+          // `http://localhost:8000/orders`,
+          "https://node-mongodb-api-ks7o.onrender.com/orders",
           {
             method: "GET",
             headers: {
@@ -105,8 +105,8 @@ const Orders = () => {
   const toggleLockStatus = async (orderId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/orders/${orderId}/toggle-lock`,
-        // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-lock`,
+        // `http://localhost:8000/orders/${orderId}/toggle-lock`,
+        `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-lock`,
         {
           method: "PUT",
           headers: {
@@ -152,8 +152,8 @@ const Orders = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/orders/${orderId}/toggle-done`,
-        // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-done`,
+        // `http://localhost:8000/orders/${orderId}/toggle-done`,
+        `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-done`,
         {
           method: "PUT",
           headers: {
@@ -183,8 +183,8 @@ const Orders = () => {
   const updateComment = async (orderId: string, newComment: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/orders/${orderId}/comment`,
-        // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/comment`,
+        // `http://localhost:8000/orders/${orderId}/comment`,
+        `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/comment`,
         {
           method: "PUT",
           headers: {

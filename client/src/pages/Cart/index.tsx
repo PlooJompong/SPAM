@@ -50,8 +50,8 @@ const Cart: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/orders",
-        // 'https://node-mongodb-api-ks7o.onrender.com/orders',
+        // "http://localhost:8000/orders",
+        "https://node-mongodb-api-ks7o.onrender.com/orders",
         {
           method: "POST",
           headers: {

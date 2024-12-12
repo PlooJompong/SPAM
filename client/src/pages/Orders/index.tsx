@@ -1,12 +1,12 @@
-import editLogo from '../../assets/editLogo.svg';
-import lockedLogo from '../../assets/lockedLogo.svg';
-import margherita from '../../assets/margherita.png';
-import unlockedLogo from '../../assets/unlockedLogo.svg';
-import { useState, useEffect } from 'react';
-import Container from '../../components/Container';
-import EmployeeHeader from '../../components/EmployeeHeader';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import editLogo from "../../assets/editLogo.svg";
+import lockedLogo from "../../assets/lockedLogo.svg";
+import margherita from "../../assets/margherita.png";
+import unlockedLogo from "../../assets/unlockedLogo.svg";
+import { useState, useEffect } from "react";
+import Container from "../../components/Container";
+import EmployeeHeader from "../../components/EmployeeHeader";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 interface OrderItem {
   _id: string;
@@ -32,38 +32,35 @@ const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
-  const [filter, setFilter] = useState<'done' | 'pending'>('pending');
+  const [filter, setFilter] = useState<"done" | "pending">("pending");
   const [editingComment, setEditingComment] = useState<string | null>(null);
-  const [newComment, setNewComment] = useState<string>('');
+  const [newComment, setNewComment] = useState<string>("");
 
   const [error, setError] = useState<string | null>(null);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
-  // Filtrering av ordrar
   const filteredOrders = orders.filter((order) => {
-    if (filter === 'pending') {
+    if (filter === "pending") {
       return !(order.locked && order.done);
     }
     return order.done && order.locked;
   });
 
-  // Formattering av datum och tid
   const formatOrderDate = (isoDate: string) => {
     const date = new Date(isoDate);
-    const datePart = new Intl.DateTimeFormat('sv-SE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
+    const datePart = new Intl.DateTimeFormat("sv-SE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     }).format(date);
-    const timePart = new Intl.DateTimeFormat('sv-SE', {
-      hour: '2-digit',
-      minute: '2-digit',
+    const timePart = new Intl.DateTimeFormat("sv-SE", {
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
     return `${datePart}, ${timePart}`;
   };
 
-  // Hämta ordrar från backend
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -71,20 +68,20 @@ const Orders = () => {
           `http://localhost:8000/orders`,
           // 'https://node-mongodb-api-ks7o.onrender.com/orders',
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              "Content-Type": "application/json",
             },
           }
         );
 
         if (!response.ok) {
           if (response.status === 401) {
-            setError('Din session har gått ut. Logga in igen');
-            console.log('Din session har gått ut. Logga in igen');
-            sessionStorage.removeItem('token');
-            navigate('/login');
+            setError("Din session har gått ut. Logga in igen");
+            console.log("Din session har gått ut. Logga in igen");
+            sessionStorage.removeItem("token");
+            navigate("/login");
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -94,15 +91,15 @@ const Orders = () => {
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
 
-    const intervalId = setInterval(fetchOrders, 1000); // Poll varje 5:e sekund
+    const intervalId = setInterval(fetchOrders, 1000);
 
-    return () => clearInterval(intervalId); // Rensa intervallet vid avmontering
+    return () => clearInterval(intervalId);
   }, []);
 
   const toggleLockStatus = async (orderId: string) => {
@@ -111,20 +108,20 @@ const Orders = () => {
         `http://localhost:8000/orders/${orderId}/toggle-lock`,
         // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-lock`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError('Din session har gått ut. Logga in igen');
-          console.log('Din session har gått ut. Logga in igen');
-          sessionStorage.removeItem('token');
-          navigate('/login');
+          setError("Din session har gått ut. Logga in igen");
+          console.log("Din session har gått ut. Logga in igen");
+          sessionStorage.removeItem("token");
+          navigate("/login");
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -133,7 +130,6 @@ const Orders = () => {
 
       const updatedOrder = await response.json();
 
-      // Uppdatera listan av ordrar med den ändrade ordern
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId
@@ -142,8 +138,8 @@ const Orders = () => {
         )
       );
     } catch (error) {
-      console.error('Error toggling lock status:', error);
-      alert('Kunde inte ändra låsstatus. Försök igen.');
+      console.error("Error toggling lock status:", error);
+      alert("Kunde inte ändra låsstatus. Försök igen.");
     }
   };
 
@@ -159,28 +155,28 @@ const Orders = () => {
         `http://localhost:8000/orders/${orderId}/toggle-done`,
         // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/toggle-done`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError('Din session har gått ut. Logga in igen');
-          console.log('Din session har gått ut. Logga in igen');
-          sessionStorage.removeItem('token');
-          navigate('/login');
+          setError("Din session har gått ut. Logga in igen");
+          console.log("Din session har gått ut. Logga in igen");
+          sessionStorage.removeItem("token");
+          navigate("/login");
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return;
       }
     } catch (error) {
-      console.error('Error toggling done status:', error);
-      alert('Kunde inte ändra klarstatus. Försök igen.');
+      console.error("Error toggling done status:", error);
+      alert("Kunde inte ändra klarstatus. Försök igen.");
     }
   };
 
@@ -190,10 +186,10 @@ const Orders = () => {
         `http://localhost:8000/orders/${orderId}/comment`,
         // `https://node-mongodb-api-ks7o.onrender.com/orders/${orderId}/comment`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ comment: newComment }),
         }
@@ -201,10 +197,10 @@ const Orders = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError('Din session har gått ut. Logga in igen');
-          console.log('Din session har gått ut. Logga in igen');
-          sessionStorage.removeItem('token');
-          navigate('/login');
+          setError("Din session har gått ut. Logga in igen");
+          console.log("Din session har gått ut. Logga in igen");
+          sessionStorage.removeItem("token");
+          navigate("/login");
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -221,8 +217,8 @@ const Orders = () => {
         )
       );
     } catch (error) {
-      console.error('Error updating comment:', error);
-      alert('Kunde inte uppdatera kommentaren. Försök igen.');
+      console.error("Error updating comment:", error);
+      alert("Kunde inte uppdatera kommentaren. Försök igen.");
     }
   };
 
@@ -232,12 +228,12 @@ const Orders = () => {
   };
 
   const handleSaveComment = (orderId: string) => {
-    if (newComment.trim() !== '') {
+    if (newComment.trim() !== "") {
       updateComment(orderId, newComment);
       setEditingComment(null);
-      setNewComment('');
+      setNewComment("");
     } else {
-      alert('Kommentaren kan inte vara tom.');
+      alert("Kommentaren kan inte vara tom.");
     }
   };
 
@@ -249,28 +245,28 @@ const Orders = () => {
           <p className="text-center">Du har inte åtkomst till denna sida.</p>
         ) : (
           <main className="flex h-full w-full justify-center bg-orange-100 p-1 md:p-4 font-sans">
-            {/* Container för båda kolumner */}
-            <section className="flex flex-col sm:flex-row w-full">
-              {/* Vänster kolumn */}
-              <article className="w-full sm:w-full md:w-4/5 space-y-4">
+            {/* Container for both columns */}
+            <section className="flex flex-col md:flex-row w-full">
+              {/* Left column */}
+              <article className="w-full md:w-full lg:w-4/5 space-y-4">
                 <div className="flex items-center justify-center">
                   <button
                     className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
-                      filter === 'pending'
-                        ? 'bg-orange-500 underline'
-                        : 'bg-teal-900'
+                      filter === "pending"
+                        ? "bg-orange-500 underline"
+                        : "bg-teal-900"
                     } rounded-l-lg`}
-                    onClick={() => setFilter('pending')}
+                    onClick={() => setFilter("pending")}
                   >
                     PÅGÅENDE
                   </button>
                   <button
                     className={`px-4 py-2 text-white shadow-md transition-all duration-300 ${
-                      filter === 'done'
-                        ? 'bg-orange-500 underline'
-                        : 'bg-teal-900'
+                      filter === "done"
+                        ? "bg-orange-500 underline"
+                        : "bg-teal-900"
                     } rounded-r-lg`}
-                    onClick={() => setFilter('done')}
+                    onClick={() => setFilter("done")}
                   >
                     KLARA
                   </button>
@@ -278,10 +274,10 @@ const Orders = () => {
 
                 {filteredOrders.map((order) => (
                   <section key={order._id} className="space-y-2">
-                    {/* Order-rad */}
+                    {/* Order row */}
                     <article className="flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer">
                       <article
-                        className={`flex-1 mr-6 ${
+                        className={`flex-1 mr-2 sm:mr-6 ${
                           selectedOrder === order._id
                             ? "bg-orange-200 rounded p-2 w-auto"
                             : ""
@@ -292,7 +288,7 @@ const Orders = () => {
                           )
                         }
                       >
-                        <h2 className="font-semibold">
+                        <h2 className="font-semibold text-sm sm:text-base">
                           Beställning {order._id}
                         </h2>
                         <p className="text-sm text-gray-600">
@@ -316,15 +312,15 @@ const Orders = () => {
                       </div>
                     </article>
 
-                    {/* Detaljer för vald order på mindre skärmar */}
+                    {/* Details for selected order on small screens */}
                     {selectedOrder === order._id && (
-                      <article className="sm:hidden p-2 md:p-4 bg-white rounded-lg shadow-md">
+                      <article className="md:block lg:hidden p-2 md:p-4 bg-white rounded-lg shadow-md">
                         {order.items.map((item) => (
                           <div
                             key={item._id}
                             className="flex justify-between items-start py-3 border-b"
                           >
-                            <span className="flex items-start space-x-4">
+                            <span className="flex items-start space-x-2 sm:space-x-4">
                               <img
                                 src={margherita}
                                 alt="Pizza"
@@ -344,7 +340,7 @@ const Orders = () => {
                                   selectedOrder,
                                   orders.find(
                                     (order) => order._id === selectedOrder
-                                  )?.comment || ''
+                                  )?.comment || ""
                                 )
                               }
                             >
@@ -367,7 +363,7 @@ const Orders = () => {
                             />
                           ) : (
                             <p className="italic">
-                              {order.comment || 'Ingen kommentar lämnad'}
+                              {order.comment || "Ingen kommentar lämnad"}
                             </p>
                           )}
 
@@ -386,8 +382,8 @@ const Orders = () => {
                 ))}
               </article>
 
-              {/* Höger kolumn */}
-              <section className="hidden sm:block w-full sm:w-3/5 sm:pl-6">
+              {/* Right column */}
+              <section className="hidden lg:block w-full sm:w-3/5 sm:pl-6">
                 {selectedOrder ? (
                   <article className="p-6 bg-white rounded-lg shadow-md">
                     <article className="flex items-center justify-between text-xl font-semibold text-teal-900 mb-4">
@@ -399,7 +395,7 @@ const Orders = () => {
                           handleEditComment(
                             selectedOrder,
                             orders.find((order) => order._id === selectedOrder)
-                              ?.comment || ''
+                              ?.comment || ""
                           )
                         }
                       >
@@ -416,7 +412,7 @@ const Orders = () => {
                               key={item._id}
                               className="flex items-center justify-between py-3 border-b"
                             >
-                              <div className="flex items-center space-x-4 w-full">
+                              <div className="flex items-start space-x-4 w-full">
                                 <img
                                   src={margherita}
                                   alt="Pizza"
@@ -429,16 +425,14 @@ const Orders = () => {
                                   </p>
                                 </div>
                               </div>
-                              <div className="text-right flex items-center space-x-1">
+                              <div className="text-right flex items-start space-x-1">
                                 <p className="text-teal-900">{item.price}</p>
                                 <p className="text-teal-900">kr</p>
                               </div>
                             </div>
                           ))}
                           <article className="flex flex-col gap-2 pt-3">
-                            <p className="font-semibold">
-                              Kommentar från kund:{' '}
-                            </p>
+                            <p className="font-semibold">Kommentar: </p>
                             {editingComment === order._id ? (
                               <input
                                 type="textarea"
@@ -448,7 +442,7 @@ const Orders = () => {
                               />
                             ) : (
                               <p className="italic">
-                                {order.comment || 'Ingen kommentar lämnad'}
+                                {order.comment || "Ingen kommentar lämnad"}
                               </p>
                             )}
 

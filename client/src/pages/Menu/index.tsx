@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
-import MenuItemComponent from './MenuItem';
-import { useCart } from '../../context/CartContext';
-import { useNavigate } from 'react-router-dom';
-import { FaRegTrashCan } from 'react-icons/fa6';
-import { HiMinusSm } from 'react-icons/hi';
-import { GoPlus } from 'react-icons/go';
-import { motion } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from "react";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
+import MenuItemComponent from "./MenuItem";
+import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { HiMinusSm } from "react-icons/hi";
+import { GoPlus } from "react-icons/go";
+import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 
 export interface MenuItem {
   _id: string;
@@ -26,21 +26,21 @@ const Menu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { cart, updateQuantity, removeItemFromCart, calculateTotalPrice } =
-    useCart(); // Använd Context
+    useCart();
   const navigate = useNavigate();
   const [filteredMenuItems, setFilteredMenuItems] = useState<MenuItem[]>([]);
   const { user } = useAuth();
-  const [cartOpen, setCartOpen] = useState<string>('hidden');
+  const [cartOpen, setCartOpen] = useState<string>("hidden");
 
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        console.log('Fetching menu...');
+        console.log("Fetching menu...");
         const res = await fetch(
-          'http://localhost:8000/menu'
+          "http://localhost:8000/menu"
           // 'https://node-mongodb-api-ks7o.onrender.com/menu'
         );
-        console.log('Response status:', res.status);
+        console.log("Response status:", res.status);
 
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -48,11 +48,11 @@ const Menu: React.FC = () => {
 
         const data: MenuItem[] = await res.json();
 
-        console.log('Fetched data:', data);
+        console.log("Fetched data:", data);
         setMenuItems(data);
-        setFilteredMenuItems(data); // Sätt initiala filtrerade alternativ till alla objekt
+        setFilteredMenuItems(data);
       } catch (err) {
-        console.error('Error fetching menu:', err);
+        console.error("Error fetching menu:", err);
       } finally {
         setLoading(false);
       }
@@ -61,7 +61,6 @@ const Menu: React.FC = () => {
     fetchMenu();
   }, []);
 
-  // Funktion för att sortera efter pris
   const sortByPrice = () => {
     const sortedItems = [...filteredMenuItems].sort(
       (a, b) => a.price - b.price
@@ -69,13 +68,11 @@ const Menu: React.FC = () => {
     setFilteredMenuItems(sortedItems);
   };
 
-  // Funktion för att visa endast vegetariska alternativ
   const filterVegetarian = () => {
     const vegetarianItems = menuItems.filter((item) => item.vegetarian);
     setFilteredMenuItems(vegetarianItems);
   };
 
-  // Funktion för att visa alla alternativ igen
   const resetFilters = () => {
     setFilteredMenuItems(menuItems);
   };
@@ -85,11 +82,11 @@ const Menu: React.FC = () => {
   }
 
   const cartClick = () => {
-    navigate('/cart');
+    navigate("/cart");
   };
 
   const toggleCart = () => {
-    setCartOpen((prevState) => (prevState === 'hidden' ? 'block' : 'hidden'));
+    setCartOpen((prevState) => (prevState === "hidden" ? "block" : "hidden"));
   };
 
   const handleQuantityChange = (itemId: string, change: number) => {
@@ -133,21 +130,21 @@ const Menu: React.FC = () => {
             Du måste vara inloggad för att göra en beställning.
           </p>
         )}
-        {/* <ul className="flex flex-col justify-start lg:gap-0 md:gap-4 sm:h-screen lg:flex-wrap lg:h-[700px] lg:m-auto md:m-auto md:w-9/12 lg:w-5/6"> */}
+
         <ul className="flex flex-col justify-start md:gap-2 h-screen xl:max-h-[800px] xl:flex-wrap mx-auto md:w-9/12 lg:w-5/6">
           {filteredMenuItems.map((item) => (
             <MenuItemComponent key={item._id} item={item} />
           ))}
         </ul>
 
-        {/* VARUKORG */}
+        {/* Cart */}
         <article className="fixed left-0 right-0 mx-auto bottom-0 w-64 px-2 bg-gray-100 border-t border-gray-300 xl:left-[864px]  rounded">
           <motion.div
             className="py-3 p-2 font-sans font-bold hover:cursor-pointer text-center"
             onClick={toggleCart}
             whileTap={{ scale: 0.9 }}
           >
-            {cartOpen === 'block' ? (
+            {cartOpen === "block" ? (
               <p>Dölj din pizzakorg</p>
             ) : (
               <p>Visa din pizzakorg</p>

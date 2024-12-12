@@ -10,7 +10,7 @@ const getUsers = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-}
+};
 
 // POST new user
 const addNewUser = async (req, res) => {
@@ -21,13 +21,13 @@ const addNewUser = async (req, res) => {
       return res.status(400).json({ message: "Alla fält är obligatoriska." });
     }
 
-    // Kontrollera om användaren redan finns
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return res.status(409).json({ message: "Användarnamnet är redan taget." });
+      return res
+        .status(409)
+        .json({ message: "Användarnamnet är redan taget." });
     }
 
-    // Skapa en ny användare
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, password: hashedPassword, admin });
     await newUser.save();
@@ -35,7 +35,9 @@ const addNewUser = async (req, res) => {
     res.status(201).json({ message: "Användare skapad!", user: newUser });
   } catch (err) {
     console.error("Fel vid skapandet av användare:", err);
-    res.status(500).json({ message: "Något gick fel vid skapandet av användaren." });
+    res
+      .status(500)
+      .json({ message: "Något gick fel vid skapandet av användaren." });
   }
 };
 
@@ -45,7 +47,9 @@ const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ message: "Användarnamn och lösenord krävs." });
+      return res
+        .status(400)
+        .json({ message: "Användarnamn och lösenord krävs." });
     }
 
     const user = await User.findOne({ username });
@@ -60,13 +64,15 @@ const loginUser = async (req, res) => {
 
     // Generate JWT
     const token = jwt.sign(
-      { id: user._id, username: user.username, admin: user.admin }, "abc123", { expiresIn: "2m" }
+      { id: user._id, username: user.username, admin: user.admin },
+      "abc123",
+      { expiresIn: "5m" } // Token expires in 5 minutes
     );
 
     res.status(200).json({
       message: "Inloggning lyckades!",
       token,
-      user: { username: user.username, admin: user.admin }
+      user: { username: user.username, admin: user.admin },
     });
   } catch (err) {
     console.error("Fel vid inloggning:", err);
@@ -74,4 +80,4 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { getUsers, addNewUser, loginUser }
+export { getUsers, addNewUser, loginUser };

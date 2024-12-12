@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import CustomerHeader from '../../components/CustomerHeader';
-import { useAuth } from '../../context/AuthContext';
-import Container from '../../components/Container';
-import { useCart } from '../../context/CartContext';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CustomerHeader from "../../components/CustomerHeader";
+import { useAuth } from "../../context/AuthContext";
+import Container from "../../components/Container";
+import { useCart } from "../../context/CartContext";
+import { motion } from "framer-motion";
 
 interface OrderItem {
   _id: string;
@@ -28,17 +28,17 @@ interface Order {
 }
 
 const TestHistory: React.FC = () => {
-  const { user } = useAuth(); // Hämta inloggad användare från AuthContext
+  const { user } = useAuth();
   const { addToCart } = useCart();
-  const [orderHistory, setOrderHistory] = useState<Order[]>([]); // Typen anges här
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [orderHistory, setOrderHistory] = useState<Order[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
       if (!user) {
-        setError('Du måste vara inloggad för att se din orderhistorik.');
+        setError("Du måste vara inloggad för att se din orderhistorik.");
         setLoading(false);
         return;
       }
@@ -48,31 +48,30 @@ const TestHistory: React.FC = () => {
           `http://localhost:8000/orderhistory/${user.username}`,
           // `https://node-mongodb-api-ks7o.onrender.com/orderhistory/${user.username}`,
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              "Content-Type": "application/json",
             },
           }
         );
 
         if (!response.ok) {
           if (response.status === 401) {
-            setError('Din session har gått ut. Logga in igen');
-            console.log('Din session har gått ut. Logga in igen');
-            sessionStorage.removeItem('token');
-            navigate('/login');
+            setError("Din session har gått ut. Logga in igen");
+            console.log("Din session har gått ut. Logga in igen");
+            sessionStorage.removeItem("token");
+            navigate("/login");
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           return;
         }
         const data = await response.json();
-        // console.log('Data from API:', data);
-        setOrderHistory(data.orders); // Uppdatera state med orderhistoriken
+        setOrderHistory(data.orders);
       } catch (err) {
-        console.error('Fel vid hämtning av orderhistorik:', err);
-        setError('Kunde inte hämta orderhistoriken. Försök igen senare.');
+        console.error("Fel vid hämtning av orderhistorik:", err);
+        setError("Kunde inte hämta orderhistoriken. Försök igen senare.");
       } finally {
         setLoading(false);
       }
@@ -88,15 +87,8 @@ const TestHistory: React.FC = () => {
         quantity: item.quantity, // Ensure the correct quantity is passed
       });
     });
-    navigate('/cart');
+    navigate("/cart");
   };
-
-  // const handleReorder = (order: Order) => {
-  //   order.items.forEach((item) => {
-  //     addToCart(item);
-  //   });
-  //   navigate('/cart');
-  // };
 
   return (
     <>
@@ -155,7 +147,7 @@ const TestHistory: React.FC = () => {
                     <article className="flex gap-2 font-sans">
                       <p className="">Din kommentar:</p>
                       <p className="italic">
-                        {order.comment || 'Ingen kommentar lämnad'}
+                        {order.comment || "Ingen kommentar lämnad"}
                       </p>
                     </article>
                     <motion.button

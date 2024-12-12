@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { useCart } from '../../context/CartContext';
-import { GoPlus } from 'react-icons/go';
-import { HiMinusSm } from 'react-icons/hi';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import CustomerHeader from '../../components/CustomerHeader';
-import Container from '../../components/Container';
+import React, { useState } from "react";
+import { useCart } from "../../context/CartContext";
+import { GoPlus } from "react-icons/go";
+import { HiMinusSm } from "react-icons/hi";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import CustomerHeader from "../../components/CustomerHeader";
+import Container from "../../components/Container";
 
 const Cart: React.FC = () => {
   const { cart, calculateTotalPrice, updateQuantity, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<string>('');
-  const [comment, setComment] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleQuantityChange = (itemId: string, change: number) => {
     updateQuantity(itemId, change);
@@ -22,18 +22,17 @@ const Cart: React.FC = () => {
 
   const handleOrder = async () => {
     if (cart.length === 0) {
-      alert('Varukorgen är tom. Lägg till något innan du beställer!');
+      alert("Varukorgen är tom. Lägg till något innan du beställer!");
       return;
     }
 
     if (!user) {
-      alert('Du måste vara inloggad för att lägga en beställning.');
+      alert("Du måste vara inloggad för att lägga en beställning.");
       return;
     }
 
-    // Skapa beställdOrder
     const createdOrder = {
-      name: user.username, // Använd användarens namn från AuthContext
+      name: user.username,
       items: cart.map((item) => ({
         _id: item._id,
         name: item.name,
@@ -51,13 +50,13 @@ const Cart: React.FC = () => {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/orders',
+        "http://localhost:8000/orders",
         // 'https://node-mongodb-api-ks7o.onrender.com/orders',
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(createdOrder),
         }
@@ -65,10 +64,10 @@ const Cart: React.FC = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError('Din session har gått ut. Logga in igen');
-          console.log('Din session har gått ut. Logga in igen');
-          sessionStorage.removeItem('token');
-          navigate('/login');
+          setError("Din session har gått ut. Logga in igen");
+          console.log("Din session har gått ut. Logga in igen");
+          sessionStorage.removeItem("token");
+          navigate("/login");
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -76,67 +75,20 @@ const Cart: React.FC = () => {
       }
 
       const data = await response.json();
-      /* alert("Din beställning har skickats!"); */
-      console.log('Beställning skickad:', data);
-      // navigate('/confirmation',  {
-      //   state: { order: createdOrder },
-      // });
+      console.log("Beställning skickad:", data);
 
-      navigate('/confirmation', {
-        state: { order: data.order || createdOrder }, // Använd backend-data om möjligt
+      navigate("/confirmation", {
+        state: { order: data.order || createdOrder },
       });
 
-      // Skicka till orderhistorik
-      // await addToOrderHistory({
-      //   // userId: user.username, // Unik användaridentifierare
-      //   name: user.username,
-      //   items: cart,
-      //   totalPrice: calculateTotalPrice(),
-      // });
-
-      // Rensa varukorgen efter beställning
       clearCart();
     } catch (error) {
-      console.error('Kunde inte skicka beställningen:', error);
+      console.error("Kunde inte skicka beställningen:", error);
       alert(
-        'Ingredienser för vald pizza är slut, vänligen kontakta restaurangen.'
+        "Ingredienser för vald pizza är slut, vänligen kontakta restaurangen."
       );
     }
   };
-
-  // const addToOrderHistory = async (order: {
-  //   // userId: string;
-  //   name: string;
-  //   items: Array<{
-  //     _id: string;
-  //     name: string;
-  //     price: number;
-  //     vegetarian: boolean;
-  //     ingredients: string[];
-  //   }>;
-  //   totalPrice: number;
-  // }) => {
-  //   try {
-  //     const response = await fetch(
-  //       // 'https://node-mongodb-api-ks7o.onrender.com/orderhistory',
-  //       'https://localhost:8000/orderhistory',
-  //       {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify(order),
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     console.log('Order tillagd i historik:', data);
-  //   } catch (error) {
-  //     console.error('Kunde inte lägga till order i historik:', error);
-  //   }
-  // };
 
   return (
     <>
@@ -212,7 +164,7 @@ const Cart: React.FC = () => {
                 </select>
               </article>
 
-              {paymentMethod === 'Betalkort' && (
+              {paymentMethod === "Betalkort" && (
                 <form className="mt-4">
                   <article className="flex flex-col">
                     <label className="text-teal-900 mb-2">
@@ -242,7 +194,7 @@ const Cart: React.FC = () => {
                         placeholder="1234 5678 9012 3456"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, '');
+                          target.value = target.value.replace(/\D/g, "");
                         }}
                       />
                     </label>
@@ -256,16 +208,16 @@ const Cart: React.FC = () => {
                         placeholder="MM/ÅÅ"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          let value = target.value.replace(/\D/g, '');
+                          let value = target.value.replace(/\D/g, "");
 
                           if (value.length > 2) {
-                            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
                           }
 
                           if (value.length > 0 && value.length <= 2) {
                             const month = parseInt(value.slice(0, 2), 10);
                             if (month > 12) {
-                              value = '12';
+                              value = "12";
                             }
                           }
 
@@ -283,7 +235,7 @@ const Cart: React.FC = () => {
                         placeholder="123"
                         onInput={(e) => {
                           const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, '');
+                          target.value = target.value.replace(/\D/g, "");
                         }}
                       />
                     </label>
@@ -292,21 +244,6 @@ const Cart: React.FC = () => {
               )}
 
               <article className="flex justify-between gap-4">
-                {/*                 <motion.button
-                  onClick={handleOrder}
-                  className="bg-teal-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-teal-800"
-                  whileTap={{ scale: 0.9 }}
-                >
-                  Beställ
-                </motion.button>
-                <motion.button
-                  onClick={clearCart}
-                  className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"
-                  whileTap={{ scale: 0.9 }}
-                >
-                  Rensa varukorg
-                </motion.button> */}
-
                 <motion.button
                   onClick={clearCart}
                   className="bg-red-900 text-white rounded-lg px-2 py-1 mt-8 mb-2 cursor-pointer hover:bg-red-800"

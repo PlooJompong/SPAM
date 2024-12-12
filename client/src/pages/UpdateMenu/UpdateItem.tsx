@@ -1,6 +1,6 @@
-import React from 'react';
-import { FaPen } from 'react-icons/fa';
-import { MenuItem } from './index.tsx';
+import React from "react";
+import { FaPen } from "react-icons/fa";
+import { MenuItem } from "./index.tsx";
 
 interface MenuItemProps {
   item: MenuItem;
@@ -9,9 +9,9 @@ interface MenuItemProps {
 
 const UpdateItemComponent: React.FC<MenuItemProps> = ({ item, handleEdit }) => {
   return (
-    <main className="flex gap-2 items-start w-full max-w-xl pt-2 pb-2 sm:w-full">
-      <section className="flex  flex-col flex-grow">
-        <article className="flex justify-between w-full">
+    <main className="flex gap-2 items-start xl:max-w-lg max-w-lg py-2 w-full mx-auto font-primary md:text-2xl text-xl text-teal-900">
+      <section className="flex flex-col flex-grow">
+        <article className="flex items-center justify-between w-full">
           <h3 className="font-primary md:text-2xl sm:text-xl text-teal-900">
             {item.name}
           </h3>
@@ -21,10 +21,10 @@ const UpdateItemComponent: React.FC<MenuItemProps> = ({ item, handleEdit }) => {
         </article>
 
         <p className="font-primary md:text-lg sm:text-md text-teal-900 italic">
-          {item.vegetarian ? 'Vegetarisk' : 'Ej vegetarisk'}
+          {item.vegetarian ? "Vegetarisk" : "Ej vegetarisk"}
         </p>
         <p className="font-primary md:text-lg sm:text-md text-teal-900">
-          {item.ingredients.join(', ')}
+          {item.ingredients.join(", ")}
         </p>
       </section>
       <FaPen

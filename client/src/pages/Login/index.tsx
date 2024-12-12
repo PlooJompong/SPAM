@@ -15,7 +15,6 @@ const Login: React.FC = () => {
   const [loginPassword, setLoginPassword] = useState<string>("");
   const [loginMessage, setLoginMessage] = useState<string>("");
 
-  const [showLoginForm, setShowLoginForm] = useState<boolean>(false);
   const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
 
   const { login } = useAuth();
@@ -136,7 +135,6 @@ const Login: React.FC = () => {
             <button
               onClick={() => {
                 setShowCreateForm((prev) => !prev);
-                setShowLoginForm(false);
               }}
               className="rounded-full w-5/6 md:w-full text-xs md:text-base md:py-2 md:px-4 bg-orange-500 px-8 py-2 font-primary text-white"
             >

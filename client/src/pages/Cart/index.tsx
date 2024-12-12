@@ -131,6 +131,7 @@ const Cart: React.FC = () => {
               <p className="text-center">
                 Logga in för att göra en beställning.
               </p>
+              <p className="text-red-500 text-center">{error}</p>
             </>
           )}
 

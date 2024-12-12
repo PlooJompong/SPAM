@@ -175,9 +175,7 @@ const Confirmation = () => {
           </h1>
         </section>
         {!order ? (
-          <p className="text-center font-primary text-teal-900">
-            Ingen orderinformation tillgänglig
-          </p>
+          <p className="text-center font-primary text-teal-900">{error}</p>
         ) : (
           <>
             <h4 className="font-primary text-lg text-teal-900">

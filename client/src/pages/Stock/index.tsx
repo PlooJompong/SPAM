@@ -54,7 +54,12 @@ const Stock = () => {
         <EmployeeHeader title="Lagerstatus" />
         <main className="m-auto flex h-full w-full justify-center font-sans bg-orange-100 p-4">
           {!isAdmin ? (
-            <p className="font-primary">Du har inte åtkomst till denna sida</p>
+            <>
+              <p className="font-primary">
+                Du har inte åtkomst till denna sida
+              </p>
+              <p className="text-center font-primary text-teal-900">{error}</p>
+            </>
           ) : (
             <table className="w-full md:w-2/4 border-collapse border border-teal-900">
               <thead>

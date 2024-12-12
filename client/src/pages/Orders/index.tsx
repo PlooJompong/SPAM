@@ -78,7 +78,6 @@ const Orders = () => {
 
         if (!response.ok) {
           if (response.status === 401) {
-            setError("Din session har gått ut. Logga in igen");
             console.log("Din session har gått ut. Logga in igen");
             sessionStorage.removeItem("token");
             navigate("/login");
@@ -276,6 +275,9 @@ const Orders = () => {
                   <section key={order._id} className="space-y-2">
                     {/* Order row */}
                     <article className="flex justify-between items-center border p-2 md:p-4 rounded-lg cursor-pointer">
+                      <p className="hidden text-center font-primary text-teal-900">
+                        {error}
+                      </p>
                       <article
                         className={`flex-1 mr-2 sm:mr-6 ${
                           selectedOrder === order._id

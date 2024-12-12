@@ -185,7 +185,10 @@ const UpdateMenu: React.FC = () => {
     <Container bgColor="bg-orange-100">
       <EmployeeHeader title="Ändra meny" />
       {!isAdmin ? (
-        <p className="text-center">Du har inte åtkomst till denna sida.</p>
+        <>
+          <p className="text-center">Du har inte åtkomst till denna sida.</p>
+          <p className="text-center font-primary text-teal-900">{error}</p>
+        </>
       ) : (
         <main className="flex flex-col">
           <ul className="flex flex-col justify-start md:gap-2 xl:max-h-[800px] xl:flex-wrap mx-auto md:w-9/12 lg:w-5/6">
